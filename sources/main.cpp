@@ -1,8 +1,6 @@
 #include "ft_containers.hpp"
 
-int main(int argc, const char* argv[])
+int main()
 {
-    (void)argc;
-    (void)argv;
     return (0);
 }
