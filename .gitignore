@@ -58,3 +58,6 @@ dkms.conf
 
 # Other
 docs/*.pdf
+
+# Other
+.vscode/settings.json
