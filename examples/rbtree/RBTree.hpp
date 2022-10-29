@@ -16,9 +16,6 @@ typedef enum tree_color { BLACK, RED } t_color;
  */
 typedef enum rotation_direction { LEFT, RIGHT } t_rot_dir;
 
-#define left child[LEFT]
-#define right child[RIGHT]
-
 typedef struct RBNode
 {
     RBNode *parent;
@@ -43,6 +40,8 @@ public:
     RBNode *successor( RBNode *node );
     RBNode *predecessor( RBNode *node );
 
+    void print();
+
 private:
     RBNode        *_root;
     static RBNode *_nil; // static void * sentinel
@@ -65,6 +64,9 @@ private:
 
     RBNode *_search( RBNode *node, int value );
     void    _destroy( RBNode *node );
+    bool    _insert( RBNode **root, int value );
+    void    _insertFixup( RBNode **node );
+    void    _print( RBNode *node, int level );
 } RBTree;
 
 #endif /* ********************************************************** RBTREE_H  \
