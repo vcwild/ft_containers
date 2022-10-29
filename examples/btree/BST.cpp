@@ -1,4 +1,4 @@
-#include "BinaryTree.hpp"
+#include "BST.hpp"
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>

@@ -1,5 +1,5 @@
-#ifndef BINARYTREE_HPP
-#define BINARYTREE_HPP
+#ifndef BST_HPP
+#define BST_HPP
 
 #include <iostream>
 
