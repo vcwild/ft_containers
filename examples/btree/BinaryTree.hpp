@@ -3,18 +3,18 @@
 
 #include <iostream>
 
-struct TreeNode
+typedef struct TreeNode
 {
     int       value;
     TreeNode *left;
     TreeNode *right;
-};
+} TreeNode;
 
-class BinaryTree
+typedef class BinarySearchTree
 {
 public:
-    BinaryTree();
-    ~BinaryTree();
+    BinarySearchTree();
+    ~BinarySearchTree();
 
     bool      insert( int value );
     bool      remove( int value );
@@ -29,7 +29,6 @@ private:
     bool      _find( TreeNode **node, int value );
     void      _print( TreeNode *node, int level );
     void      _destroy( TreeNode *node );
-};
+} BST;
 
-#endif /* ****************************************************** BINARYTREE_H  \
-        */
+#endif /* ************************************************** BINARYTREE_H  */

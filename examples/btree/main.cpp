@@ -11,7 +11,7 @@ void printNode( TreeNode *node )
 
 int main()
 {
-    BinaryTree *tree = new BinaryTree();
+    BST *tree = new BST();
 
     tree->insert( 2 );
     tree->insert( 1 );

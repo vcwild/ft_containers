@@ -7,13 +7,13 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-BinaryTree::BinaryTree() : _root( NULL ) {}
+BST::BinarySearchTree() : _root( NULL ) {}
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
 */
 
-BinaryTree::~BinaryTree()
+BST::~BinarySearchTree()
 {
     if ( _root != NULL ) {
         _destroy( _root );
@@ -28,13 +28,13 @@ BinaryTree::~BinaryTree()
 ** --------------------------------- METHODS ----------------------------------
 */
 
-bool BinaryTree::insert( int value ) { return _insert( &_root, value ); }
+bool BST::insert( int value ) { return _insert( &_root, value ); }
 
-bool BinaryTree::remove( int value ) { return true; }
+bool BST::remove( int value ) { return true; }
 
-void BinaryTree::print() { _print( _root, 0 ); }
+void BST::print() { _print( _root, 0 ); }
 
-void BinaryTree::_print( TreeNode *node, int level )
+void BST::_print( TreeNode *node, int level )
 {
     if ( node != NULL ) {
         if ( node->right ) {
@@ -54,9 +54,9 @@ void BinaryTree::_print( TreeNode *node, int level )
     std::cout << std::endl;
 }
 
-TreeNode *BinaryTree::search( int value ) { return _search( _root, value ); }
+TreeNode *BST::search( int value ) { return _search( _root, value ); }
 
-TreeNode *BinaryTree::_search( TreeNode *node, int value )
+TreeNode *BST::_search( TreeNode *node, int value )
 {
     if ( node == NULL )
         return NULL;
@@ -67,7 +67,7 @@ TreeNode *BinaryTree::_search( TreeNode *node, int value )
     return _search( node->right, value );
 }
 
-TreeNode *BinaryTree::_create( int value )
+TreeNode *BST::_create( int value )
 {
     TreeNode *node = new TreeNode;
     node->value    = value;
@@ -77,7 +77,7 @@ TreeNode *BinaryTree::_create( int value )
     return node;
 }
 
-bool BinaryTree::_insert( TreeNode **node, int value )
+bool BST::_insert( TreeNode **node, int value )
 {
     if ( *node == NULL )
         return ( *node = _create( value ), true );
@@ -88,7 +88,7 @@ bool BinaryTree::_insert( TreeNode **node, int value )
     return _insert( &( *node )->right, value );
 }
 
-bool BinaryTree::_find( TreeNode **node, int value )
+bool BST::_find( TreeNode **node, int value )
 {
     if ( *node == NULL )
         return false;
@@ -99,7 +99,7 @@ bool BinaryTree::_find( TreeNode **node, int value )
     return _find( &( *node )->right, value );
 }
 
-void BinaryTree::_destroy( TreeNode *node )
+void BST::_destroy( TreeNode *node )
 {
     if ( node != NULL ) {
         _destroy( node->left );
