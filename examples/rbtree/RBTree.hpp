@@ -16,13 +16,18 @@ typedef enum tree_color { BLACK, RED } t_color;
  */
 typedef enum rotation_direction { LEFT, RIGHT } t_rot_dir;
 
-typedef struct RBNode
+typedef struct RBNode RBNode;
+
+typedef RBNode *RBNodePtr;
+
+struct RBNode
 {
-    RBNode *parent;
-    RBNode *child[2];
-    int     value;
-    t_color color;
-} RBNode;
+    RBNodePtr parent;
+    RBNodePtr left;
+    RBNodePtr right;
+    int       value;
+    t_color   color;
+};
 
 typedef class RedBlackTree
 {
@@ -31,22 +36,40 @@ public:
     RedBlackTree();
     ~RedBlackTree();
 
-    bool    insert( int value );
-    RBNode *search( int value );
-    bool    remove( int value );
+    RBNodePtr parent( RBNodePtr node );
+    RBNodePtr grandparent( RBNodePtr node );
+    RBNodePtr sibling( RBNodePtr node );
+    RBNodePtr uncle( RBNodePtr node );
 
-    RBNode *min( RBNode *node );
-    RBNode *max( RBNode *node );
-    RBNode *successor( RBNode *node );
-    RBNode *predecessor( RBNode *node );
+    bool      insert( int value );
+    RBNodePtr search( int value );
+    bool      remove( int value );
+
+    RBNodePtr min( RBNodePtr node );
+    RBNodePtr max( RBNodePtr node );
+    RBNodePtr successor( RBNodePtr node );
+    RBNodePtr predecessor( RBNodePtr node );
+
+    /**
+     * @brief  In order to move subtrees around within the binary search tree,
+     * we define a subroutine TRANSPLANT, which replaces one subtree as a child
+     * of its parent with another subtree. When TRANSPLANT replaces the subtree
+     * rooted at node u with the subtree rooted at node v, node u's parent
+     * becomes node v’s parent, and u's parent ends up having as its appropriate
+     * child.
+     *
+     * @param u The node to be replaced.
+     * @param v The node to replace u.
+     */
+    void transplant( RBNodePtr u, RBNodePtr v );
 
     void print();
 
 private:
-    RBNode        *_root;
-    static RBNode *_nil; // static void * sentinel
+    RBNodePtr _root;
+    RBNodePtr _nil;
 
-    static RBNode *_create( RBNode *parent, t_color color, int value );
+    RBNodePtr _create( t_color color, int value );
 
     /**
      * @brief Rotates red black tree leaves. Requires an existing pointer to a
@@ -58,15 +81,14 @@ private:
      * rotation
      * @return Returns the node for the root of the subtree
      */
-    RBNode *_rotate( RBNode *subRoot, t_rot_dir dir );
-    RBNode *_rotateLeft( RBNode *subRoot );
-    RBNode *_rotateRight( RBNode *subRoot );
+    RBNodePtr _leftRotate( RBNodePtr subRoot );
+    RBNodePtr _rightRotate( RBNodePtr subRoot );
 
-    RBNode *_search( RBNode *node, int value );
-    void    _destroy( RBNode *node );
-    bool    _insert( RBNode **root, int value );
-    void    _insertFixup( RBNode **node );
-    void    _print( RBNode *node, int level );
+    RBNodePtr _search( RBNodePtr node, int value );
+    void      _destroy( RBNodePtr node );
+    bool      _insert( int value );
+    void      _insertFixup( RBNodePtr node );
+    void      _print( RBNodePtr node, int level );
 } RBTree;
 
 #endif /* ********************************************************** RBTREE_H  \

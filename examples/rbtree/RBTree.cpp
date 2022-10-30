@@ -2,13 +2,20 @@
 #include <cassert>
 #include <iomanip>
 
-RBNode *RBTree::_nil = RBTree::_create( NULL, BLACK, 0 ); // Sentinel value
-
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-RBTree::RedBlackTree() : _root( NULL ) {}
+RBTree::RedBlackTree() : _root( NULL )
+{
+    RBNodePtr _nil = new RBNode;
+
+    _nil->color  = BLACK;
+    _nil->left   = NULL;
+    _nil->right  = NULL;
+    _nil->parent = NULL;
+    _nil->value  = 0;
+}
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
@@ -26,38 +33,80 @@ RBTree::~RedBlackTree()
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
+// bool RBTree::operator==( RedBlackTree const &rhs )
+// {
+//     if ( this == &rhs ) {
+//         return true;
+//     }
+//     return false;
+// }
+
 /*
 ** --------------------------------- METHODS ----------------------------------
 */
+RBNodePtr RBTree::grandparent( RBNodePtr node )
+{
+    if ( node != NULL && node->parent != NULL ) {
+        return node->parent->parent;
+    } else {
+        return NULL;
+    }
+}
+
+RBNode *RBTree::uncle( RBNodePtr node )
+{
+    RBNodePtr g = grandparent( node );
+    if ( g == NULL ) {
+        return NULL;
+    }
+    if ( node->parent == g->left ) {
+        return g->right;
+    } else {
+        return g->left;
+    }
+}
+
+RBNode *RBTree::sibling( RBNodePtr node )
+{
+    if ( node->parent == NULL ) {
+        return NULL;
+    }
+    if ( node == node->parent->left ) {
+        return node->parent->right;
+    } else {
+        return node->parent->left;
+    }
+}
+
 void RBTree::print() { _print( _root, 0 ); }
 
-RBNode *RBTree::search( int value ) { return _search( _root, value ); }
+RBNodePtr RBTree::search( int value ) { return _search( _root, value ); }
 
-RBNode *RBTree::min( RBNode *node )
+RBNodePtr RBTree::min( RBNodePtr node )
 {
-    while ( node->child[LEFT] != _nil ) {
-        node = node->child[LEFT];
+    while ( node->left != _nil ) {
+        node = node->left;
     }
     return node;
 }
 
-RBNode *RBTree::max( RBNode *node )
+RBNodePtr RBTree::max( RBNodePtr node )
 {
-    while ( node->child[RIGHT] != _nil ) {
-        node = node->child[RIGHT];
+    while ( node->right != _nil ) {
+        node = node->right;
     }
     return node;
 }
 
-RBNode *RBTree::successor( RBNode *node )
+RBNodePtr RBTree::successor( RBNodePtr node )
 {
-    if ( node->child[RIGHT] != _nil ) {
-        return min( node->child[RIGHT] );
+    if ( node->right != _nil ) {
+        return min( node->right );
     }
 
-    RBNode *parent = node->parent;
+    RBNodePtr parent = node->parent;
 
-    while ( parent != _nil && node == parent->child[RIGHT] ) {
+    while ( parent != _nil && node == parent->right ) {
         node   = parent;
         parent = parent->parent;
     }
@@ -65,15 +114,15 @@ RBNode *RBTree::successor( RBNode *node )
     return parent;
 }
 
-RBNode *RBTree::predecessor( RBNode *node )
+RBNodePtr RBTree::predecessor( RBNodePtr node )
 {
-    if ( node->child[LEFT] != _nil ) {
-        return max( node->child[LEFT] );
+    if ( node->left != _nil ) {
+        return max( node->left );
     }
 
-    RBNode *parent = node->parent;
+    RBNodePtr parent = node->parent;
 
-    while ( parent != _nil && node == parent->child[LEFT] ) {
+    while ( parent != _nil && node == parent->left ) {
         node   = parent;
         parent = parent->parent;
     }
@@ -81,98 +130,203 @@ RBNode *RBTree::predecessor( RBNode *node )
     return parent;
 }
 
-bool RBTree::insert( int value ) { return _insert( &_root, value ); }
+bool RBTree::insert( int value )
+{
 
-bool RBTree::_insert( RBNode **node, int value ) {}
+    if ( _root == NULL ) {
+        _root = _create( BLACK, value );
+        return true;
+    }
 
-void RBTree::_insertFixup( RBNode **node ) {}
+    RBNodePtr node   = _create( RED, value );
+    RBNodePtr parent = _root;
+    RBNodePtr child  = _root;
+
+    while ( child != _nil ) {
+        parent = child;
+        if ( node->value < child->value ) {
+            child = child->left;
+        } else if ( node->value > child->value ) {
+            child = child->right;
+        } else {
+            return false;
+        }
+    }
+
+    node->parent = parent;
+
+    if ( node->value < parent->value ) {
+        parent->left = node;
+    } else {
+        parent->right = node;
+    }
+
+    _insertFixup( node );
+
+    return true;
+}
+
+void RBTree::transplant( RBNodePtr u, RBNodePtr v )
+{
+    if ( u->parent == NULL ) {
+        _root = v;
+    } else if ( u == u->parent->left ) {
+        u->parent->left = v;
+    } else {
+        u->parent->right = v;
+    }
+
+    if ( v != NULL ) {
+        v->parent = u->parent;
+    }
+}
 
 /*
 ** ----------------------------- PRIVATE METHODS ----------------------------
 */
 
-RBNode *RBTree::_create( RBNode *parent, t_color color, int value )
+RBNodePtr RBTree::_create( t_color color, int value )
 {
-    RBNode *node       = new RBNode();
-    node->child[LEFT]  = NULL;
-    node->child[RIGHT] = NULL;
-    node->color        = color;
-    node->parent       = parent;
-    node->value        = value;
+    RBNodePtr node = new RBNode;
+    node->color    = color;
+    node->left     = _nil;
+    node->right    = _nil;
+    node->parent   = _nil;
+    node->value    = value;
 
     return node;
 }
 
-RBNode *RBTree::_rotate( RBNode *subRoot, t_rot_dir dir )
+RBNodePtr RBTree::_leftRotate( RBNodePtr subRoot )
 {
-    RBNode *G = subRoot->parent;
-    RBNode *S = subRoot->child[1 - dir];
-    RBNode *C;
+    RBNodePtr right = subRoot->right;
 
-    assert( S != NULL );
+    subRoot->right = right->left;
 
-    C                       = S->child[dir];
-    subRoot->child[1 - dir] = C;
+    if ( right->left != _nil ) {
+        right->left->parent = subRoot;
+    }
 
-    if ( C != NULL )
-        C->parent = subRoot;
-    S->child[dir]   = subRoot;
-    subRoot->parent = S;
-    S->parent       = G;
+    right->parent = subRoot->parent;
 
-    if ( G != NULL )
-        G->child[subRoot == G->child[RIGHT] ? RIGHT : LEFT] = S;
-    else
-        this->_root = S;
+    if ( subRoot->parent == _nil ) {
+        _root = right;
+    } else if ( subRoot == subRoot->parent->left ) {
+        subRoot->parent->left = right;
+    } else {
+        subRoot->parent->right = right;
+    }
 
-    return S;
+    right->left     = subRoot;
+    subRoot->parent = right;
+
+    return right;
+}
+RBNodePtr RBTree::_rightRotate( RBNodePtr subRoot )
+{
+    RBNodePtr left = subRoot->left;
+
+    subRoot->left = left->right;
+
+    if ( left->right != _nil ) {
+        left->right->parent = subRoot;
+    }
+
+    left->parent = subRoot->parent;
+
+    if ( subRoot->parent == _nil ) {
+        _root = left;
+    } else if ( subRoot == subRoot->parent->right ) {
+        subRoot->parent->right = left;
+    } else {
+        subRoot->parent->left = left;
+    }
+
+    left->right     = subRoot;
+    subRoot->parent = left;
+
+    return left;
 }
 
-RBNode *RBTree::_rotateLeft( RBNode *subRoot )
+void RBTree::_insertFixup( RBNodePtr node )
 {
-    return _rotate( subRoot, LEFT );
-}
-RBNode *RBTree::_rotateRight( RBNode *subRoot )
-{
-    return _rotate( subRoot, RIGHT );
+    while ( node->parent->color == RED ) {
+        if ( node->parent == grandparent( node )->left ) {
+            RBNodePtr uncle = grandparent( node )->right;
+            if ( uncle->color == RED ) {
+                node->parent->color        = BLACK;
+                uncle->color               = BLACK;
+                grandparent( node )->color = RED;
+                node                       = grandparent( node );
+            } else {
+                if ( node == node->parent->right ) {
+                    node = node->parent;
+                    _leftRotate( node );
+                }
+                node->parent->color        = BLACK;
+                grandparent( node )->color = RED;
+                _rightRotate( grandparent( node ) );
+            }
+        } else {
+            RBNodePtr uncle = grandparent( node )->left;
+            if ( uncle->color == RED ) {
+                node->parent->color        = BLACK;
+                uncle->color               = BLACK;
+                grandparent( node )->color = RED;
+                node                       = grandparent( node );
+            } else {
+                if ( node == node->parent->left ) {
+                    node = node->parent;
+                    _rightRotate( node );
+                }
+                node->parent->color        = BLACK;
+                grandparent( node )->color = RED;
+                _leftRotate( grandparent( node ) );
+            }
+        }
+    }
+    _root->color = BLACK;
 }
 
-void RBTree::_destroy( RBNode *node )
+void RBTree::_destroy( RBNodePtr node )
 {
     if ( node != NULL ) {
-        _destroy( node->child[LEFT] );
-        _destroy( node->child[RIGHT] );
+        _destroy( node->left );
+        _destroy( node->right );
         delete node;
     }
+    _destroy( _nil );
 }
 
-RBNode *RBTree::_search( RBNode *node, int value )
+RBNodePtr RBTree::_search( RBNodePtr node, int value )
 {
     if ( node == NULL )
         return NULL;
     if ( value == node->value )
         return node;
     if ( value < node->value )
-        return _search( node->child[LEFT], value );
-    return _search( node->child[RIGHT], value );
+        return _search( node->left, value );
+    return _search( node->right, value );
 }
 
-void RBTree::_print( RBNode *node, int level )
+void RBTree::_print( RBNodePtr node, int level )
 {
-    std::string nodeColor = node->color == RED ? "\e[31m" : "\e[33m";
+    std::string nodeColor;
 
-    if ( node->child[RIGHT] ) {
-        _print( node->child[RIGHT], level + 4 );
+    nodeColor = node->color == RED ? "\e[31m" : "\e[33m";
+
+    if ( node->right ) {
+        _print( node->right, level + 4 );
     }
     if ( level ) {
         std::cout << std::setw( level ) << ' ';
     }
-    if ( node->child[RIGHT] )
+    if ( node->right )
         std::cout << " /\n" << std::setw( level ) << ' ';
     std::cout << nodeColor << node->value << "\e[0m\n ";
-    if ( node->child[LEFT] ) {
+    if ( node->left ) {
         std::cout << std::setw( level ) << ' ' << " \\" << std::endl;
-        _print( node->child[LEFT], level + 4 );
+        _print( node->left, level + 4 );
     }
     std::cout << std::endl;
 }
