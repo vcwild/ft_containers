@@ -26,7 +26,6 @@ private:
     TreeNode *_search( TreeNode *node, int value );
     TreeNode *_create( int value );
     bool      _insert( TreeNode **node, int value );
-    bool      _find( TreeNode **node, int value );
     void      _print( TreeNode *node, int level );
     void      _destroy( TreeNode *node );
 } BST;

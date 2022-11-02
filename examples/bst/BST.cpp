@@ -88,17 +88,6 @@ bool BST::_insert( TreeNode **node, int value )
     return _insert( &( *node )->right, value );
 }
 
-bool BST::_find( TreeNode **node, int value )
-{
-    if ( *node == NULL )
-        return false;
-    if ( value == ( *node )->value )
-        return true;
-    if ( value < ( *node )->value )
-        return _find( &( *node )->left, value );
-    return _find( &( *node )->right, value );
-}
-
 void BST::_destroy( TreeNode *node )
 {
     if ( node != NULL ) {
