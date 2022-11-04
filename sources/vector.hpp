@@ -18,7 +18,12 @@ public:
     typedef typename allocator_type::const_pointer   const_pointer;
     typedef typename allocator_type::size_type       size_type;
     typedef typename allocator_type::difference_type difference_type;
+    typedef pointer                                  iterator;
+    typedef const_pointer                            const_iterator;
+    typedef std::reverse_iterator<iterator>          reverse_iterator;
+    typedef std::reverse_iterator<const_iterator>    const_reverse_iterator;
 
+    // Constructors
     explicit vector( const allocator_type &alloc = allocator_type() )
     {
         _alloc    = alloc;
@@ -39,16 +44,17 @@ public:
             _alloc.construct( _data + i, val );
     };
 
-    vector( const vector &rhs )
+    vector( const vector &x )
     {
-        _alloc    = rhs._alloc;
-        _size     = rhs._size;
-        _capacity = rhs._capacity;
+        _alloc    = x._alloc;
+        _size     = x._size;
+        _capacity = x._capacity;
         _data     = _alloc.allocate( _capacity );
         for ( size_type i = 0; i < _size; i++ )
-            _alloc.construct( _data + i, rhs._data[i] );
+            _alloc.construct( _data + i, x._data[i] );
     };
 
+    // Destructor
     ~vector()
     {
         for ( size_type i = 0; i < _size; i++ )
@@ -56,6 +62,7 @@ public:
         _alloc.deallocate( _data, _capacity );
     };
 
+    // Operators
     vector &operator=( const vector &x )
     {
         if ( this == &x )
@@ -70,6 +77,38 @@ public:
         for ( size_type i = 0; i < _size; i++ )
             _alloc.construct( _data + i, x._data[i] );
         return *this;
+    };
+
+    reference       operator[]( size_type n ) { return _data[n]; };
+    const_reference operator[]( size_type n ) const { return _data[n]; };
+
+    difference_type operator-( const vector &x ) const
+    {
+        return ( _data - x._data );
+    };
+
+    // Accessors
+    size_type size() const { return _size; };
+    size_type capacity() const { return _capacity; };
+    pointer   data() { return _data; };
+
+    // Iterators
+    iterator       begin() { return _data; };
+    const_iterator begin() const { return _data; };
+
+    iterator       end() { return _data + _size; };
+    const_iterator end() const { return _data + _size; };
+
+    reverse_iterator       rbegin() { return reverse_iterator( end() ); };
+    const_reverse_iterator rbegin() const
+    {
+        return const_reverse_iterator( end() );
+    };
+
+    reverse_iterator       rend() { return reverse_iterator( begin() ); };
+    const_reverse_iterator rend() const
+    {
+        return const_reverse_iterator( begin() );
     };
 
 protected:
