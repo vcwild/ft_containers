@@ -6,7 +6,7 @@
 #    By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/07 19:19:40 by vwildner          #+#    #+#              #
-#    Updated: 2022/10/24 16:44:52 by vwildner         ###   ########.fr        #
+#    Updated: 2022/11/04 13:56:50 by vwildner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ OBJECTS = $(addprefix $(OBJECTS_PATH)/,$(subst .cpp,.o,$(SOURCE_FILES)))
 
 # **************************************************************************** #
 
-ifeq (run,$(firstword $(MAKECMDGOALS)))
+ifeq (test,$(firstword $(MAKECMDGOALS)))
   # use the rest as arguments for "run"
   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   # ...and turn them into do-nothing targets
@@ -70,8 +70,10 @@ $(OBJECTS_PATH)/%.o: $(SOURCES_PATH)/%.cpp $(HEADER)
 	@$(SAFE_MKDIR) $(OBJECTS_PATH)
 	@$(CXX) $(CXXFLAGS) -I $(INCLUDES_PATH) -o $@ -c $<
 
-test: $(NAME)
-	@./$(NAME)
+test:
+	@$(CXX) -g -Wall -Wextra -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o $(RUN_ARGS)
+	@./$(RUN_ARGS)
+	@rm $(RUN_ARGS)
 
 clean:
 	@$(REMOVE) $(OBJECTS_PATH)
