@@ -1,5 +1,5 @@
-#include "minunit.h"
 #include "vector.hpp"
+#include "minunit.h"
 
 static ft::vector<int> vint( 10 );
 
