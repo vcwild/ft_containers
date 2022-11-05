@@ -88,6 +88,15 @@ MU_TEST( test_assignment_operator )
     mu_assert_double_eq( p2.second, p1.second );
 }
 
+MU_TEST( test_make_pair )
+{
+    ft::pair<int, float> p1( 42, 3.14 );
+    ft::pair<int, float> p2 = ft::make_pair( p1.first, p1.second );
+
+    mu_assert_int_eq( p1.first, p2.first );
+    mu_assert_double_eq( p1.second, p2.second );
+}
+
 MU_TEST_SUITE( suite_utility )
 {
     MU_RUN_TEST( test_int_float_pair );
@@ -100,6 +109,7 @@ MU_TEST_SUITE( suite_utility )
     MU_RUN_TEST( test_pair_greater_than );
     MU_RUN_TEST( test_pair_greater_than_or_equal );
     MU_RUN_TEST( test_assignment_operator );
+    MU_RUN_TEST( test_make_pair );
 }
 
 int main()
