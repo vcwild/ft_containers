@@ -119,14 +119,50 @@ public:
     // Capacity
     size_type size() const { return _size; };
     size_type max_size() const { return _alloc.max_size(); };
-    // TODO: implement resize
-    void      resize( size_type n, value_type val = value_type() );
+    void      resize( size_type n, value_type val = value_type() )
+    {
+        if ( n > _size ) {
+            if ( n > _capacity )
+                reserve( n );
+            for ( size_type i = _size; i < n; i++ )
+                _alloc.construct( _data + i, val );
+        } else {
+            for ( size_type i = n; i < _size; i++ )
+                _alloc.destroy( _data + i );
+        }
+        _size = n;
+    };
+
     size_type capacity() const { return _capacity; };
     bool      empty() const { return ( _size == 0 ); };
-    // TODO: implement reserve
-    void reserve( size_type n );
-    // TODO: implement shrink_to_fit
-    void shrink_to_fit();
+
+    void reserve( size_type n )
+    {
+        if ( n > _capacity ) {
+            pointer tmp = _alloc.allocate( n );
+            for ( size_type i = 0; i < _size; i++ )
+                _alloc.construct( tmp + i, _data[i] );
+            for ( size_type i = 0; i < _size; i++ )
+                _alloc.destroy( _data + i );
+            _alloc.deallocate( _data, _capacity );
+            _data     = tmp;
+            _capacity = n;
+        }
+    };
+
+    void shrink_to_fit()
+    {
+        if ( _size < _capacity ) {
+            pointer tmp = _alloc.allocate( _size );
+            for ( size_type i = 0; i < _size; i++ )
+                _alloc.construct( tmp + i, _data[i] );
+            for ( size_type i = 0; i < _size; i++ )
+                _alloc.destroy( _data + i );
+            _alloc.deallocate( _data, _capacity );
+            _data     = tmp;
+            _capacity = _size;
+        }
+    };
 
     // Element access
     reference       operator[]( size_type n ) { return _data[n]; };
@@ -214,7 +250,24 @@ public:
 
     // TODO: implement insert input iterator
     template <class InputIterator>
-    void insert( iterator position, InputIterator first, InputIterator last );
+    void insert( iterator position, InputIterator first, InputIterator last )
+    {
+        if ( position < begin() || position > end() )
+            throw std::out_of_range( "vector::insert" );
+        size_type n = last - first;
+        if ( n == 0 )
+            return;
+        if ( n > max_size() - _size )
+            throw std::length_error( "vector::insert" );
+        if ( _size + n > _capacity )
+            reserve( _size + n );
+        size_type pos = position - begin();
+        for ( size_type i = _size; i > pos; i-- )
+            _alloc.construct( _data + i + n - 1, _data[i - 1] );
+        for ( size_type i = 0; i < n; i++ )
+            _alloc.construct( _data + pos + i, first[i] );
+        _size += n;
+    };
 
     /**
      * @brief Erases the specified elements from the container.
@@ -263,7 +316,6 @@ public:
         return begin() + pos;
     };
 
-    // TODO: implement swap
     /**
      * @brief Exchanges the content of the container by the content of x,
      * which is another vector object of the same type. Sizes may differ.
@@ -271,7 +323,23 @@ public:
      * @param x Another vector object of the same type (with the same class
      * template arguments T, Alloc).
      */
-    void swap( vector &x );
+    void swap( vector &x )
+    {
+        pointer        tmp_data     = _data;
+        size_type      tmp_size     = _size;
+        size_type      tmp_capacity = _capacity;
+        allocator_type tmp_alloc    = _alloc;
+
+        _data     = x._data;
+        _size     = x._size;
+        _capacity = x._capacity;
+        _alloc    = x._alloc;
+
+        x._data     = tmp_data;
+        x._size     = tmp_size;
+        x._capacity = tmp_capacity;
+        x._alloc    = tmp_alloc;
+    }
 
     /**
      * @brief Removes all elements from the vector (which are destroyed),
