@@ -5,8 +5,8 @@
 
 namespace ft {
 
-template < typename T,
-           typename Category,
+template < typename Category,
+           typename T,
            typename Distance  = ptrdiff_t,
            typename Pointer   = T *,
            typename Reference = T & >
