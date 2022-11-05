@@ -23,7 +23,7 @@ MU_TEST( test_vec_iter )
         mu_assert_int_eq( *it, vint[it - vint.begin()] );
 }
 
-MU_TEST_SUITE( test_vector )
+MU_TEST_SUITE( suite_vector )
 {
     MU_RUN_TEST( test_iter );
     MU_RUN_TEST( test_vec_iter );
@@ -32,7 +32,7 @@ MU_TEST_SUITE( test_vector )
 int main( int argc, char *argv[] )
 {
     MU_SUITE_CONFIGURE( &test_setup, &test_teardown );
-    MU_RUN_SUITE( test_vector );
+    MU_RUN_SUITE( suite_vector );
     MU_REPORT();
     return MU_EXIT_CODE;
 }

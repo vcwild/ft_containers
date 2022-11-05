@@ -95,7 +95,7 @@ MU_TEST( test_is_not_lexicographical_compare_predicate )
                "world is not lexicographically less than HELLO" );
 }
 
-MU_TEST_SUITE( suite_name )
+MU_TEST_SUITE( suite_algorithm )
 {
     MU_RUN_TEST( test_is_palindrome );
     MU_RUN_TEST( test_not_palindrome );
@@ -112,7 +112,7 @@ MU_TEST_SUITE( suite_name )
 int main()
 {
     MU_SUITE_CONFIGURE( &test_setup, &test_teardown );
-    MU_RUN_SUITE( suite_name );
+    MU_RUN_SUITE( suite_algorithm );
     MU_REPORT();
     return MU_EXIT_CODE;
 }
