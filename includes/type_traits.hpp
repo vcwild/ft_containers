@@ -377,6 +377,17 @@ struct is_reference
         = is_lvalue_reference<T>::value || is_rvalue_reference<T>::value;
 };
 
+template < bool B, typename T = void >
+struct enable_if
+{
+};
+
+template < class T >
+struct enable_if< true, T >
+{
+    typedef T type;
+};
+
 } // namespace ft
 
 #endif // TYPE_TRAITS_HPP
