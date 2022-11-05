@@ -6,7 +6,7 @@
 #    By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/07 19:19:40 by vwildner          #+#    #+#              #
-#    Updated: 2022/11/04 13:56:50 by vwildner         ###   ########.fr        #
+#    Updated: 2022/11/05 02:34:06 by vwildner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ $(OBJECTS_PATH)/%.o: $(SOURCES_PATH)/%.cpp $(HEADER)
 	@$(CXX) $(CXXFLAGS) -I $(INCLUDES_PATH) -o $@ -c $<
 
 test:
-	@$(CXX) -g -Wall -Wextra -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o $(RUN_ARGS)
+	@$(CXX) -g -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o $(RUN_ARGS)
 	@./$(RUN_ARGS)
 	@rm $(RUN_ARGS)
 
