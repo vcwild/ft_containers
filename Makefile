@@ -6,7 +6,7 @@
 #    By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/07 19:19:40 by vwildner          #+#    #+#              #
-#    Updated: 2022/11/05 02:34:06 by vwildner         ###   ########.fr        #
+#    Updated: 2022/11/05 03:39:01 by vwildner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ ARCHIVES_PATH = $(PWD)/archives
 
 # **************************************************************************** #
 
-HEADER_FILE = ft_containers.hpp
+HEADER_FILE = algorithm.hpp
 
 HEADER = $(addprefix $(INCLUDES_PATH)/,$(HEADER_FILE))
 

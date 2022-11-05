@@ -1,6 +1,7 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include "algorithm.hpp"
 #include <cstring>
 #include <iostream>
 #include <memory>
@@ -248,7 +249,6 @@ public:
         _size += n;
     };
 
-    // TODO: implement insert input iterator
     template <class InputIterator>
     void insert( iterator position, InputIterator first, InputIterator last )
     {
@@ -403,37 +403,38 @@ public:
     friend bool operator==( const vector<T, Alloc> &lhs,
                             const vector<T, Alloc> &rhs )
     {
-        if ( lhs.size() != rhs.size() )
-            return false;
-        for ( size_type i = 0; i < lhs.size(); i++ )
-            if ( lhs[i] != rhs[i] )
-                return false;
-        return true;
+        return ( lhs.size() == rhs.size()
+                 && ft::equal( lhs.begin(), lhs.end(), rhs.begin() ) );
     };
 
-    friend bool operator!=( const vector<T, Alloc> &lhs,
-                            const vector<T, Alloc> &rhs )
+    friend bool operator!=( const vector &lhs, const vector &rhs )
     {
         return !( lhs == rhs );
     }
 
     // TODO: implement lexicographical comparison
-    friend bool operator<( const vector<T, Alloc> &lhs,
-                           const vector<T, Alloc> &rhs );
-
-    friend bool operator<=( const vector<T, Alloc> &lhs,
-                            const vector<T, Alloc> &rhs );
-
-    friend bool operator>( const vector<T, Alloc> &lhs,
-                           const vector<T, Alloc> &rhs );
-
-    friend bool operator>=( const vector<T, Alloc> &lhs,
-                            const vector<T, Alloc> &rhs );
-
-    friend void swap( vector<T, Alloc> &x, vector<T, Alloc> &y )
+    friend bool operator<( const vector &lhs, const vector &rhs )
     {
-        x.swap( y );
+        return ( ft::lexicographical_compare(
+            lhs.begin(), lhs.end(), rhs.begin(), rhs.end() ) );
     };
+
+    friend bool operator<=( const vector &lhs, const vector &rhs )
+    {
+        return !( rhs < lhs );
+    };
+
+    friend bool operator>( const vector &lhs, const vector &rhs )
+    {
+        return rhs < lhs;
+    };
+
+    friend bool operator>=( const vector &lhs, const vector &rhs )
+    {
+        return !( lhs < rhs );
+    };
+
+    friend void swap( vector &x, vector &y ) { x.swap( y ); };
 
 protected:
     allocator_type _alloc;
