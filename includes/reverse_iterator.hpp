@@ -135,9 +135,11 @@ public:
         return reverse_iterator( rhs.base() - n );
     };
 
-    friend difference_type
-    operator-( const reverse_iterator &rhs,
-               const reverse_iterator &lhs ) { return lhs.base() - rhs.base() };
+    friend difference_type operator-( const reverse_iterator &rhs,
+                                      const reverse_iterator &lhs )
+    {
+        return lhs.base() - rhs.base();
+    };
 
     friend bool operator==( const reverse_iterator &rhs,
                             const reverse_iterator &lhs )
@@ -158,8 +160,10 @@ public:
     };
 
     friend bool operator<=( const reverse_iterator &rhs,
-                            const reverse_iterator &lhs ) { return rhs.base()
-                                                            >= lhs.base() };
+                            const reverse_iterator &lhs )
+    {
+        return rhs.base() >= lhs.base();
+    };
 
     friend bool operator>( const reverse_iterator &rhs,
                            const reverse_iterator &lhs )
@@ -168,8 +172,10 @@ public:
     };
 
     friend bool operator>=( const reverse_iterator &rhs,
-                            const reverse_iterator &lhs ) { return rhs.base()
-                                                            <= lhs.base() };
+                            const reverse_iterator &lhs )
+    {
+        return rhs.base() <= lhs.base();
+    };
 
     friend reverse_iterator operator+( difference_type         n,
                                        const reverse_iterator &rhs )
