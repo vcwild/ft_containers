@@ -22,8 +22,11 @@ public:
     typedef typename iterator_traits<Iterator>::reference       reference;
 
     reverse_iterator() : _it( NULL ) {};
+    explicit reverse_iterator( iterator_type it ) : _it( it ) {};
     reverse_iterator( const iterator_type &it ) : _it( it ) {};
-    reverse_iterator( const reverse_iterator &rhs ) : _it( rhs.base() ) {};
+    reverse_iterator( const reverse_iterator &it ) : _it( it.base() ) {};
+    template <typename It>
+    reverse_iterator( const reverse_iterator<It> &it ) : _it( it.base() ) {};
     ~reverse_iterator() {};
 
     // accessors
