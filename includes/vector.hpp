@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include "algorithm.hpp"
+#include "iterator.hpp"
 #include <cstring>
 #include <iostream>
 #include <memory>
@@ -11,71 +12,62 @@ namespace ft {
 template < typename T, typename Alloc = std::allocator<T> >
 class vector {
 public:
-    typedef T                                        value_type;
-    typedef Alloc                                    allocator_type;
-    typedef typename allocator_type::reference       reference;
-    typedef typename allocator_type::const_reference const_reference;
-    typedef typename allocator_type::pointer         pointer;
-    typedef typename allocator_type::const_pointer   const_pointer;
-    typedef pointer                                  iterator;
-    typedef const_pointer                            const_iterator;
-    typedef std::reverse_iterator<iterator>          reverse_iterator;
-    typedef std::reverse_iterator<const_iterator>    const_reverse_iterator;
-    typedef typename allocator_type::difference_type difference_type;
-    typedef typename allocator_type::size_type       size_type;
+    typedef T                                         value_type;
+    typedef Alloc                                     allocator_type;
+    typedef typename allocator_type::reference        reference;
+    typedef typename allocator_type::const_reference  const_reference;
+    typedef typename allocator_type::pointer          pointer;
+    typedef typename allocator_type::const_pointer    const_pointer;
+    typedef ft::random_access_iterator<pointer>       iterator;
+    typedef ft::random_access_iterator<const_pointer> const_iterator;
+    typedef ft::reverse_iterator<iterator>            reverse_iterator;
+    typedef ft::reverse_iterator<const_iterator>      const_reverse_iterator;
+    typedef typename allocator_type::difference_type  difference_type;
+    typedef typename allocator_type::size_type        size_type;
 
-    // Constructors
-    explicit vector( const allocator_type &alloc = allocator_type() )
-    {
-        _alloc    = alloc;
-        _size     = 0;
-        _capacity = 0;
-        _data     = NULL;
-    };
+protected:
+    allocator_type _alloc;
+    pointer        _data;
+    size_type      _size;
+    size_type      _capacity;
 
-    vector( size_type             n,
-            const value_type     &val   = value_type(),
-            const allocator_type &alloc = allocator_type() )
+public:
+    explicit vector( const allocator_type &alloc = allocator_type() ) :
+        _alloc( alloc ), _data( NULL ), _size( 0 ), _capacity( 0 ) {};
+
+    explicit vector( size_type             n,
+                     const value_type     &val   = value_type(),
+                     const allocator_type &alloc = allocator_type() ) :
+        _alloc( alloc ),
+        _size( n ), _capacity( n )
     {
-        _alloc    = alloc;
-        _size     = n;
-        _capacity = n;
-        _data     = _alloc.allocate( n );
-        for ( size_type i = 0; i < n; i++ )
+        _data = _alloc.allocate( _capacity );
+        for ( size_type i = 0; i < _size; i++ )
             _alloc.construct( _data + i, val );
     };
 
     template <class InputIterator>
     vector( InputIterator         first,
             InputIterator         last,
-            const allocator_type &alloc = allocator_type() )
+            const allocator_type &alloc = allocator_type() ) :
+        _alloc( alloc ),
+        _size( 0 ), _capacity( 0 ), _data( NULL )
     {
-        _alloc    = alloc;
-        _size     = 0;
-        _capacity = 0;
-        _data     = NULL;
         assign( first, last );
     };
 
-    vector( const vector &x )
+    vector( const vector &x ) :
+        _alloc( x.get_allocator() ), _size( 0 ), _capacity( 0 ), _data( NULL )
     {
-        _alloc    = x._alloc;
-        _size     = x._size;
-        _capacity = x._capacity;
-        _data     = _alloc.allocate( _capacity );
-        for ( size_type i = 0; i < _size; i++ )
-            _alloc.construct( _data + i, x._data[i] );
+        assign( x.begin(), x.end() );
     };
 
-    // Destructor
     ~vector()
     {
-        for ( size_type i = 0; i < _size; i++ )
-            _alloc.destroy( _data + i );
+        clear();
         _alloc.deallocate( _data, _capacity );
     };
 
-    // Operators
     vector &operator=( const vector &x )
     {
         if ( this == &x )
@@ -83,9 +75,9 @@ public:
         for ( size_type i = 0; i < _size; i++ )
             _alloc.destroy( _data + i );
         _alloc.deallocate( _data, _capacity );
-        _alloc    = x._alloc;
-        _size     = x._size;
-        _capacity = x._capacity;
+        _alloc    = x.get_allocator();
+        _size     = x.size();
+        _capacity = x.capacity();
         _data     = _alloc.allocate( _capacity );
         for ( size_type i = 0; i < _size; i++ )
             _alloc.construct( _data + i, x._data[i] );
@@ -120,7 +112,14 @@ public:
     // Capacity
     size_type size() const { return _size; };
     size_type max_size() const { return _alloc.max_size(); };
-    void      resize( size_type n, value_type val = value_type() )
+
+    /**
+     * @brief Resizes the container so that it contains n elements.
+     *
+     * @param n The new container size, expressed in number of elements.
+     * @param val The value to initialize the new elements with.
+     */
+    void resize( size_type n, value_type val = value_type() )
     {
         if ( n > _size ) {
             if ( n > _capacity )
@@ -137,6 +136,12 @@ public:
     size_type capacity() const { return _capacity; };
     bool      empty() const { return ( _size == 0 ); };
 
+    /**
+     * @brief Reserves the storage capacity for the container to be at least
+     * enough to contain n elements.
+     *
+     * @param n The size of the memory to reserve
+     */
     void reserve( size_type n )
     {
         if ( n > _capacity ) {
@@ -151,6 +156,11 @@ public:
         }
     };
 
+    /**
+     * @brief Shrinks the capacity of the vector to fit its size. It is done by
+     * creating a new vector and copying the elements of the current vector to
+     * the new one and then destroying the current vector.
+     */
     void shrink_to_fit()
     {
         if ( _size < _capacity ) {
@@ -166,9 +176,15 @@ public:
     };
 
     // Element access
-    reference       operator[]( size_type n ) { return _data[n]; };
-    const_reference operator[]( size_type n ) const { return _data[n]; };
+    reference       operator[]( size_type n ) { return at( n ); };
+    const_reference operator[]( size_type n ) const { return at( n ); };
 
+    /**
+     * @brief Fetches the element at position n in the vector.
+     *
+     * @param n The position of the element to fetch.
+     * @return reference A reference to the element at position n.
+     */
     reference at( size_type n )
     {
         if ( n >= _size )
@@ -192,6 +208,12 @@ public:
     const_pointer data() const { return _data; };
 
     // Modifiers
+    /**
+     * @brief Assigns new contents to the vector, replacing its current
+     *
+     * @param n Number of elements to assign
+     * @param val Value to assign
+     */
     void assign( size_type n, const value_type &val )
     {
         clear();
@@ -200,6 +222,11 @@ public:
             push_back( val );
     };
 
+    /**
+     * @brief Pushes a new element at the end of the vector.
+     *
+     * @param val The value to be copied (or moved) to the new element.
+     */
     void push_back( const value_type &val )
     {
         if ( _size == _capacity )
@@ -229,8 +256,28 @@ public:
      * @return Iterator pointing to the first element inserted, or position if
      * no elements were inserted.
      */
-    iterator insert( iterator position, const value_type &val ) {};
+    iterator insert( iterator position, const value_type &val )
+    {
+        size_type pos = position - begin();
 
+        if ( _size == _capacity )
+            reserve( _capacity + 1 );
+        for ( size_type i = _size; i > pos; i-- )
+            _alloc.construct( _data + i, _data[i - 1] );
+        _alloc.construct( _data + pos, val );
+        _size++;
+        return begin() + pos;
+    };
+
+    /**
+     * @brief Inserts elements at the specified location in the container.
+     *
+     * @param position Iterator to the element before which the content will be
+     * inserted. position may be the end() iterator.
+     * @param n Number of elements to insert. Each element is initialized to a
+     * copy of val.
+     * @param val Value to be copied (or moved) to the inserted elements.
+     */
     void insert( iterator position, size_type n, const value_type &val )
     {
         if ( position < begin() || position > end() )
@@ -249,6 +296,14 @@ public:
         _size += n;
     };
 
+    /**
+     * @brief Template version of insert
+     *
+     * @tparam InputIterator The type of the iterator
+     * @param position The position to insert the elements
+     * @param first The typenamed iterator to the first element to insert
+     * @param last The typenamed iterator to the last element to insert
+     */
     template <class InputIterator>
     void insert( iterator position, InputIterator first, InputIterator last )
     {
@@ -330,10 +385,10 @@ public:
         size_type      tmp_capacity = _capacity;
         allocator_type tmp_alloc    = _alloc;
 
-        _data     = x._data;
-        _size     = x._size;
-        _capacity = x._capacity;
-        _alloc    = x._alloc;
+        _data     = x.data();
+        _size     = x.size();
+        _capacity = x.capacity();
+        _alloc    = x.get_allocator();
 
         x._data     = tmp_data;
         x._size     = tmp_size;
@@ -352,51 +407,7 @@ public:
         _size = 0;
     };
 
-    /**
-     * @brief Resizes the container so that it contains n elements.
-     *
-     * @tparam ...Args Types of arguments to be passed to the constructor of
-     * @param position Iterator to the element before which the content will be
-     * @param ...args Arguments to be passed to the constructor of the new
-     * @return An iterator that points to the newly emplaced element
-     */
-    template <class... Args>
-    iterator emplace( const_iterator position, Args &&...args )
-    {
-        if ( position < begin() || position > end() )
-            throw std::out_of_range( "vector::emplace" );
-        size_type pos = position - begin();
-        if ( _size == _capacity )
-            reserve( _capacity + 1 );
-        for ( size_type i = _size; i > pos; i-- )
-            _alloc.construct( _data + i, _data[i - 1] );
-        _alloc.construct( _data + pos, std::forward<Args>( args )... );
-        _size++;
-        return begin() + pos;
-    };
-
-    /**
-     * @brief Inserts a new element at the end of the vector, right after its
-     * current last element. This new element is constructed in place using args
-     * as the arguments for its constructor.
-     *
-     * This effectively increases the container size by one, which causes an
-     * automatic reallocation of the allocated storage space if -and only if-
-     * the new vector size surpasses the current vector capacity.
-     *
-     * @tparam ...Args
-     * @param ...args
-     */
-    template <class... Args>
-    void emplace_back( Args &&...args )
-    {
-        if ( _size == _capacity )
-            reserve( _capacity + 1 );
-        _alloc.construct( _data + _size, std::forward<Args>( args )... );
-        _size++;
-    };
-
-    // Allocator
+    // Allocator accessor
     allocator_type get_allocator() const { return _alloc; };
 
     // Non-member function overloads
@@ -412,7 +423,6 @@ public:
         return !( lhs == rhs );
     }
 
-    // TODO: implement lexicographical comparison
     friend bool operator<( const vector &lhs, const vector &rhs )
     {
         return ( ft::lexicographical_compare(
@@ -435,12 +445,6 @@ public:
     };
 
     friend void swap( vector &x, vector &y ) { x.swap( y ); };
-
-protected:
-    allocator_type _alloc;
-    size_type      _size;
-    size_type      _capacity;
-    pointer        _data;
 };
 
 } // namespace ft
