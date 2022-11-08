@@ -128,69 +128,74 @@ public:
         return _it <= rhs.base();
     };
 
-    // Non-member function overloads
-    friend reverse_iterator operator+( difference_type         n,
-                                       const reverse_iterator &rhs )
-    {
-        return reverse_iterator( rhs.base() - n );
-    };
-
-    friend difference_type operator-( const reverse_iterator &rhs,
-                                      const reverse_iterator &lhs )
-    {
-        return lhs.base() - rhs.base();
-    };
-
-    friend bool operator==( const reverse_iterator &rhs,
-                            const reverse_iterator &lhs )
-    {
-        return rhs.base() == lhs.base();
-    };
-
-    friend bool operator!=( const reverse_iterator &rhs,
-                            const reverse_iterator &lhs )
-    {
-        return rhs.base() != lhs.base();
-    };
-
-    friend bool operator<( const reverse_iterator &rhs,
-                           const reverse_iterator &lhs )
-    {
-        return rhs.base() > lhs.base();
-    };
-
-    friend bool operator<=( const reverse_iterator &rhs,
-                            const reverse_iterator &lhs )
-    {
-        return rhs.base() >= lhs.base();
-    };
-
-    friend bool operator>( const reverse_iterator &rhs,
-                           const reverse_iterator &lhs )
-    {
-        return rhs.base() < lhs.base();
-    };
-
-    friend bool operator>=( const reverse_iterator &rhs,
-                            const reverse_iterator &lhs )
-    {
-        return rhs.base() <= lhs.base();
-    };
-
-    friend reverse_iterator operator+( difference_type         n,
-                                       const reverse_iterator &rhs )
-    {
-        return reverse_iterator( rhs.base() - n );
-    };
-
-    friend reverse_iterator operator-( difference_type         n,
-                                       const reverse_iterator &rhs )
-    {
-        return reverse_iterator( rhs.base() + n );
-    };
-
 protected:
     iterator_type _it;
+};
+
+template < typename Iterator >
+inline typename reverse_iterator<Iterator>::difference_type
+operator-( const reverse_iterator<Iterator> &rhs,
+           const reverse_iterator<Iterator> &lhs )
+{
+    return lhs.base() - rhs.base();
+};
+
+template < typename Iterator >
+inline bool operator==( const reverse_iterator<Iterator> &rhs,
+                        const reverse_iterator<Iterator> &lhs )
+{
+    return rhs.base() == lhs.base();
+};
+
+template < typename Iterator >
+inline bool operator!=( const reverse_iterator<Iterator> &rhs,
+                        const reverse_iterator<Iterator> &lhs )
+{
+    return rhs.base() != lhs.base();
+};
+
+template < typename Iterator >
+inline bool operator<( const reverse_iterator<Iterator> &rhs,
+                       const reverse_iterator<Iterator> &lhs )
+{
+    return rhs.base() > lhs.base();
+};
+
+template < typename Iterator >
+inline bool operator<=( const reverse_iterator<Iterator> &rhs,
+                        const reverse_iterator<Iterator> &lhs )
+{
+    return rhs.base() >= lhs.base();
+};
+
+template < typename Iterator >
+inline bool operator>( const reverse_iterator<Iterator> &rhs,
+                       const reverse_iterator<Iterator> &lhs )
+{
+    return rhs.base() < lhs.base();
+};
+
+template < typename Iterator >
+inline bool operator>=( const reverse_iterator<Iterator> &rhs,
+                        const reverse_iterator<Iterator> &lhs )
+{
+    return rhs.base() <= lhs.base();
+};
+
+template < typename Iterator >
+inline reverse_iterator<Iterator>
+operator+( typename reverse_iterator<Iterator>::difference_type n,
+           const reverse_iterator<Iterator>                    &rhs )
+{
+    return reverse_iterator( rhs.base() - n );
+};
+
+template < typename Iterator >
+inline reverse_iterator<Iterator>
+operator-( typename reverse_iterator<Iterator>::difference_type n,
+           const reverse_iterator<Iterator>                    &rhs )
+{
+    return reverse_iterator( rhs.base() + n );
 };
 
 template < typename Iterator >
