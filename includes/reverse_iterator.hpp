@@ -187,7 +187,7 @@ inline reverse_iterator<Iterator>
 operator+( typename reverse_iterator<Iterator>::difference_type n,
            const reverse_iterator<Iterator>                    &rhs )
 {
-    return reverse_iterator( rhs.base() - n );
+    return reverse_iterator<Iterator>( rhs.base() - n );
 };
 
 template < typename Iterator >
@@ -195,7 +195,7 @@ inline reverse_iterator<Iterator>
 operator-( typename reverse_iterator<Iterator>::difference_type n,
            const reverse_iterator<Iterator>                    &rhs )
 {
-    return reverse_iterator( rhs.base() + n );
+    return reverse_iterator<Iterator>( rhs.base() + n );
 };
 
 template < typename Iterator >

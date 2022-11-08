@@ -40,7 +40,7 @@ public:
 
     random_access_iterator operator+( difference_type n ) const
     {
-        return iterator( _it + n );
+        return random_access_iterator( _it + n );
     };
 
     random_access_iterator operator++( int )
@@ -64,7 +64,7 @@ public:
 
     random_access_iterator operator-( difference_type n ) const
     {
-        return iterator( _it - n );
+        return random_access_iterator( _it - n );
     };
 
     random_access_iterator operator--( int )
@@ -172,7 +172,7 @@ inline random_access_iterator<Iterator>
 operator+( typename random_access_iterator<Iterator>::difference_type n,
            const random_access_iterator<Iterator>                    &it )
 {
-    return random_access_iterator( it.base() + n );
+    return random_access_iterator<Iterator>( it.base() + n );
 };
 
 template < typename Iterator >
