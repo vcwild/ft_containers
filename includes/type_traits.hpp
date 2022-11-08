@@ -202,7 +202,7 @@ struct enable_if
 {
 };
 
-template < class T >
+template < typename T >
 struct enable_if< true, T >
 {
     typedef T type;

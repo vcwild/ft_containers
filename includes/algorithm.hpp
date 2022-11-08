@@ -5,7 +5,7 @@
 
 namespace ft {
 
-template <class InputIt1, class InputIt2>
+template <typename InputIt1, typename InputIt2>
 bool equal( InputIt1 first1, InputIt1 last1, InputIt2 first2 )
 {
     while ( first1 != last1 ) {
@@ -18,7 +18,7 @@ bool equal( InputIt1 first1, InputIt1 last1, InputIt2 first2 )
     return true;
 }
 
-template < class InputIt1, class InputIt2, class BinaryPredicate >
+template < typename InputIt1, typename InputIt2, typename BinaryPredicate >
 bool equal( InputIt1        first1,
             InputIt1        last1,
             InputIt2        first2,
@@ -34,7 +34,7 @@ bool equal( InputIt1        first1,
     return true;
 }
 
-template < class InputIt1, class InputIt2 >
+template < typename InputIt1, typename InputIt2 >
 bool lexicographical_compare( InputIt1 first1,
                               InputIt1 last1,
                               InputIt2 first2,
@@ -51,7 +51,7 @@ bool lexicographical_compare( InputIt1 first1,
     return ( first1 == last1 ) && ( first2 != last2 );
 }
 
-template < class InputIt1, class InputIt2, class Compare >
+template < typename InputIt1, typename InputIt2, typename Compare >
 bool lexicographical_compare( InputIt1 first1,
                               InputIt1 last1,
                               InputIt2 first2,

@@ -56,7 +56,7 @@ struct iterator_traits<const T *>
 };
 
 // Iterator operations
-template <class InputIt>
+template <typename InputIt>
 typename iterator_traits<InputIt>::difference_type distance( InputIt first,
                                                              InputIt last )
 {
@@ -68,7 +68,7 @@ typename iterator_traits<InputIt>::difference_type distance( InputIt first,
     return result;
 };
 
-template <class InputIt, class Distance>
+template <typename InputIt, typename Distance>
 void advance( InputIt &it, Distance n )
 {
     while ( n > 0 ) {
