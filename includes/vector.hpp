@@ -50,21 +50,18 @@ public:
             _alloc.construct( _data + i, val );
     };
 
-    template <typename InputIterator>
-    vector( InputIterator         first,
-            InputIterator         last,
+    template <typename Iterator>
+    vector( Iterator              first,
+            Iterator              last,
             const allocator_type &alloc = allocator_type() ) :
         _alloc( alloc ),
         _size( 0 ), _capacity( 0 ), _data( NULL )
     {
-        _range_initialize(
-            first, last, ft::is_integral<InputIterator>::type() );
+        _range_initialize( first, last, ft::is_integral<Iterator>::type );
     };
 
-    template < typename InputIterator >
-    void _range_initialize( InputIterator first,
-                            InputIterator last,
-                            bool          integral_type )
+    template < typename Iterator >
+    void _range_initialize( Iterator first, Iterator last, bool integral_type )
     {
         if ( integral_type == false ) {
             assign( first, last );
@@ -82,7 +79,7 @@ public:
     vector( const vector &x ) :
         _alloc( x.get_allocator() ), _size( 0 ), _capacity( 0 ), _data( NULL )
     {
-        assign( x.begin(), x.end() );
+        *this = x;
     };
 
     ~vector()
@@ -317,31 +314,30 @@ public:
             throw std::length_error( "vector::insert" );
         if ( _size + n > _capacity )
             reserve( _size + n );
-        size_type pos = position - begin();
-        for ( size_type i = _size; i > pos; i-- )
-            _alloc.construct( _data + i + n - 1, _data[i - 1] );
+        for ( size_type i = _capacity; i > _size; i-- )
+            _alloc.construct( _data + i - 1, _data[i - n - 1] );
         for ( size_type i = 0; i < n; i++ )
-            _alloc.construct( _data + pos + i, val );
+            _alloc.construct( _data + i, val );
         _size += n;
     };
 
     /**
      * @brief Template version of insert
      *
-     * @tparam InputIterator The type of the iterator
+     * @tparam Iterator The type of the iterator
      * @param position The position to insert the elements
      * @param first The typenamed iterator to the first element to insert
      * @param last The typenamed iterator to the last element to insert
      */
-    template <typename InputIterator>
-    void insert( iterator position, InputIterator first, InputIterator last )
+    template <typename Iterator>
+    void insert( iterator position, Iterator first, Iterator last )
     {
         if ( position < begin() || position > end() )
             throw std::out_of_range( "vector::insert" );
         size_type n = last - first;
         if ( n == 0 )
             return;
-        if ( n > max_size() - _size )
+        if ( n > ( max_size() - _size ) )
             throw std::length_error( "vector::insert" );
         if ( _size + n > _capacity )
             reserve( _size + n );
