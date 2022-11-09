@@ -41,13 +41,19 @@ public:
                      const value_type     &val   = value_type(),
                      const allocator_type &alloc = allocator_type() ) :
         _alloc( alloc ),
-        _size( n ), _capacity( n )
+        _data( NULL ), _size( 0 ), _capacity( n )
     {
+        if ( n > max_size() ) {
+            throw std::length_error( "std::length_error" );
+        }
         _data = _alloc.allocate( _capacity );
-        if ( _data == NULL )
+        if ( _data == NULL ) {
             throw std::bad_alloc();
-        for ( size_type i = 0; i < _size; i++ )
+        }
+        for ( size_t i = 0; i < _capacity; i++ ) {
             _alloc.construct( _data + i, val );
+            _size++;
+        }
     };
 
     template <typename Iterator>
@@ -55,29 +61,40 @@ public:
             Iterator              last,
             const allocator_type &alloc = allocator_type() ) :
         _alloc( alloc ),
-        _size( 0 ), _capacity( 0 ), _data( NULL )
+        _data( NULL ), _size( 0 ), _capacity( 0 )
     {
-        _range_initialize( first, last, ft::is_integral<Iterator>::type );
+        typename ft::is_integral<Iterator>::type is_integral;
+        _handle_integral_type( first, last, is_integral );
     };
 
-    template < typename Iterator >
-    void _range_initialize( Iterator first, Iterator last, bool integral_type )
+    template < typename Integer >
+    void _handle_integral_type( Integer n, Integer val, true_type )
     {
-        if ( integral_type == false ) {
-            assign( first, last );
-            return;
-        }
-        _size     = last - first;
-        _capacity = _size;
+
+        _capacity = n;
         _data     = _alloc.allocate( _capacity );
         if ( _data == NULL )
             throw std::bad_alloc();
-        for ( size_type i = 0; i < _size; i++ )
-            _alloc.construct( _data + i, first + i );
+        for ( size_type i = 0; i < _capacity; i++ )
+            _alloc.construct( _data + i, val );
+        _size++;
+    };
+
+    template < typename Iterator >
+    void _handle_integral_type( Iterator first, Iterator last, false_type )
+    {
+        size_type n = ft::distance( first, last );
+        _capacity   = n;
+        _data       = _alloc.allocate( _capacity );
+        if ( _data == NULL )
+            throw std::bad_alloc();
+        for ( size_type i = 0; i < _capacity; i++ )
+            _alloc.construct( _data + i, *first++ );
+        _size++;
     };
 
     vector( const vector &x ) :
-        _alloc( x.get_allocator() ), _size( 0 ), _capacity( 0 ), _data( NULL )
+        _alloc( x.get_allocator() ), _data( NULL ), _size( 0 ), _capacity( 0 )
     {
         *this = x;
     };
