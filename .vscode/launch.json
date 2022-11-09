@@ -8,7 +8,7 @@
 			"name": "(gdb) Start",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/ft_containers",
+			"program": "${workspaceFolder}/bin/vector",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
