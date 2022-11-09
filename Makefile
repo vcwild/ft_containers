@@ -6,7 +6,7 @@
 #    By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/07 19:19:40 by vwildner          #+#    #+#              #
-#    Updated: 2022/11/05 03:39:01 by vwildner         ###   ########.fr        #
+#    Updated: 2022/11/08 23:45:56 by vwildner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,12 +71,14 @@ $(OBJECTS_PATH)/%.o: $(SOURCES_PATH)/%.cpp $(HEADER)
 	@$(CXX) $(CXXFLAGS) -I $(INCLUDES_PATH) -o $@ -c $<
 
 test:
-	@$(CXX) -g -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o $(RUN_ARGS)
-	@./$(RUN_ARGS)
-	@rm $(RUN_ARGS)
+	@mkdir -p bin
+	@$(CXX) -g -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o bin/$(RUN_ARGS)
+	@./bin/$(RUN_ARGS)
 
 clean:
 	@$(REMOVE) $(OBJECTS_PATH)
 
 fclean: clean
 	@$(REMOVE) $(NAME)
+	@rm -r bin
+
