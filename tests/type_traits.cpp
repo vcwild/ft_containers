@@ -7,14 +7,13 @@ void test_setup() {}
 void test_teardown() {}
 
 template <class T>
-typename ft::enable_if<ft::is_integral<T>::type, bool>::type is_odd( T i )
+typename ft::enable_if_t<ft::is_integral<T>::value, bool> is_odd( T i )
 {
     return bool( i % 2 );
 }
 
-template < class T,
-           class = typename ft::enable_if<ft::is_integral<T>::type>::type>
-bool is_even( T i )
+template <class T>
+typename ft::enable_if_t<ft::is_integral<T>::value, bool> is_even( T i )
 {
     return !bool( i % 2 );
 }
@@ -33,122 +32,123 @@ MU_TEST( test_enable_if_is_odd )
 
 MU_TEST( test_is_integral_bool )
 {
-    mu_assert( ft::is_integral<bool>::type == true,
-               "is_integral<bool>::type == true" );
+    mu_assert( ft::is_integral<bool>::value == true,
+               "is_integral<bool>::value == true" );
 }
 
 MU_TEST( test_is_integral_char )
 {
-    mu_assert( ft::is_integral<char>::type == true,
-               "is_integral<char>::type == true" );
+    mu_assert( ft::is_integral<char>::value == true,
+               "is_integral<char>::value == true" );
 }
 
 MU_TEST( test_is_integral_wchar_t )
 {
-    mu_assert( ft::is_integral<wchar_t>::type == true,
-               "is_integral<wchar_t>::type == true" );
+    mu_assert( ft::is_integral<wchar_t>::value == true,
+               "is_integral<wchar_t>::value == true" );
 }
 
 MU_TEST( test_is_integral_signed_char )
 {
-    mu_assert( ft::is_integral<signed char>::type == true,
-               "is_integral<signed char>::type == true" );
+    mu_assert( ft::is_integral<signed char>::value == true,
+               "is_integral<signed char>::value == true" );
 }
 
 MU_TEST( test_is_integral_short_int )
 {
-    mu_assert( ft::is_integral<short int>::type == true,
-               "is_integral<short int>::type == true" );
+    mu_assert( ft::is_integral<short int>::value == true,
+               "is_integral<short int>::value == true" );
 }
 
 MU_TEST( test_is_integral_int )
 {
-    mu_assert( ft::is_integral<int>::type == true,
-               "is_integral<int>::type == true" );
+    mu_assert( ft::is_integral<int>::value == true,
+               "is_integral<int>::value == true" );
 }
 
 MU_TEST( test_is_integral_long_int )
 {
-    mu_assert( ft::is_integral<long int>::type == true,
-               "is_integral<long int>::type == true" );
+    mu_assert( ft::is_integral<long int>::value == true,
+               "is_integral<long int>::value == true" );
 }
 
 MU_TEST( test_is_integral_long_long_int )
 {
-    mu_assert( ft::is_integral<long long int>::type == true,
-               "is_integral<long long int>::type == true" );
+    mu_assert( ft::is_integral<long long int>::value == true,
+               "is_integral<long long int>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_char )
 {
-    mu_assert( ft::is_integral<unsigned char>::type == true,
-               "is_integral<unsigned char>::type == true" );
+    mu_assert( ft::is_integral<unsigned char>::value == true,
+               "is_integral<unsigned char>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_short_int )
 {
-    mu_assert( ft::is_integral<unsigned short int>::type == true,
-               "is_integral<unsigned short int>::type == true" );
+    mu_assert( ft::is_integral<unsigned short int>::value == true,
+               "is_integral<unsigned short int>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_int )
 {
-    mu_assert( ft::is_integral<unsigned int>::type == true,
-               "is_integral<unsigned int>::type == true" );
+    mu_assert( ft::is_integral<unsigned int>::value == true,
+               "is_integral<unsigned int>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_long_int )
 {
-    mu_assert( ft::is_integral<unsigned long int>::type == true,
-               "is_integral<unsigned long int>::type == true" );
+    mu_assert( ft::is_integral<unsigned long int>::value == true,
+               "is_integral<unsigned long int>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_long_long_int )
 {
-    mu_assert( ft::is_integral<unsigned long long int>::type == true,
-               "is_integral<unsigned long long int>::type == true" );
+    mu_assert( ft::is_integral<unsigned long long int>::value == true,
+               "is_integral<unsigned long long int>::value == true" );
 }
 
 MU_TEST( test_is_integral_float )
 {
-    mu_assert( ft::is_integral<float>::type == false,
-               "is_integral<float>::type == false" );
+    mu_assert( ft::is_integral<float>::value == false,
+               "is_integral<float>::value == false" );
 }
 
 MU_TEST( test_is_integral_double )
 {
-    mu_assert( ft::is_integral<double>::type == false,
-               "is_integral<double>::type == false" );
+    mu_assert( ft::is_integral<double>::value == false,
+               "is_integral<double>::value == false" );
 }
 
 MU_TEST( test_is_integral_int_volatile )
 {
-    mu_assert( ft::is_integral<int volatile>::type == true,
-               "is_integral<int volatile>::type == true" );
+    mu_assert( ft::is_integral<int volatile>::value == true,
+               "is_integral<int volatile>::value == true" );
 }
 
 MU_TEST( test_is_integral_int_const )
 {
-    mu_assert( ft::is_integral<int const>::type == true,
-               "is_integral<int const>::type == true" );
+    mu_assert( ft::is_integral<int const>::value == true,
+               "is_integral<int const>::value == true" );
 }
 
 MU_TEST( test_is_integral_int_const_volatile )
 {
-    mu_assert( ft::is_integral<int const volatile>::type == true,
-               "is_integral<int const volatile>::type == true" );
+    mu_assert( ft::is_integral<int const volatile>::value == true,
+               "is_integral<int const volatile>::value == true" );
 }
 
 MU_TEST( test_is_integral_int_ptr )
 {
-    mu_assert( ft::is_integral<int *>::type == false,
-               "is_integral<int *>::type == false" );
+    mu_assert( ft::is_integral<int *>::value == false,
+               "is_integral<int *>::value == false" );
 }
+#include <type_traits>
 
 MU_TEST( test_is_integral_int_const_ptr )
 {
-    mu_assert( ft::is_integral<int const *>::type == false,
-               "is_integral<int const *>::type == false" );
+    mu_assert( ft::is_integral<int const *>::value == false,
+               "is_integral<int const *>::value == false" );
 }
 
 MU_TEST_SUITE( suite_type_traits )

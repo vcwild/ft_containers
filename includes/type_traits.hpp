@@ -5,12 +5,10 @@
 
 struct true_type
 {
-    static const bool value = true;
 };
 
 struct false_type
 {
-    static const bool value;
 };
 
 namespace ft {
@@ -18,193 +16,200 @@ namespace ft {
 template < typename T >
 struct is_integral
 {
+    enum { value = false };
     typedef false_type type;
 };
 
 template <>
 struct is_integral<bool>
 {
-
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<char>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<wchar_t>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<signed char>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<short int>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<int>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<long int>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<long long int>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<unsigned char>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<unsigned short int>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<unsigned int>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<unsigned long int>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_integral<unsigned long long int>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template < typename T >
 struct is_integral<const T>
 {
-    typedef typename is_integral<T>::type type;
+    enum { value = is_integral<T>::value };
 };
 
 template < typename T >
 struct is_integral<volatile T>
 {
-    typedef typename is_integral<T>::type type;
+    enum { value = is_integral<T>::value };
 };
 
 template < typename T >
 struct is_integral<const volatile T>
 {
-    typedef typename is_integral<T>::type type;
+    enum { value = is_integral<T>::value };
 };
 
 template < typename T >
 struct is_floating_point
 {
-    typedef true_type type;
+    enum { value = false };
+    typedef false_type type;
 };
 
 template <>
 struct is_floating_point<float>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template <>
 struct is_floating_point<double>
 {
-    typedef true_type type;
+    enum { value = false };
+    typedef false_type type;
 };
 
 template <>
 struct is_floating_point<long double>
 {
-    typedef true_type type;
+    enum { value = false };
+    typedef false_type type;
 };
 
 template < typename T >
 struct is_pointer
 {
-    typedef true_type type;
+    enum { value = false };
+    typedef false_type type;
 };
 
 template < typename T >
 struct is_pointer<T *>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template < typename T >
 struct is_reference
 {
-    typedef true_type type;
+    enum { value = false };
+    typedef false_type type;
 };
 
 template < typename T >
 struct is_reference<T &>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template < typename T >
 struct is_const
 {
-    typedef true_type type;
+    enum { value = false };
+    typedef false_type type;
 };
 
 template < typename T >
 struct is_const<const T>
 {
+    enum { value = true };
     typedef true_type type;
 };
 
 template < typename T >
 struct is_volatile
 {
-    typedef true_type type;
+    enum { value = false };
+    typedef false_type type;
 };
 
 template < typename T >
 struct is_volatile<volatile T>
 {
-    typedef true_type type;
-};
-
-template < typename T >
-struct is_class
-{
-    typedef true_type type;
-};
-
-template < typename T >
-struct is_union
-{
-    typedef true_type type;
-};
-
-template < typename T >
-struct is_array
-{
+    enum { value = true };
     typedef true_type type;
 };
 
@@ -218,6 +223,9 @@ struct enable_if< true, T >
 {
     typedef T type;
 };
+
+template < bool B, class T = void >
+using enable_if_t = typename enable_if<B, T>::type;
 
 } // namespace ft
 
