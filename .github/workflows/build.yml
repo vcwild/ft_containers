@@ -21,6 +21,7 @@ jobs:
       - name: Run the tests
         run: |
           make test algorithm
-          make test utility
-          make test vector
           make test type_traits
+          make test utility
+          make test iterator
+          make test vector
