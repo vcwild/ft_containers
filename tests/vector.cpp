@@ -415,6 +415,28 @@ MU_TEST( test_vec_not_equal )
     mu_assert( vecMut != vecMut2, "vecMut is not equal to vecMut2" );
 }
 
+MU_TEST( test_vec_of_vecs )
+{
+    ft::vector<ft::vector<int> > vecMut( TEST_VECTOR_SIZE, vecInt );
+    mu_assert_int_eq( 0, vecMut[0][0] );
+    mu_assert_int_eq( 1, vecMut[0][1] );
+    mu_assert_int_eq( 2, vecMut[0][2] );
+    mu_assert_int_eq( 3, vecMut[0][3] );
+    mu_assert_int_eq( 4, vecMut[0][4] );
+}
+
+MU_TEST( test_vec_of_vecs_of_vecs )
+{
+    ft::vector<ft::vector<ft::vector<int> > > vecMut(
+        TEST_VECTOR_SIZE,
+        ft::vector<ft::vector<int> >( TEST_VECTOR_SIZE, vecInt ) );
+    mu_assert_int_eq( 0, vecMut[0][0][0] );
+    mu_assert_int_eq( 1, vecMut[0][0][1] );
+    mu_assert_int_eq( 2, vecMut[0][0][2] );
+    mu_assert_int_eq( 3, vecMut[0][0][3] );
+    mu_assert_int_eq( 4, vecMut[0][0][4] );
+}
+
 MU_TEST_SUITE( suite_vector )
 {
     MU_RUN_TEST( test_vec_integral_constructor );
@@ -471,6 +493,8 @@ MU_TEST_SUITE( suite_vector )
     MU_RUN_TEST( test_vec_greater_than_or_equal );
     MU_RUN_TEST( test_vec_equal );
     MU_RUN_TEST( test_vec_not_equal );
+    MU_RUN_TEST( test_vec_of_vecs );
+    MU_RUN_TEST( test_vec_of_vecs_of_vecs );
 }
 
 int main()
