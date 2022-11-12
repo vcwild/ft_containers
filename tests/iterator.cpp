@@ -103,18 +103,6 @@ MU_TEST( test_swap_iterators )
     mu_check( *it2 == 4 );
 }
 
-MU_TEST( test_compare_iterators_int_char )
-{
-    int                            a[5] = { 48, 49, 50, 51, 52 };
-    char                           b[5] = { '0', '1', '2', '3', '4' };
-    random_access_iterator<int *>  it( a );
-    random_access_iterator<char *> it2( b );
-
-    mu_check( it == it2 );
-    mu_check( it2 == it );
-    mu_check( it != it2 );
-}
-
 MU_TEST_SUITE( suite_name )
 {
     MU_RUN_TEST( test_create_int_iterator );
@@ -123,7 +111,6 @@ MU_TEST_SUITE( suite_name )
     MU_RUN_TEST( test_iterate_while_true_loop );
     MU_RUN_TEST( test_access_invalid_index );
     MU_RUN_TEST( test_swap_iterators );
-    MU_RUN_TEST( test_compare_iterators_int_char );
 }
 
 int main()
