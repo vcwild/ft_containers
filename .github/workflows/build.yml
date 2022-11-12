@@ -25,3 +25,4 @@ jobs:
           make test utility
           make test iterator
           make test vector
+          make test stack
