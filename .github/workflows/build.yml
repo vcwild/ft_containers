@@ -26,3 +26,4 @@ jobs:
           make test iterator
           make test vector
           make test stack
+          make test rb_node
