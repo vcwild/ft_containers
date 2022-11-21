@@ -20,11 +20,7 @@ The containers are implemented in the following order:
 - [x] Vector
 - [x] Map
 - [x] Stack
-- [ ] Queue
-- [ ] Double ended queue
-- [ ] Set
-- [ ] Multiset
-- [ ] Multimap
+- [x] Set
 
 ## References
 
