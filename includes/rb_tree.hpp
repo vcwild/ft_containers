@@ -284,7 +284,7 @@ public:
 
 private:
     // Member functions
-    node_pointer _copy( node_pointer nptr )
+    void _copy( node_pointer nptr )
     {
         if ( nptr != nptr->leaf ) {
             insert_unique( nptr->data );

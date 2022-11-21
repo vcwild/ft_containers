@@ -118,21 +118,6 @@ MU_TEST( test_map_erase_iterator )
     mu_assert( m[5] == 0, "m[5] == 0" );
 }
 
-MU_TEST( test_map_value_compare )
-{
-    ft::map<int, int> m;
-    for ( int i = 0; i < 10; i++ ) {
-        m[i] = i + 2;
-    }
-
-    ft::map<int, int>::value_compare comp = m.value_comp();
-    ft::map<int, int>::iterator      it   = m.begin();
-    ft::map<int, int>::iterator      ite  = m.end();
-    for ( int i = 0; it != ite; ++it, ++i ) {
-        mu_assert( !comp( *it, *it ), "not comp( *it, *it )" );
-    }
-}
-
 MU_TEST( test_map_key_compare )
 {
     ft::map<int, int> m;
@@ -351,7 +336,6 @@ MU_TEST_SUITE( suite_map )
     MU_RUN_TEST( test_map_add_duplicates );
     MU_RUN_TEST( test_map_find );
     MU_RUN_TEST( test_map_erase_iterator );
-    MU_RUN_TEST( test_map_value_compare );
     MU_RUN_TEST( test_map_key_compare );
     MU_RUN_TEST( test_map_insert_input_iterator );
     MU_RUN_TEST( test_map_swap );

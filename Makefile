@@ -1,9 +1,9 @@
 # Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
 NAME = ft_containers
 
-CXX = c++
+CXX = clang++
 
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -pedantic -Wshadow=local -fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -Wno-long-long -pedantic-errors
 
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes
 

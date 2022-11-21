@@ -20,6 +20,22 @@ void test_setup()
 
 void test_teardown() {}
 
+MU_TEST( test_vec_copy_constructor )
+{
+    ft::vector<int> copyVec( vecInt );
+    mu_assert_int_eq( copyVec.size(), vecInt.size() );
+    mu_assert_int_eq( copyVec[0], vecInt[0] );
+    mu_assert_int_eq( copyVec[1], vecInt[1] );
+    mu_assert_int_eq( copyVec[2], vecInt[2] );
+    mu_assert_int_eq( copyVec[3], vecInt[3] );
+    mu_assert_int_eq( copyVec[4], vecInt[4] );
+    mu_assert_int_eq( copyVec[5], vecInt[5] );
+    mu_assert_int_eq( copyVec[6], vecInt[6] );
+    mu_assert_int_eq( copyVec[7], vecInt[7] );
+    mu_assert_int_eq( copyVec[8], vecInt[8] );
+    mu_assert_int_eq( copyVec[9], vecInt[9] );
+}
+
 MU_TEST( test_vec_integral_constructor )
 {
     ft::vector<int> vec( TEST_VECTOR_SIZE, 42 );
@@ -439,6 +455,7 @@ MU_TEST( test_vec_of_vecs_of_vecs )
 
 MU_TEST_SUITE( suite_vector )
 {
+    MU_RUN_TEST( test_vec_copy_constructor );
     MU_RUN_TEST( test_vec_integral_constructor );
     MU_RUN_TEST( test_vec_iterators_constructor );
     MU_RUN_TEST( test_vec_begin );

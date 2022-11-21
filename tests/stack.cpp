@@ -14,6 +14,13 @@ void test_setup()
 
 void test_teardown() {}
 
+MU_TEST( test_stack_copy_constructor )
+{
+    ft::stack<int> copyStack( stackInt );
+    mu_assert_int_eq( copyStack.size(), stackInt.size() );
+    mu_assert_int_eq( copyStack.top(), stackInt.top() );
+}
+
 MU_TEST( test_stack_empty )
 {
     mu_check( demoStack.empty() == true );
@@ -133,6 +140,7 @@ MU_TEST( test_greater_equal )
 
 MU_TEST_SUITE( suite_stack )
 {
+    MU_RUN_TEST( test_stack_copy_constructor );
     MU_RUN_TEST( test_stack_empty );
     MU_RUN_TEST( test_stack_size );
     MU_RUN_TEST( test_stack_top );
