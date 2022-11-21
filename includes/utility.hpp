@@ -14,14 +14,20 @@ struct pair
     T1 first;
     T2 second;
 
-    pair() : first( T1() ), second( T2() ) {};
+    pair() : first(), second() {};
     pair( const T1 &x, const T2 &y ) : first( x ), second( y ) {};
+
+    template < typename U, typename V >
+    pair( const pair<U, V> &p ) : first( p.first ), second( p.second ) {};
+
     ~pair() {};
 
     pair &operator=( const pair &p )
     {
-        first  = p.first;
-        second = p.second;
+        if ( this != &p ) {
+            first  = p.first;
+            second = p.second;
+        }
         return *this;
     };
 };
