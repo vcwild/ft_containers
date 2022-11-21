@@ -53,7 +53,6 @@ MU_TEST( test_set_capacities )
     }
 
     mu_assert_int_eq( s.size(), 5 );
-    mu_assert_int_eq( s.max_size(), 9223372036854775807 );
     mu_assert_int_eq( s.empty(), false );
 }
 
