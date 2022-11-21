@@ -5,7 +5,7 @@
 
 using namespace ft;
 
-MU_TEST( test_create_int_iterator )
+MU_TEST( test_rb_iterator_create_int_iterator )
 {
     static ft::rb_node<int> root( 0, NULL, NULL );
     static ft::rb_node<int> leaf( 1, &root, NULL );
@@ -17,7 +17,7 @@ MU_TEST( test_create_int_iterator )
     mu_assert( it.base()->leaf == &leaf, "is not the same as node" );
 }
 
-MU_TEST( test_create_int_const_iterator )
+MU_TEST( test_rb_iterator_create_int_const_iterator )
 {
     static ft::rb_node<int>      root( 0, NULL, NULL );
     static ft::rb_node<int>      leaf( 1, &root, NULL );
@@ -29,7 +29,7 @@ MU_TEST( test_create_int_const_iterator )
     mu_assert( it.base()->leaf == &leaf, "is not the same as node" );
 }
 
-MU_TEST( test_create_string_iterator )
+MU_TEST( test_rb_iterator_create_string_iterator )
 {
     static ft::rb_node<std::string> root( "0", NULL, NULL );
     static ft::rb_node<std::string> leaf( "1", &root, NULL );
@@ -43,9 +43,9 @@ MU_TEST( test_create_string_iterator )
 
 MU_TEST_SUITE( suite_rb_iterator )
 {
-    MU_RUN_TEST( test_create_int_iterator );
-    MU_RUN_TEST( test_create_int_const_iterator );
-    MU_RUN_TEST( test_create_string_iterator );
+    MU_RUN_TEST( test_rb_iterator_create_int_iterator );
+    MU_RUN_TEST( test_rb_iterator_create_int_const_iterator );
+    MU_RUN_TEST( test_rb_iterator_create_string_iterator );
 }
 
 int main()

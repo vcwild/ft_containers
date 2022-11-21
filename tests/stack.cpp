@@ -54,7 +54,7 @@ MU_TEST( test_stack_pop )
     mu_check( mutStack.empty() == true );
 }
 
-MU_TEST( test_equal )
+MU_TEST( test_stack_equal )
 {
     ft::stack<int> stack1;
     ft::stack<int> stack2;
@@ -67,7 +67,7 @@ MU_TEST( test_equal )
     mu_check( stack1 == stack2 );
 }
 
-MU_TEST( test_not_equal )
+MU_TEST( test_stack_not_equal )
 {
     ft::stack<int> stack1;
     ft::stack<int> stack2;
@@ -82,7 +82,7 @@ MU_TEST( test_not_equal )
     mu_check( stack1 != stack2 );
 }
 
-MU_TEST( test_less )
+MU_TEST( test_stack_less )
 {
     ft::stack<int> stack1;
     ft::stack<int> stack2;
@@ -97,7 +97,7 @@ MU_TEST( test_less )
     mu_check( stack1 < stack2 );
 }
 
-MU_TEST( test_less_equal )
+MU_TEST( test_stack_less_equal )
 {
     ft::stack<int> stack1;
     ft::stack<int> stack2;
@@ -110,7 +110,7 @@ MU_TEST( test_less_equal )
     mu_check( stack1 <= stack2 );
 }
 
-MU_TEST( test_greater )
+MU_TEST( test_stack_greater )
 {
     ft::stack<int> stack1;
     ft::stack<int> stack2;
@@ -125,7 +125,7 @@ MU_TEST( test_greater )
     mu_check( stack2 > stack1 );
 }
 
-MU_TEST( test_greater_equal )
+MU_TEST( test_stack_greater_equal )
 {
     ft::stack<int> stack1;
     ft::stack<int> stack2;
@@ -145,12 +145,12 @@ MU_TEST_SUITE( suite_stack )
     MU_RUN_TEST( test_stack_size );
     MU_RUN_TEST( test_stack_top );
     MU_RUN_TEST( test_stack_pop );
-    MU_RUN_TEST( test_equal );
-    MU_RUN_TEST( test_not_equal );
-    MU_RUN_TEST( test_less );
-    MU_RUN_TEST( test_less_equal );
-    MU_RUN_TEST( test_greater );
-    MU_RUN_TEST( test_greater_equal );
+    MU_RUN_TEST( test_stack_equal );
+    MU_RUN_TEST( test_stack_not_equal );
+    MU_RUN_TEST( test_stack_less );
+    MU_RUN_TEST( test_stack_less_equal );
+    MU_RUN_TEST( test_stack_greater );
+    MU_RUN_TEST( test_stack_greater_equal );
 }
 
 int main()

@@ -4,7 +4,7 @@
 
 using namespace ft;
 
-MU_TEST( test_create_int_iterator )
+MU_TEST( test_iterator_create_int_iterator )
 {
     int                           a[5] = { 1, 2, 3, 4, 5 };
     int                          *p    = a;
@@ -22,7 +22,7 @@ MU_TEST( test_create_int_iterator )
     mu_check( it[2] == 3 );
 }
 
-MU_TEST( test_compare_iterators )
+MU_TEST( test_iterator_compare )
 {
     int                           a[6] = { 1, 2, 3, 4, 5, 1 };
     int                          *p    = a;
@@ -42,7 +42,7 @@ MU_TEST( test_compare_iterators )
     mu_check( it2 >= it );
 }
 
-MU_TEST( test_difference_between_two_iterators )
+MU_TEST( test_iterator_difference_between_two_iterators )
 {
     int                           a[5] = { 1, 2, 3, 4, 5 };
     int                          *p    = a;
@@ -54,7 +54,7 @@ MU_TEST( test_difference_between_two_iterators )
     mu_check( it - it2 == -3 );
 }
 
-MU_TEST( test_iterate_while_true_loop )
+MU_TEST( test_iterator_iterate_while_true_loop )
 {
     int                           a[5] = { 1, 2, 3, 4, 5 };
     int                          *p    = a;
@@ -68,7 +68,7 @@ MU_TEST( test_iterate_while_true_loop )
     }
 }
 
-MU_TEST( test_access_invalid_index )
+MU_TEST( test_iterator_access_invalid_index )
 {
     int                           a[5] = { 1, 2, 3, 4, 5 };
     int                          *p    = a;
@@ -85,7 +85,7 @@ MU_TEST( test_access_invalid_index )
     }
 }
 
-MU_TEST( test_swap_iterators )
+MU_TEST( test_iterator_swap )
 {
     int                           a[5] = { 1, 2, 3, 4, 5 };
     int                          *p    = a;
@@ -101,12 +101,12 @@ MU_TEST( test_swap_iterators )
 
 MU_TEST_SUITE( suite_iterator )
 {
-    MU_RUN_TEST( test_create_int_iterator );
-    MU_RUN_TEST( test_compare_iterators );
-    MU_RUN_TEST( test_difference_between_two_iterators );
-    MU_RUN_TEST( test_iterate_while_true_loop );
-    MU_RUN_TEST( test_access_invalid_index );
-    MU_RUN_TEST( test_swap_iterators );
+    MU_RUN_TEST( test_iterator_create_int_iterator );
+    MU_RUN_TEST( test_iterator_compare );
+    MU_RUN_TEST( test_iterator_difference_between_two_iterators );
+    MU_RUN_TEST( test_iterator_iterate_while_true_loop );
+    MU_RUN_TEST( test_iterator_access_invalid_index );
+    MU_RUN_TEST( test_iterator_swap );
 }
 
 int main()
