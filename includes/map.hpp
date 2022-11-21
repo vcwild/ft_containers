@@ -152,12 +152,23 @@ public:
         }
     };
 
-    void      erase( iterator position ) { _rb_tree.erase( position->first ); };
-    size_type erase( const key_type &k ) { return _rb_tree.erase( k ); };
-    void      erase( iterator first, iterator last )
+    void      erase( iterator it ) { _rb_tree.erase( it->first ); };
+    size_type erase( const key_type &k )
     {
-        _rb_tree.erase( first, last );
+        if ( find( k ) == end() ) {
+            return 0;
+        }
+        _rb_tree.erase( k );
+        return 1;
     };
+    void erase( iterator first, iterator last )
+    {
+        while ( first != last ) {
+            erase( first );
+            ++first;
+        }
+    };
+
     void swap( map &x ) { _rb_tree.swap( x._rb_tree ); };
     void clear() { _rb_tree.clear(); };
 
@@ -176,7 +187,7 @@ public:
 
     const_iterator find( const key_type &k ) const
     {
-        return _rb_tree.search( k );
+        return const_iterator( _rb_tree.search( k ) );
     };
 
     size_type count( const key_type &k ) const { return _rb_tree.count( k ); };

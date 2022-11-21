@@ -101,26 +101,22 @@ public:
 
     // Iterators
 
-    iterator begin() { return iterator( minimum( _root ) ); };
-
-    iterator end() { return iterator( NULL ); };
-
+    iterator       begin() { return iterator( minimum( _root ) ); };
     const_iterator begin() const { return const_iterator( minimum( _root ) ); };
 
-    const_iterator end() const { return const_iterator( NULL ); };
+    iterator       end() { return iterator( _sentinel ); };
+    const_iterator end() const { return const_iterator( _sentinel ); };
 
-    reverse_iterator rbegin() { return reverse_iterator( maximum( _root ) ); };
-
-    reverse_iterator rend() { return reverse_iterator( NULL ); };
-
+    reverse_iterator       rbegin() { return reverse_iterator( end() ); };
     const_reverse_iterator rbegin() const
     {
-        return const_reverse_iterator( maximum( _root ) );
+        return const_reverse_iterator( end() );
     };
 
+    reverse_iterator       rend() { return reverse_iterator( begin() ); };
     const_reverse_iterator rend() const
     {
-        return const_reverse_iterator( NULL );
+        return const_reverse_iterator( begin() );
     };
 
     // Accessors
@@ -157,38 +153,22 @@ public:
 
     iterator insert_unique( value_type val ) { return _insert( val ); };
 
-    void erase( iterator position )
+    void erase( key_type k )
     {
-        node_pointer node = position.base();
-        _erase( node );
-    };
-
-    size_type erase( const key_type &k )
-    {
-        node_pointer node = _search( k );
-        if ( node == NULL ) {
-            return 0;
+        node_pointer nptr = search( k );
+        if ( nptr == _sentinel ) {
+            return;
         }
-        _erase( node );
-        return 1;
-    };
-
-    void erase( iterator first, iterator last )
-    {
-        while ( first != last ) {
-            node_pointer node = first.base();
-            ++first;
-            _erase( node );
-        }
+        _erase( nptr );
     };
 
     void swap( rb_tree &rbt )
     {
-        allocator_type tmp_alloc    = _alloc;
-        node_pointer   tmp_root     = _root;
-        node_pointer   tmp_sentinel = _sentinel;
-        size_type      tmp_size     = _size;
-        key_compare    tmp_comp     = _comp;
+        allocator_type tmp_alloc = rbt._alloc;
+        node_pointer   tmp_root  = rbt._root;
+        node_pointer   tmp_sent  = rbt._sentinel;
+        size_type      tmp_size  = rbt._size;
+        key_compare    tmp_comp  = rbt._comp;
 
         rbt._alloc    = _alloc;
         rbt._root     = _root;
@@ -198,7 +178,7 @@ public:
 
         _alloc    = tmp_alloc;
         _root     = tmp_root;
-        _sentinel = tmp_sentinel;
+        _sentinel = tmp_sent;
         _size     = tmp_size;
         _comp     = tmp_comp;
     };

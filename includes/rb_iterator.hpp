@@ -20,7 +20,7 @@ public:
     typedef node                                               *node_pointer;
 
     // Constructors
-    rb_iterator() : node( NULL ) {};
+    rb_iterator() : _node( NULL ) {};
 
     explicit rb_iterator( node_pointer nptr ) : _node( nptr ) {};
 
