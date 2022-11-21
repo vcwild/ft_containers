@@ -201,8 +201,8 @@ public:
 
     size_type count( const key_type &k ) const
     {
-        node_pointer node = _search( k );
-        if ( node == _sentinel ) {
+        node_pointer nptr = search( k );
+        if ( nptr == _sentinel ) {
             return 0;
         }
         return 1;
@@ -524,16 +524,22 @@ private:
         x->color = BLACK;
     };
 
-    node_pointer minimum( node_pointer nptr ) { return node::minimum( nptr ); };
+    node_pointer minimum( node_pointer nptr ) const
+    {
+        return node::minimum( nptr );
+    };
 
-    node_pointer maximum( node_pointer nptr ) { return node::maximum( nptr ); };
+    node_pointer maximum( node_pointer nptr ) const
+    {
+        return node::maximum( nptr );
+    };
 
-    node_pointer successor( node_pointer nptr )
+    node_pointer successor( node_pointer nptr ) const
     {
         return node::successor( nptr );
     };
 
-    node_pointer predecessor( node_pointer nptr )
+    node_pointer predecessor( node_pointer nptr ) const
     {
         return node::predecessor( nptr );
     };

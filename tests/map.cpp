@@ -189,6 +189,151 @@ MU_TEST( test_map_swap )
 
     mu_assert( foo.size() == 3, "foo.size() == 3" );
     mu_assert( bar.size() == 2, "bar.size() == 2" );
+    mu_assert( foo['a'] == 11, "foo['a'] == 11" );
+    mu_assert( bar['x'] == 100, "bar['x'] == 100" );
+
+    swap( bar, foo );
+
+    mu_assert( foo.size() == 2, "foo.size() == 2" );
+    mu_assert( bar.size() == 3, "bar.size() == 3" );
+    mu_assert( bar['a'] == 11, "bar['a'] == 11" );
+    mu_assert( foo['x'] == 100, "foo['x'] == 100" );
+}
+
+MU_TEST( test_map_max_size )
+{
+    ft::map<int, int> m;
+    mu_assert( m.max_size() > 0, "m.max_size() > 0" );
+}
+
+MU_TEST( test_map_count )
+{
+    ft::map<int, int> m;
+    for ( int i = 0; i < 10; i++ ) {
+        m[i] = i + 2;
+    }
+
+    mu_assert( m.count( 5 ) == 1, "m.count( 5 ) == 1" );
+    mu_assert( m.count( 11 ) == 0, "m.count( 11 ) == 0" );
+}
+
+MU_TEST( test_map_lower_bound )
+{
+    ft::map<int, int> m;
+    for ( int i = 0; i < 10; i++ ) {
+        m[i] = i + 2;
+    }
+
+    ft::map<int, int>::iterator it = m.lower_bound( 5 );
+    mu_assert( it->first == 5, "it->first == 5" );
+    mu_assert( it->second == 7, "it->second == 7" );
+    it = m.lower_bound( 11 );
+    mu_assert( it == m.end(), "it is at map end" );
+}
+
+MU_TEST( test_map_upper_bound )
+{
+    ft::map<int, int> m;
+    for ( int i = 0; i < 10; i++ ) {
+        m[i] = i + 2;
+    }
+
+    ft::map<int, int>::iterator it = m.upper_bound( 5 );
+    mu_assert( it->first == 6, "it->first == 6" );
+    mu_assert( it->second == 8, "it->second == 8" );
+    it = m.upper_bound( 11 );
+    mu_assert( it == m.end(), "it is at map end" );
+}
+
+MU_TEST( test_map_equal_range )
+{
+    ft::map<int, int> m;
+    for ( int i = 0; i < 10; i++ ) {
+        m[i] = i + 2;
+    }
+
+    ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> ret;
+    ret = m.equal_range( 5 );
+
+    mu_assert( ret.first->first == 5, "ret.first->first == 5" );
+    mu_assert( ret.first->second == 7, "ret.first->second == 7" );
+    mu_assert( ret.second->first == 6, "ret.second->first == 6" );
+    mu_assert( ret.second->second == 8, "ret.second->second == 8" );
+
+    ret = m.equal_range( 11 );
+    mu_assert( ret.first == m.end(), "ret.first is at map end" );
+    mu_assert( ret.second == m.end(), "ret.second is at map end" );
+}
+
+MU_TEST( test_map_equal )
+{
+    ft::map<int, int> m1;
+    ft::map<int, int> m2;
+    for ( int i = 0; i < 10; i++ ) {
+        m1[i] = i + 2;
+        m2[i] = i + 2;
+    }
+    mu_assert( m1 == m2, "m1 == m2" );
+}
+
+MU_TEST( test_map_not_equal )
+{
+    ft::map<int, int> m1;
+    ft::map<int, int> m2;
+    for ( int i = 0; i < 10; i++ ) {
+        m1[i] = i + 2;
+        m2[i] = i + 2;
+    }
+    m2[5] = 42;
+    mu_assert( m1 != m2, "m1 != m2" );
+}
+
+MU_TEST( test_map_less_than )
+{
+    ft::map<int, int> m1;
+    ft::map<int, int> m2;
+    for ( int i = 0; i < 10; i++ ) {
+        m1[i] = i + 2;
+        m2[i] = i + 2;
+    }
+    m2[5] = 42;
+    mu_assert( m1 < m2, "m1 < m2" );
+}
+
+MU_TEST( test_map_less_than_or_equal )
+{
+    ft::map<int, int> m1;
+    ft::map<int, int> m2;
+    for ( int i = 0; i < 10; i++ ) {
+        m1[i] = i + 2;
+        m2[i] = i + 2;
+    }
+    m2[5] = 42;
+    mu_assert( m1 <= m2, "m1 <= m2" );
+}
+
+MU_TEST( test_map_greater_than )
+{
+    ft::map<int, int> m1;
+    ft::map<int, int> m2;
+    for ( int i = 0; i < 10; i++ ) {
+        m1[i] = i + 2;
+        m2[i] = i + 2;
+    }
+    m2[5] = 42;
+    mu_assert( m2 > m1, "m2 > m1" );
+}
+
+MU_TEST( test_map_greater_than_or_equal )
+{
+    ft::map<int, int> m1;
+    ft::map<int, int> m2;
+    for ( int i = 0; i < 10; i++ ) {
+        m1[i] = i + 2;
+        m2[i] = i + 2;
+    }
+    m2[5] = 42;
+    mu_assert( m2 >= m1, "m2 >= m1" );
 }
 
 MU_TEST_SUITE( suite_map )
@@ -204,6 +349,17 @@ MU_TEST_SUITE( suite_map )
     MU_RUN_TEST( test_map_key_compare );
     MU_RUN_TEST( test_map_insert_input_iterator );
     MU_RUN_TEST( test_map_swap );
+    MU_RUN_TEST( test_map_max_size );
+    MU_RUN_TEST( test_map_count );
+    MU_RUN_TEST( test_map_lower_bound );
+    MU_RUN_TEST( test_map_upper_bound );
+    MU_RUN_TEST( test_map_equal_range );
+    MU_RUN_TEST( test_map_equal );
+    MU_RUN_TEST( test_map_not_equal );
+    MU_RUN_TEST( test_map_less_than );
+    MU_RUN_TEST( test_map_less_than_or_equal );
+    MU_RUN_TEST( test_map_greater_than );
+    MU_RUN_TEST( test_map_greater_than_or_equal );
 }
 
 int main()
