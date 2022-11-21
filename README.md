@@ -17,10 +17,9 @@ This project is an implementation of the containers of the C++ standard library.
 
 The containers are implemented in the following order:
 
-- [ ] Vector
-- [ ] List
-- [ ] Map
-- [ ] Stack
+- [x] Vector
+- [x] Map
+- [x] Stack
 - [ ] Queue
 - [ ] Double ended queue
 - [ ] Set
