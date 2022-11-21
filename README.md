@@ -15,12 +15,22 @@ This project is an implementation of the containers of the C++ standard library.
 
 ## Brief
 
-The containers are implemented in the following order:
+The containers were implemented in the following order:
 
 - [x] Vector
-- [x] Map
 - [x] Stack
+- [x] Map
 - [x] Set
+
+## How to use
+
+Simply compile the program with the following command:
+
+```bash
+make
+```
+
+This will compile the program and run the tests for each container.
 
 ## References
 
