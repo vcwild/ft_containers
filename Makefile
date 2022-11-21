@@ -48,13 +48,6 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(OBJECTS) $(HEADER) $(ALL_LIBS)
-	@$(CXX) $(CXXFLAGS) \
-	-w $(OBJECTS) \
-	-o $(NAME) \
-	-L $(ARCHIVES_PATH) \
-	-I $(INCLUDES_PATH)
-
 $(OBJECTS_PATH)/%.o: $(SOURCES_PATH)/%.cpp $(HEADER)
 	@$(SAFE_MKDIR) $(OBJECTS_PATH)
 	@$(CXX) $(CXXFLAGS) -I $(INCLUDES_PATH) -o $@ -c $<
@@ -64,11 +57,10 @@ test:
 	@$(CXX) -g -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o bin/$(RUN_ARGS)
 	@./bin/$(RUN_ARGS)
 
-test_all:
+$(NAME):
 	@mkdir -p bin
-	@$(CXX) -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/main.cpp -o bin/ft_containers
-	@./bin/ft_containers
-	@rm ./bin/ft_containers
+	@$(CXX) -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/ft_main.cpp -o bin/$(NAME)
+	@./bin/$(NAME)
 
 clean:
 	@$(REMOVE) $(OBJECTS_PATH)
