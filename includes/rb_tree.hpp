@@ -9,33 +9,41 @@
 #include <iostream>
 #include <memory.h>
 
+#define RB_TEMPLATE_ARGS                                                       \
+    typename Key, typename T, typename KeyOfValue, typename Compare,           \
+        typename Alloc
+#define RB_CLASS_TYPE rb_tree< Key, T, KeyOfValue, Compare, Alloc >
+
 namespace ft {
 
 template < typename Key,
            typename T,
-           typename Compare = ft::less<Key>,
-           typename Alloc   = std::allocator< ft::pair<const Key, T> > >
+           typename KeyOfValue,
+           typename Compare,
+           typename Alloc = std::allocator< T > >
 class rb_tree {
 
 public:
-    typedef Key                    key_type;
-    typedef T                      mapped_type;
-    typedef ft::pair<const Key, T> value_type;
-    typedef Compare                key_compare;
-    typedef typename Alloc::template rebind<ft::pair<const Key, T> >::other
-                                                     allocator_type;
-    typedef typename allocator_type::reference       reference;
-    typedef typename allocator_type::const_reference const_reference;
-    typedef typename allocator_type::pointer         pointer;
-    typedef typename allocator_type::const_pointer   const_pointer;
-    typedef ft::rb_iterator<pointer>                 iterator;
-    typedef ft::rb_iterator<const_pointer>           const_iterator;
-    typedef ft::reverse_iterator<iterator>           reverse_iterator;
-    typedef ft::reverse_iterator<const_iterator>     const_reverse_iterator;
-    typedef typename iterator_traits<iterator>::difference_type difference_type;
-    typedef size_t                                              size_type;
-    typedef rb_node<value_type>                                 node;
-    typedef node                                               *node_pointer;
+    typedef Key                                                  key_type;
+    typedef T                                                    value_type;
+    typedef Compare                                              key_compare;
+    typedef typename Alloc::template rebind< rb_node<T> >::other allocator_type;
+
+    typedef value_type       &reference;
+    typedef const value_type &const_reference;
+    typedef value_type       *pointer;
+    typedef const value_type *const_pointer;
+    typedef ptrdiff_t         difference_type;
+    typedef size_t            size_type;
+
+    typedef ft::rb_iterator<pointer>             iterator;
+    typedef ft::rb_iterator<const_pointer>       const_iterator;
+    typedef ft::reverse_iterator<iterator>       reverse_iterator;
+    typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+
+    typedef rb_node<value_type> node;
+    typedef node               *node_pointer;
+    typedef const node         *const_node_pointer;
 
 private:
     allocator_type _alloc;
@@ -137,6 +145,17 @@ public:
         return _insert( new_node ).first;
     };
 
+    void insert( value_type val, node_pointer _root )
+    {
+        node_pointer existing_node = search( KeyOfValue()( val ), _root );
+        if ( existing_node != _sentinel ) {
+            _erase( existing_node );
+        }
+        node_pointer new_node = _alloc.allocate( 1 );
+        _alloc.construct( new_node, node( val, _root, _sentinel ) );
+        _insert( new_node );
+    }
+
     template < typename InputIterator >
     void insert( InputIterator first, InputIterator last )
     {
@@ -144,6 +163,18 @@ public:
             node_pointer new_node = _alloc.allocate( 1 );
             _alloc.construct( new_node, node( *first, _root, _sentinel ) );
             _insert( new_node );
+            ++first;
+        }
+    };
+
+    template < typename InputIterator >
+    void insert_unique( InputIterator first, InputIterator last )
+    {
+        while ( first != last ) {
+            node_pointer new_node = _alloc.allocate( 1 );
+            _alloc.construct( new_node, node( *first, _root, _sentinel ) );
+            if ( _insert_unique( new_node ).second )
+                ++_size;
             ++first;
         }
     };
@@ -156,7 +187,7 @@ public:
 
     size_type erase( const key_type &k )
     {
-        node_pointer node = _find( k );
+        node_pointer node = _search( k );
         if ( node == NULL ) {
             return 0;
         }
@@ -175,10 +206,23 @@ public:
 
     void swap( rb_tree &rbt )
     {
-        ft::swap( _root, rbt._root );
-        ft::swap( _sentinel, rbt._sentinel );
-        ft::swap( _size, rbt._size );
-        ft::swap( _comp, rbt._comp );
+        allocator_type tmp_alloc    = _alloc;
+        node_pointer   tmp_root     = _root;
+        node_pointer   tmp_sentinel = _sentinel;
+        size_type      tmp_size     = _size;
+        key_compare    tmp_comp     = _comp;
+
+        rbt._alloc    = _alloc;
+        rbt._root     = _root;
+        rbt._sentinel = _sentinel;
+        rbt._size     = _size;
+        rbt._comp     = _comp;
+
+        _alloc    = tmp_alloc;
+        _root     = tmp_root;
+        _sentinel = tmp_sentinel;
+        _size     = tmp_size;
+        _comp     = tmp_comp;
     };
 
     void clear()
@@ -191,14 +235,14 @@ public:
 
     // Observers
 
-    mapped_type &operator[]( const key_type &key )
+    value_type &operator[]( const key_type &key )
     {
-        node_pointer node = _find( key );
+        node_pointer node = _search( key );
         if ( node == NULL ) {
             node_pointer new_node = _alloc.allocate( 1 );
             _alloc.construct(
                 new_node,
-                node( value_type( key, mapped_type() ), _root, _sentinel ) );
+                node( value_type( key, value_type() ), _root, _sentinel ) );
             _insert( new_node );
             return new_node->value.second;
         }
@@ -207,18 +251,18 @@ public:
 
     // Operations
 
-    iterator find( const key_type &k )
+    iterator search( const key_type &k )
     {
-        node_pointer node = _find( k );
+        node_pointer node = _search( k );
         if ( node == NULL ) {
             return end();
         }
         return iterator( node );
     };
 
-    const_iterator find( const key_type &k ) const
+    const_iterator search( const key_type &k ) const
     {
-        node_pointer node = _find( k );
+        node_pointer node = _search( k );
         if ( node == NULL ) {
             return end();
         }
@@ -227,7 +271,7 @@ public:
 
     size_type count( const key_type &k ) const
     {
-        node_pointer node = _find( k );
+        node_pointer node = _search( k );
         if ( node == NULL ) {
             return 0;
         }
@@ -237,53 +281,61 @@ public:
     iterator lower_bound( const key_type &k )
     {
         node_pointer node = _root;
-        while ( node != NULL ) {
-            if ( _comp( node->value.first, k ) ) {
-                node = node->right;
-            } else {
+        node_pointer y    = _sentinel;
+        while ( node != _sentinel ) {
+            if ( !_comp( KeyOfValue()( node->data ), k ) ) {
+                y    = node;
                 node = node->left;
+            } else {
+                node = node->right;
             }
         }
-        return iterator( node );
+        return iterator( y );
     };
 
     const_iterator lower_bound( const key_type &k ) const
     {
         node_pointer node = _root;
-        while ( node != NULL ) {
-            if ( _comp( node->value.first, k ) ) {
-                node = node->right;
-            } else {
+        node_pointer y    = _sentinel;
+        while ( node != _sentinel ) {
+            if ( !_comp( KeyOfValue()( node->data ), k ) ) {
+                y    = node;
                 node = node->left;
+            } else {
+                node = node->right;
             }
         }
-        return const_iterator( node );
+        return iterator( y );
     };
 
     iterator upper_bound( const key_type &k )
     {
         node_pointer node = _root;
-        while ( node != NULL ) {
-            if ( _comp( k, node->value.first ) ) {
+        node_pointer y    = _sentinel;
+        while ( node != _sentinel ) {
+            if ( _comp( k, KeyOfValue()( node->data ) ) ) {
+                y    = node;
                 node = node->left;
             } else {
                 node = node->right;
             }
         }
-        return iterator( node );
+        return iterator( y );
     };
 
     const_iterator upper_bound( const key_type &k ) const
     {
         node_pointer node = _root;
-        while ( node != NULL ) {
-            if ( _comp( k, node->value.first ) ) {
+        node_pointer y    = _sentinel;
+        while ( node != _sentinel ) {
+            if ( _comp( k, KeyOfValue()( node->data ) ) ) {
+                y    = node;
                 node = node->left;
             } else {
                 node = node->right;
             }
         }
-        return const_iterator( node );
+        return iterator( y );
     };
 
     ft::pair<const_iterator, const_iterator>
@@ -348,33 +400,30 @@ private:
 
     void _insert( node_pointer node, node_pointer &end )
     {
-        node_pointer parent = NULL;
-        node_pointer tmp    = _root;
-        while ( tmp != NULL ) {
-            parent = tmp;
-            if ( _comp( node->data.first, tmp->data.first ) ) {
-                tmp = tmp->left;
+        node_pointer y = _sentinel;
+        node_pointer x = _root;
+        while ( x != _sentinel ) {
+            y = x;
+            if ( _comp( KeyOfValue()( node->data ),
+                        KeyOfValue()( x->data ) ) ) {
+                x = x->left;
             } else {
-                tmp = tmp->right;
+                x = x->right;
             }
         }
-        node->parent = parent;
-        if ( parent == NULL ) {
+        node->parent = y;
+        if ( y == _sentinel ) {
             _root = node;
-        } else if ( _comp( node->data.first, parent->data.first ) ) {
-            parent->left = node;
+        } else if ( _comp( KeyOfValue()( node->data ),
+                           KeyOfValue()( y->data ) ) ) {
+            y->left = node;
         } else {
-            parent->right = node;
+            y->right = node;
         }
-        node->left  = NULL;
-        node->right = NULL;
-        node->color = RED;
-        node->root  = _root;
-        node->leaf  = _sentinel;
-        _insert_fix( node );
         if ( node->right == NULL ) {
             end = node;
         }
+        _insert_fix( node );
     };
 
     void _insert_fix( node_pointer node )
@@ -471,9 +520,9 @@ private:
 
     void _erase( node_pointer node )
     {
-        node_pointer y = node;
-        node_pointer x;
-        color_type   y_original_color = y->color;
+        node_pointer    y = node;
+        node_pointer    x;
+        t_rb_node_color y_original_color = y->color;
         if ( node->left == NULL ) {
             x = node->right;
             _transplant( node, node->right );
@@ -565,45 +614,25 @@ private:
 
     node_pointer _minimum( node_pointer node )
     {
-        return rb_node::minimum( node );
+        return node::minimum( node );
     };
 
     node_pointer _maximum( node_pointer node )
     {
-        return rb_node::maximum( node );
+        return node::maximum( node );
     };
 
     node_pointer _successor( node_pointer node )
     {
-        return rb_node::successor( node );
+        return node::successor( node );
     };
 
     node_pointer _predecessor( node_pointer node )
     {
-        return rb_node::predecessor( node );
+        return node::predecessor( node );
     };
 
-    void _print( node_pointer node, int indent = 0 )
-    {
-        if ( node != NULL ) {
-            if ( node->right ) {
-                _print( node->right, indent + 4 );
-            }
-            if ( indent ) {
-                std::cout << std::setw( indent ) << ' ';
-            }
-            if ( node->right ) {
-                std::cout << " /\n" << std::setw( indent ) << ' ';
-            }
-            std::cout << node->value << "\n ";
-            if ( node->left ) {
-                std::cout << std::setw( indent ) << ' ' << " \\\n";
-                _print( node->left, indent + 4 );
-            }
-        }
-    };
-
-    node_pointer _find( const value_type &value )
+    node_pointer _search( const value_type &value )
     {
         node_pointer node = _root;
         while ( node != NULL ) {
@@ -617,6 +646,50 @@ private:
         }
         return node;
     };
+};
+
+template < RB_TEMPLATE_ARGS >
+inline bool operator==( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
+{
+    return lhs.size() == rhs.size()
+        && ft::equal( lhs.begin(), lhs.end(), rhs.begin() );
+};
+
+template < RB_TEMPLATE_ARGS >
+inline bool operator!=( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
+{
+    return !( lhs == rhs );
+};
+
+template < RB_TEMPLATE_ARGS >
+inline bool operator<( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
+{
+    return ft::lexicographical_compare(
+        lhs.begin(), lhs.end(), rhs.begin(), rhs.end() );
+};
+
+template < RB_TEMPLATE_ARGS >
+inline bool operator<=( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
+{
+    return !( rhs < lhs );
+};
+
+template < RB_TEMPLATE_ARGS >
+inline bool operator>( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
+{
+    return rhs < lhs;
+};
+
+template < RB_TEMPLATE_ARGS >
+inline bool operator>=( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
+{
+    return !( lhs < rhs );
+};
+
+template < RB_TEMPLATE_ARGS >
+inline void swap( RB_CLASS_TYPE &lhs, RB_CLASS_TYPE &rhs )
+{
+    lhs.swap( rhs );
 };
 
 } // namespace ft
