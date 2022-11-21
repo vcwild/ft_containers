@@ -64,6 +64,12 @@ test:
 	@$(CXX) -g -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o bin/$(RUN_ARGS)
 	@./bin/$(RUN_ARGS)
 
+test_all:
+	@mkdir -p bin
+	@$(CXX) -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/main.cpp -o bin/ft_containers
+	@./bin/ft_containers
+	@rm ./bin/ft_containers
+
 clean:
 	@$(REMOVE) $(OBJECTS_PATH)
 

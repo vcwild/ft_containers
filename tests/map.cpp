@@ -1,10 +1,6 @@
 #include "map.hpp"
 #include "minunit.h"
 
-void test_setup() {}
-
-void test_teardown() {}
-
 MU_TEST( test_map_assignment )
 {
 
@@ -354,7 +350,6 @@ MU_TEST_SUITE( suite_map )
 
 int main()
 {
-    MU_SUITE_CONFIGURE( &test_setup, &test_teardown );
     MU_RUN_SUITE( suite_map );
     MU_REPORT();
     return MU_EXIT_CODE;

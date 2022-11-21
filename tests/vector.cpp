@@ -4,24 +4,12 @@
 
 #define TEST_VECTOR_SIZE 10
 
-static ft::vector<int>         vecInt( TEST_VECTOR_SIZE );
-static ft::vector<char>        vecChar( TEST_VECTOR_SIZE );
-static ft::vector<std::string> vecStr( TEST_VECTOR_SIZE );
-
-void test_vector_setup()
-{
-    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
-        vecInt[i] = i;
-    for ( int i = 0; i < ( int ) vecChar.size(); i++ )
-        vecChar[i] = i + '0';
-    for ( int i = 0; i < ( int ) vecStr.size(); i++ )
-        vecStr[i] = std::to_string( i );
-}
-
-void test_vector_teardown() {}
-
 MU_TEST( test_vec_copy_constructor )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
+
     ft::vector<int> copyVec( vecInt );
     mu_assert_int_eq( copyVec.size(), vecInt.size() );
     mu_assert_int_eq( copyVec[0], vecInt[0] );
@@ -45,6 +33,9 @@ MU_TEST( test_vec_integral_constructor )
 
 MU_TEST( test_vec_iterators_constructor )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     ft::vector<int> vec( vecInt.begin(), vecInt.end() );
     for ( int i = 0; i < ( int ) vec.size(); i++ )
         mu_assert( vec[i] == vecInt[i], "all vector values must be equal" );
@@ -52,60 +43,90 @@ MU_TEST( test_vec_iterators_constructor )
 
 MU_TEST( test_vec_begin )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( *( vecInt.begin() ) == 0,
                "vector begin is equal to the first element" );
 }
 
 MU_TEST( test_vec_end )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( *( --vecInt.end() ) == ( TEST_VECTOR_SIZE - 1 ),
                "vector end - 1 is equal to the last element added" );
 }
 
 MU_TEST( test_vec_rbegin )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( *( vecInt.rbegin() ) == 9,
                "vector rbegin is equal to the last element" );
 }
 
 MU_TEST( test_vec_rend )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( *( --vecInt.rend() ) == 0,
                "vector rend - 1 is equal to the first element added" );
 }
 
 MU_TEST( test_vec_cbegin )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( *( vecInt.cbegin() ) == 0,
                "vector cbegin is equal to the first element" );
 }
 
 MU_TEST( test_vec_cend )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( *( --vecInt.cend() ) == ( TEST_VECTOR_SIZE - 1 ),
                "vector cend - 1 is equal to the last element added" );
 }
 
 MU_TEST( test_vec_crbegin )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( *( vecInt.crbegin() ) == 9,
                "vector crbegin is equal to the last element" );
 }
 
 MU_TEST( test_vec_crend )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( *( --vecInt.crend() ) == 0,
                "vector crend - 1 is equal to the first element added" );
 }
 
 MU_TEST( test_vec_size )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( vecInt.size() == TEST_VECTOR_SIZE,
                "vector size is equal to the number of elements added" );
 }
 
 MU_TEST( test_vec_max_size )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( vecInt.max_size() >= TEST_VECTOR_SIZE,
                "vector max_size is greater than or equal to the number of "
                "elements added" );
@@ -131,6 +152,9 @@ MU_TEST( test_vec_resize )
 
 MU_TEST( test_vec_capacity )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( vecInt.capacity() >= TEST_VECTOR_SIZE,
                "vector capacity is greater than or equal to the number of "
                "elements added" );
@@ -138,17 +162,26 @@ MU_TEST( test_vec_capacity )
 
 MU_TEST( test_vec_empty )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     mu_assert( vecInt.empty() == false, "vector is not empty" );
 }
 
 MU_TEST( test_iter_brackets )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         mu_assert_int_eq( i, vecInt[i] );
 }
 
 MU_TEST( test_vec_int_iter )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     for ( ft::vector<int>::iterator it = vecInt.begin(); it != vecInt.end();
           it++ )
         mu_assert_int_eq( *it, vecInt[it - vecInt.begin()] );
@@ -156,6 +189,9 @@ MU_TEST( test_vec_int_iter )
 
 MU_TEST( test_vec_reverse_iter )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     for ( ft::vector<int>::reverse_iterator it = vecInt.rbegin();
           it != vecInt.rend();
           it++ )
@@ -164,6 +200,9 @@ MU_TEST( test_vec_reverse_iter )
 
 MU_TEST( test_vec_iter_char )
 {
+    ft::vector<char> vecChar( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecChar.size(); i++ )
+        vecChar[i] = i + '0';
     for ( ft::vector<char>::iterator it = vecChar.begin(); it != vecChar.end();
           it++ )
         mu_assert_int_eq( *it, vecChar[it - vecChar.begin()] );
@@ -171,6 +210,9 @@ MU_TEST( test_vec_iter_char )
 
 MU_TEST( test_vec_reverse_iter_char )
 {
+    ft::vector<char> vecChar( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecChar.size(); i++ )
+        vecChar[i] = i + '0';
     for ( ft::vector<char>::reverse_iterator it = vecChar.rbegin();
           it != vecChar.rend();
           it++ )
@@ -179,6 +221,9 @@ MU_TEST( test_vec_reverse_iter_char )
 
 MU_TEST( test_vec_iter_string )
 {
+    ft::vector<std::string> vecStr( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecStr.size(); i++ )
+        vecStr[i] = std::to_string( i );
     for ( ft::vector<std::string>::iterator it = vecStr.begin();
           it != vecStr.end();
           it++ )
@@ -187,6 +232,9 @@ MU_TEST( test_vec_iter_string )
 
 MU_TEST( test_vec_reverse_iter_string )
 {
+    ft::vector<std::string> vecStr( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecStr.size(); i++ )
+        vecStr[i] = std::to_string( i );
     for ( ft::vector<std::string>::reverse_iterator it = vecStr.rbegin();
           it != vecStr.rend();
           it++ )
@@ -196,6 +244,9 @@ MU_TEST( test_vec_reverse_iter_string )
 
 MU_TEST( test_vec_assert_out_of_range )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     try {
         vecInt.at( 100 );
     } catch ( std::out_of_range &e ) {
@@ -203,30 +254,54 @@ MU_TEST( test_vec_assert_out_of_range )
     }
 }
 
-MU_TEST( test_vec_front ) { mu_assert_int_eq( vecInt.front(), 0 ); }
+MU_TEST( test_vec_front )
+{
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
+    mu_assert_int_eq( vecInt.front(), 0 );
+}
 
 MU_TEST( test_vec_const_front )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     const ft::vector<int> &vec = vecInt;
     mu_assert_int_eq( vec.front(), 0 );
 }
 
-MU_TEST( test_vec_back ) { mu_assert_int_eq( vecInt.back(), 9 ); }
+MU_TEST( test_vec_back )
+{
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
+    mu_assert_int_eq( vecInt.back(), 9 );
+}
 
 MU_TEST( test_vec_const_back )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     const ft::vector<int> &vec = vecInt;
     mu_assert_int_eq( vec.back(), 9 );
 }
 
 MU_TEST( test_vec_data )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         mu_assert_int_eq( i, vecInt.data()[i] );
 }
 
 MU_TEST( test_vec_const_data )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     const ft::vector<int> &vec = vecInt;
     for ( int i = 0; i < ( int ) vec.size(); i++ )
         mu_assert_int_eq( i, vec.data()[i] );
@@ -276,6 +351,9 @@ MU_TEST( test_vec_insert_pos_nsize_val )
 
 MU_TEST( test_vec_insert_pos_range )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     ft::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut.insert( vecMut.begin(), vecInt.begin(), vecInt.end() );
     mu_assert_int_eq( 0, vecMut[0] );
@@ -283,6 +361,9 @@ MU_TEST( test_vec_insert_pos_range )
 
 MU_TEST( test_vec_erase_first )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     ft::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut = vecInt;
     vecMut.erase( vecMut.begin() );
@@ -294,6 +375,9 @@ MU_TEST( test_vec_erase_first )
 
 MU_TEST( test_vec_erase_range )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     ft::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut = vecInt;
     vecMut.erase( vecMut.begin(), vecMut.begin() + 5 );
@@ -334,6 +418,9 @@ MU_TEST( test_vec_clear )
 
 MU_TEST( test_vec_allocator )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     ft::vector<int> vecMut( vecInt );
     mu_assert( vecMut.get_allocator() == vecInt.get_allocator(),
                "allocator is the same" );
@@ -383,6 +470,9 @@ MU_TEST( test_vec_not_equal )
 
 MU_TEST( test_vec_of_vecs )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     ft::vector<ft::vector<int> > vecMut( TEST_VECTOR_SIZE, vecInt );
     mu_assert_int_eq( 0, vecMut[0][0] );
     mu_assert_int_eq( 1, vecMut[0][1] );
@@ -393,6 +483,9 @@ MU_TEST( test_vec_of_vecs )
 
 MU_TEST( test_vec_of_vecs_of_vecs )
 {
+    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    for ( int i = 0; i < ( int ) vecInt.size(); i++ )
+        vecInt[i] = i;
     ft::vector<ft::vector<ft::vector<int> > > vecMut(
         TEST_VECTOR_SIZE,
         ft::vector<ft::vector<int> >( TEST_VECTOR_SIZE, vecInt ) );
@@ -460,7 +553,6 @@ MU_TEST_SUITE( suite_vector )
 
 int main()
 {
-    MU_SUITE_CONFIGURE( &test_vector_setup, &test_vector_teardown );
     MU_RUN_SUITE( suite_vector );
     MU_REPORT();
     return MU_EXIT_CODE;
