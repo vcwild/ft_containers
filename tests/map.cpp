@@ -19,13 +19,19 @@ MU_TEST( test_map_assignment )
     mu_assert( m["c"] == 6, "m[\"c\"] == 6" );
     mu_assert( m.size() == 3, "m.size() == 3" );
 
+    ft::map<const char *, int> mcopy( m );
     m.clear();
+
     mu_assert( m.size() == 0, "m.size() == 0" );
     mu_assert( m.empty(), "m.empty()" );
     mu_assert( m["a"] == 0, "m[\"a\"] == 0" );
     mu_assert( m["b"] == 0, "m[\"b\"] == 0" );
     mu_assert( m["c"] == 0, "m[\"c\"] == 0" );
     mu_assert( m["nil"] == 0, "m[\"nil\"] == 0" );
+    mu_assert( mcopy["a"] == 4, "mcopy[\"a\"] == 4" );
+    mu_assert( mcopy["b"] == 5, "mcopy[\"b\"] == 5" );
+    mu_assert( mcopy["c"] == 6, "mcopy[\"c\"] == 6" );
+    mu_assert( mcopy.size() == 3, "mcopy.size() == 3" );
 }
 
 MU_TEST( test_map_pairs )

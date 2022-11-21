@@ -64,13 +64,14 @@ public:
         _root = _sentinel;
     };
 
-    rb_tree( const rb_tree &rbt ) :
-        _alloc( rbt._alloc ), _size( rbt._size ), _comp( rbt._comp )
+    rb_tree( const rb_tree &rbt ) : _alloc( rbt._alloc )
     {
         _sentinel = _alloc.allocate( 1 );
         _alloc.construct( _sentinel, create_node( value_type(), BLACK ) );
         _root = _sentinel;
         _copy( rbt._root );
+        _size = rbt._size;
+        _comp = rbt._comp;
     };
 
     // Destructor
