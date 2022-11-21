@@ -214,43 +214,43 @@ template < SET_TEMPLATE_ARGS >
 inline bool operator==( const SET_CLASS_TYPE &lhs, const SET_CLASS_TYPE &rhs )
 {
     return lhs._rb_tree == rhs._rb_tree;
-};
+}
 
 template < SET_TEMPLATE_ARGS >
 inline bool operator!=( const SET_CLASS_TYPE &lhs, const SET_CLASS_TYPE &rhs )
 {
     return lhs._rb_tree != rhs._rb_tree;
-};
+}
 
 template < SET_TEMPLATE_ARGS >
 inline bool operator<( const SET_CLASS_TYPE &lhs, const SET_CLASS_TYPE &rhs )
 {
     return lhs._rb_tree < rhs._rb_tree;
-};
+}
 
 template < SET_TEMPLATE_ARGS >
 inline bool operator<=( const SET_CLASS_TYPE &lhs, const SET_CLASS_TYPE &rhs )
 {
     return lhs._rb_tree <= rhs._rb_tree;
-};
+}
 
 template < SET_TEMPLATE_ARGS >
 inline bool operator>( const SET_CLASS_TYPE &lhs, const SET_CLASS_TYPE &rhs )
 {
     return lhs._rb_tree > rhs._rb_tree;
-};
+}
 
 template < SET_TEMPLATE_ARGS >
 inline bool operator>=( const SET_CLASS_TYPE &lhs, const SET_CLASS_TYPE &rhs )
 {
     return lhs._rb_tree >= rhs._rb_tree;
-};
+}
 
 template < SET_TEMPLATE_ARGS >
 inline void swap( SET_CLASS_TYPE &lhs, SET_CLASS_TYPE &rhs )
 {
     lhs.swap( rhs );
-};
+}
 
 } // namespace ft
 

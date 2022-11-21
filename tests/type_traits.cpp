@@ -2,30 +2,6 @@
 #include "minunit.h"
 #include <limits.h>
 
-template <class T>
-typename ft::enable_if_t<ft::is_integral<T>::value, bool> is_odd( T i )
-{
-    return bool( i % 2 );
-}
-
-template <class T>
-typename ft::enable_if_t<ft::is_integral<T>::value, bool> is_even( T i )
-{
-    return !bool( i % 2 );
-}
-
-MU_TEST( test_enable_if_is_even )
-{
-    mu_assert( is_even( 2 ) == true, "is_even(2) == true" );
-    mu_assert( is_even( 3 ) == false, "is_even(3) == false" );
-}
-
-MU_TEST( test_enable_if_is_odd )
-{
-    mu_assert( is_odd( 2 ) == false, "is_odd(2) == false" );
-    mu_assert( is_odd( 3 ) == true, "is_odd(3) == true" );
-}
-
 MU_TEST( test_is_integral_bool )
 {
     mu_assert( ft::is_integral<bool>::value == true,
@@ -139,7 +115,6 @@ MU_TEST( test_is_integral_int_ptr )
     mu_assert( ft::is_integral<int *>::value == false,
                "is_integral<int *>::value == false" );
 }
-#include <type_traits>
 
 MU_TEST( test_is_integral_int_const_ptr )
 {
@@ -169,8 +144,6 @@ MU_TEST_SUITE( suite_type_traits )
     MU_RUN_TEST( test_is_integral_int_const_volatile );
     MU_RUN_TEST( test_is_integral_int_ptr );
     MU_RUN_TEST( test_is_integral_int_const_ptr );
-    MU_RUN_TEST( test_enable_if_is_even );
-    MU_RUN_TEST( test_enable_if_is_odd );
 }
 
 int main()

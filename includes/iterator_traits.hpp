@@ -66,7 +66,7 @@ typename iterator_traits<InputIt>::difference_type distance( InputIt first,
         ++result;
     }
     return result;
-};
+}
 
 template <typename InputIt, typename Distance>
 void advance( InputIt &it, Distance n )
@@ -75,7 +75,7 @@ void advance( InputIt &it, Distance n )
         --n;
         ++it;
     }
-};
+}
 
 } // namespace ft
 

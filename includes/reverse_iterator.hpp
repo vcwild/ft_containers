@@ -137,49 +137,49 @@ operator-( const reverse_iterator<Iterator> &rhs,
            const reverse_iterator<Iterator> &lhs )
 {
     return lhs.base() - rhs.base();
-};
+}
 
 template < typename Iterator >
 inline bool operator==( const reverse_iterator<Iterator> &rhs,
                         const reverse_iterator<Iterator> &lhs )
 {
     return rhs.base() == lhs.base();
-};
+}
 
 template < typename Iterator >
 inline bool operator!=( const reverse_iterator<Iterator> &rhs,
                         const reverse_iterator<Iterator> &lhs )
 {
     return rhs.base() != lhs.base();
-};
+}
 
 template < typename Iterator >
 inline bool operator<( const reverse_iterator<Iterator> &rhs,
                        const reverse_iterator<Iterator> &lhs )
 {
     return rhs.base() > lhs.base();
-};
+}
 
 template < typename Iterator >
 inline bool operator<=( const reverse_iterator<Iterator> &rhs,
                         const reverse_iterator<Iterator> &lhs )
 {
     return rhs.base() >= lhs.base();
-};
+}
 
 template < typename Iterator >
 inline bool operator>( const reverse_iterator<Iterator> &rhs,
                        const reverse_iterator<Iterator> &lhs )
 {
     return rhs.base() < lhs.base();
-};
+}
 
 template < typename Iterator >
 inline bool operator>=( const reverse_iterator<Iterator> &rhs,
                         const reverse_iterator<Iterator> &lhs )
 {
     return rhs.base() <= lhs.base();
-};
+}
 
 template < typename Iterator >
 inline reverse_iterator<Iterator>
@@ -187,7 +187,7 @@ operator+( typename reverse_iterator<Iterator>::difference_type n,
            const reverse_iterator<Iterator>                    &rhs )
 {
     return reverse_iterator<Iterator>( rhs.base() - n );
-};
+}
 
 template < typename Iterator >
 inline reverse_iterator<Iterator>
@@ -195,55 +195,55 @@ operator-( typename reverse_iterator<Iterator>::difference_type n,
            const reverse_iterator<Iterator>                    &rhs )
 {
     return reverse_iterator<Iterator>( rhs.base() + n );
-};
+}
 
 template < typename Iterator >
 reverse_iterator<Iterator> make_reverse_iterator( Iterator it )
 {
     return reverse_iterator<Iterator>( it );
-};
+}
 
 template < typename It1, typename It2 >
 inline bool operator==( const reverse_iterator<It1> &lhs,
                         const reverse_iterator<It2> &rhs )
 {
     return lhs.base() == rhs.base();
-};
+}
 
 template < typename It1, typename It2 >
 inline bool operator!=( const reverse_iterator<It1> &lhs,
                         const reverse_iterator<It2> &rhs )
 {
     return lhs.base() != rhs.base();
-};
+}
 
 template < typename It1, typename It2 >
 inline bool operator<( const reverse_iterator<It1> &lhs,
                        const reverse_iterator<It2> &rhs )
 {
     return lhs.base() > rhs.base();
-};
+}
 
 template < typename It1, typename It2 >
 inline bool operator<=( const reverse_iterator<It1> &lhs,
                         const reverse_iterator<It2> &rhs )
 {
     return lhs.base() >= rhs.base();
-};
+}
 
 template < typename It1, typename It2 >
 inline bool operator>( const reverse_iterator<It1> &lhs,
                        const reverse_iterator<It2> &rhs )
 {
     return lhs.base() < rhs.base();
-};
+}
 
 template < typename It1, typename It2 >
 inline bool operator>=( const reverse_iterator<It1> &lhs,
                         const reverse_iterator<It2> &rhs )
 {
     return lhs.base() <= rhs.base();
-};
+}
 
 template < typename It1, typename It2 >
 inline reverse_iterator<It1>
@@ -251,14 +251,14 @@ operator+( typename reverse_iterator<It1>::difference_type n,
            const reverse_iterator<It2>                    &rhs )
 {
     return reverse_iterator<It1>( rhs.base() - n );
-};
+}
 
 template < typename It1, typename It2 >
 inline typename reverse_iterator<It1>::difference_type
 operator-( const reverse_iterator<It1> &lhs, const reverse_iterator<It2> &rhs )
 {
     return rhs.base() - lhs.base();
-};
+}
 
 template < typename It1, typename It2 >
 inline reverse_iterator<It1>
@@ -266,7 +266,7 @@ operator-( typename reverse_iterator<It1>::difference_type n,
            const reverse_iterator<It2>                    &rhs )
 {
     return reverse_iterator<It1>( rhs.base() + n );
-};
+}
 
 } // namespace ft
 

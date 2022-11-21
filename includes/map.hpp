@@ -240,43 +240,43 @@ template < MAP_TEMPLATE_ARGS >
 bool operator==( const MAP_CLASS_TYPE &lhs, const MAP_CLASS_TYPE &rhs )
 {
     return lhs._rb_tree == rhs._rb_tree;
-};
+}
 
 template < MAP_TEMPLATE_ARGS >
 bool operator!=( const MAP_CLASS_TYPE &lhs, const MAP_CLASS_TYPE &rhs )
 {
     return !( lhs == rhs );
-};
+}
 
 template < MAP_TEMPLATE_ARGS >
 bool operator<( const MAP_CLASS_TYPE &lhs, const MAP_CLASS_TYPE &rhs )
 {
     return lhs._rb_tree < rhs._rb_tree;
-};
+}
 
 template < MAP_TEMPLATE_ARGS >
 bool operator<=( const MAP_CLASS_TYPE &lhs, const MAP_CLASS_TYPE &rhs )
 {
     return !( rhs < lhs );
-};
+}
 
 template < MAP_TEMPLATE_ARGS >
 bool operator>( const MAP_CLASS_TYPE &lhs, const MAP_CLASS_TYPE &rhs )
 {
     return rhs < lhs;
-};
+}
 
 template < MAP_TEMPLATE_ARGS >
 bool operator>=( const MAP_CLASS_TYPE &lhs, const MAP_CLASS_TYPE &rhs )
 {
     return !( lhs < rhs );
-};
+}
 
 template < MAP_TEMPLATE_ARGS >
 void swap( MAP_CLASS_TYPE &x, MAP_CLASS_TYPE &y )
 {
     x.swap( y );
-};
+}
 
 } // namespace ft
 

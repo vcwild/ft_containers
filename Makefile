@@ -33,6 +33,9 @@ SOURCES = $(addprefix $(SOURCES_PATH)/,$(SOURCE_FILES))
 
 OBJECTS = $(addprefix $(OBJECTS_PATH)/,$(subst .cpp,.o,$(SOURCE_FILES)))
 
+TARGET = bin/$(NAME)
+STD_TARGET = bin/containers
+
 # **************************************************************************** #
 
 ifeq (test,$(firstword $(MAKECMDGOALS)))
@@ -44,9 +47,9 @@ endif
 
 # **************************************************************************** #
 
-.PHONY: all run valgrind re fclean clean test
+.PHONY: all run valgrind re fclean clean test containers
 
-all: $(NAME)
+all: $(NAME) containers
 
 $(OBJECTS_PATH)/%.o: $(SOURCES_PATH)/%.cpp $(HEADER)
 	@$(SAFE_MKDIR) $(OBJECTS_PATH)
@@ -54,13 +57,20 @@ $(OBJECTS_PATH)/%.o: $(SOURCES_PATH)/%.cpp $(HEADER)
 
 test:
 	@mkdir -p bin
-	@$(CXX) -g -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o bin/$(RUN_ARGS)
+	@$(CXX) $(CXXFLAGS) -lrt -lm -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o bin/$(RUN_ARGS)
 	@./bin/$(RUN_ARGS)
 
-$(NAME):
+$(NAME) : $(TARGET)
+
+containers: $(STD_TARGET)
+
+$(TARGET):
 	@mkdir -p bin
-	@$(CXX) -lrt -lm -Wall -Wextra -I $(INCLUDES_PATH) tests/ft_main.cpp -o bin/$(NAME)
-	@./bin/$(NAME)
+	@$(CXX) -lrt -lm -Wall -Wextra -Werror -I $(INCLUDES_PATH) tests/ft_main.cpp -o bin/$(NAME)
+
+$(STD_TARGET):
+	@mkdir -p bin
+	@$(CXX) -lrt -lm -Wall -Wextra -std=c++11 -I $(INCLUDES_PATH) tests/std_main.cpp -o bin/containers
 
 clean:
 	@$(REMOVE) $(OBJECTS_PATH)

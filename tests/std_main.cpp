@@ -1,45 +1,47 @@
-#include "algorithm.hpp"
-#include "map.hpp"
 #include "minunit.h"
-#include "set.hpp"
-#include "stack.hpp"
-#include "type_traits.hpp"
-#include "utility.hpp"
-#include "vector.hpp"
+#include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <limits.h>
+#include <map>
+#include <set>
+#include <stack>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
-using namespace ft;
+using namespace std;
 
 bool is_palindrome( const std::string &s )
 {
-    return ft::equal( s.begin(), s.begin() + s.size() / 2, s.rbegin() );
+    return std::equal( s.begin(), s.begin() + s.size() / 2, s.rbegin() );
 }
 
 bool is_equal( const std::string &s1, const std::string &s2 )
 {
-    return ft::equal( s1.begin(), s1.end(), s2.begin() );
+    return std::equal( s1.begin(), s1.end(), s2.begin() );
 }
 
 bool is_equal_predicate( const std::string &s1, const std::string &s2 )
 {
-    return ft::equal( s1.begin(), s1.end(), s2.begin(), []( char c1, char c2 ) {
-        return std::tolower( c1 ) == std::tolower( c2 );
-    } );
+    return std::equal(
+        s1.begin(), s1.end(), s2.begin(), []( char c1, char c2 ) {
+            return std::tolower( c1 ) == std::tolower( c2 );
+        } );
 }
 
 bool is_lexicographical_compare( const std::string &s1, const std::string &s2 )
 {
-    return ft::lexicographical_compare(
+    return std::lexicographical_compare(
         s1.begin(), s1.end(), s2.begin(), s2.end() );
 }
 
 bool is_lexicographical_compare_predicate( const std::string &s1,
                                            const std::string &s2 )
 {
-    return ft::lexicographical_compare(
+    return std::lexicographical_compare(
         s1.begin(), s1.end(), s2.begin(), s2.end(), []( char c1, char c2 ) {
             return std::tolower( c1 ) < std::tolower( c2 );
         } );
@@ -119,7 +121,7 @@ MU_TEST_SUITE( suite_algorithm )
 MU_TEST( test_map_assignment )
 {
 
-    ft::map<const char *, int> m;
+    std::map<const char *, int> m;
 
     m["a"] = 4;
     m["b"] = 5;
@@ -130,7 +132,7 @@ MU_TEST( test_map_assignment )
     mu_assert( m["c"] == 6, "m[\"c\"] == 6" );
     mu_assert( m.size() == 3, "m.size() == 3" );
 
-    ft::map<const char *, int> mcopy( m );
+    std::map<const char *, int> mcopy( m );
     m.clear();
 
     mu_assert( m.size() == 0, "m.size() == 0" );
@@ -147,10 +149,10 @@ MU_TEST( test_map_assignment )
 
 MU_TEST( test_map_pairs )
 {
-    ft::map<char, std::string> m;
+    std::map<char, std::string> m;
 
-    m.insert( ft::make_pair( 'a', "amora" ) );
-    m.insert( ft::make_pair( 'b', "banana" ) );
+    m.insert( std::make_pair( 'a', "amora" ) );
+    m.insert( std::make_pair( 'b', "banana" ) );
 
     mu_assert( m.size() == 2, "m.size() == 2" );
     mu_assert( m['a'] == "amora", "m['a'] == \"amora\"" );
@@ -159,7 +161,7 @@ MU_TEST( test_map_pairs )
 
 MU_TEST( test_map_string_pairs )
 {
-    ft::map<const std::string, int> v;
+    std::map<const std::string, int> v;
 
     v.insert( make_pair( "sun", 1 ) );
     v.insert( make_pair( "moon", 2 ) );
@@ -179,14 +181,14 @@ MU_TEST( test_map_string_pairs )
 MU_TEST( test_map_iterate )
 {
     // create a map of ints from 0 to 50
-    ft::map<int, int> m;
+    std::map<int, int> m;
     for ( int i = 0; i < 50; i++ ) {
         m[i] = i;
     }
 
     // iterate over the map and check that the values are correct
-    ft::map<int, int>::iterator it  = m.begin();
-    ft::map<int, int>::iterator ite = m.end();
+    std::map<int, int>::iterator it  = m.begin();
+    std::map<int, int>::iterator ite = m.end();
     for ( int i = 0; it != ite; ++it, ++i ) {
         mu_assert( it->first == i, "it->first == i" );
         mu_assert( it->second == i, "it->second == i" );
@@ -195,7 +197,7 @@ MU_TEST( test_map_iterate )
 
 MU_TEST( test_map_add_duplicates )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     m[1] = 9;
     m[1] = 10;
     mu_assert( m.size() == 1, "m.size() == 1" );
@@ -204,12 +206,12 @@ MU_TEST( test_map_add_duplicates )
 
 MU_TEST( test_map_find )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     for ( int i = 0; i < 10; i++ ) {
         m[i] = i + 2;
     }
 
-    ft::map<int, int>::iterator it = m.find( 5 );
+    std::map<int, int>::iterator it = m.find( 5 );
     mu_assert( it->first == 5, "it->first == 5" );
     mu_assert( it->second == 7, "it->second == 7" );
     it = m.find( 11 );
@@ -218,12 +220,12 @@ MU_TEST( test_map_find )
 
 MU_TEST( test_map_erase_iterator )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     for ( int i = 0; i < 10; i++ ) {
         m[i] = i + 2;
     }
 
-    ft::map<int, int>::iterator it = m.find( 5 );
+    std::map<int, int>::iterator it = m.find( 5 );
     m.erase( it );
     mu_assert( m.size() == 9, "m.size() == 9" );
     mu_assert( m[5] == 0, "m[5] == 0" );
@@ -231,14 +233,14 @@ MU_TEST( test_map_erase_iterator )
 
 MU_TEST( test_map_key_compare )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     for ( int i = 0; i < 10; i++ ) {
         m[i] = i + 2;
     }
 
-    ft::map<int, int>::key_compare comp = m.key_comp();
-    ft::map<int, int>::iterator    it   = m.begin();
-    ft::map<int, int>::iterator    ite  = m.end();
+    std::map<int, int>::key_compare comp = m.key_comp();
+    std::map<int, int>::iterator    it   = m.begin();
+    std::map<int, int>::iterator    ite  = m.end();
     for ( int i = 0; it != ite; ++it, ++i ) {
         mu_assert( !comp( it->first, it->first ),
                    "not comp( it->first, it->first )" );
@@ -247,30 +249,30 @@ MU_TEST( test_map_key_compare )
 
 MU_TEST( test_map_insert_input_iterator )
 {
-    ft::map<int, int>           m;
-    ft::map<int, int>::iterator it;
+    std::map<int, int>           m;
+    std::map<int, int>::iterator it;
 
-    it = m.insert( m.begin(), ft::make_pair( 1, 1 ) );
+    it = m.insert( m.begin(), std::make_pair( 1, 1 ) );
     mu_assert( it->first == 1, "it->first == 1" );
     mu_assert( it->second == 1, "it->second == 1" );
     mu_assert( m.size() == 1, "m.size() == 1" );
 
-    it = m.insert( m.begin(), ft::make_pair( 2, 2 ) );
+    it = m.insert( m.begin(), std::make_pair( 2, 2 ) );
     mu_assert( it->first == 2, "it->first == 2" );
     mu_assert( it->second == 2, "it->second == 2" );
     mu_assert( m.size() == 2, "m.size() == 2" );
 
-    it = m.insert( m.begin(), ft::make_pair( 3, 3 ) );
+    it = m.insert( m.begin(), std::make_pair( 3, 3 ) );
     mu_assert( it->first == 3, "it->first == 3" );
     mu_assert( it->second == 3, "it->second == 3" );
     mu_assert( m.size() == 3, "m.size() == 3" );
 
-    it = m.insert( m.begin(), ft::make_pair( 4, 4 ) );
+    it = m.insert( m.begin(), std::make_pair( 4, 4 ) );
     mu_assert( it->first == 4, "it->first == 4" );
     mu_assert( it->second == 4, "it->second == 4" );
     mu_assert( m.size() == 4, "m.size() == 4" );
 
-    it = m.insert( m.begin(), ft::make_pair( 5, 5 ) );
+    it = m.insert( m.begin(), std::make_pair( 5, 5 ) );
     mu_assert( it->first == 5, "it->first == 5" );
     mu_assert( it->second == 5, "it->second == 5" );
     mu_assert( m.size() == 5, "m.size() == 5" );
@@ -278,7 +280,7 @@ MU_TEST( test_map_insert_input_iterator )
 
 MU_TEST( test_map_swap )
 {
-    ft::map<char, int> foo, bar;
+    std::map<char, int> foo, bar;
 
     foo['x'] = 100;
     foo['y'] = 200;
@@ -304,13 +306,13 @@ MU_TEST( test_map_swap )
 
 MU_TEST( test_map_max_size )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     mu_assert( m.max_size() > 0, "m.max_size() > 0" );
 }
 
 MU_TEST( test_map_count )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     for ( int i = 0; i < 10; i++ ) {
         m[i] = i + 2;
     }
@@ -321,12 +323,12 @@ MU_TEST( test_map_count )
 
 MU_TEST( test_map_lower_bound )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     for ( int i = 0; i < 10; i++ ) {
         m[i] = i + 2;
     }
 
-    ft::map<int, int>::iterator it = m.lower_bound( 5 );
+    std::map<int, int>::iterator it = m.lower_bound( 5 );
     mu_assert( it->first == 5, "it->first == 5" );
     mu_assert( it->second == 7, "it->second == 7" );
     it = m.lower_bound( 11 );
@@ -335,12 +337,12 @@ MU_TEST( test_map_lower_bound )
 
 MU_TEST( test_map_upper_bound )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     for ( int i = 0; i < 10; i++ ) {
         m[i] = i + 2;
     }
 
-    ft::map<int, int>::iterator it = m.upper_bound( 5 );
+    std::map<int, int>::iterator it = m.upper_bound( 5 );
     mu_assert( it->first == 6, "it->first == 6" );
     mu_assert( it->second == 8, "it->second == 8" );
     it = m.upper_bound( 11 );
@@ -349,12 +351,12 @@ MU_TEST( test_map_upper_bound )
 
 MU_TEST( test_map_equal_range )
 {
-    ft::map<int, int> m;
+    std::map<int, int> m;
     for ( int i = 0; i < 10; i++ ) {
         m[i] = i + 2;
     }
 
-    ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> ret;
+    std::pair<std::map<int, int>::iterator, std::map<int, int>::iterator> ret;
     ret = m.equal_range( 5 );
 
     mu_assert( ret.first->first == 5, "ret.first->first == 5" );
@@ -369,8 +371,8 @@ MU_TEST( test_map_equal_range )
 
 MU_TEST( test_map_equal )
 {
-    ft::map<int, int> m1;
-    ft::map<int, int> m2;
+    std::map<int, int> m1;
+    std::map<int, int> m2;
     for ( int i = 0; i < 10; i++ ) {
         m1[i] = i + 2;
         m2[i] = i + 2;
@@ -380,8 +382,8 @@ MU_TEST( test_map_equal )
 
 MU_TEST( test_map_not_equal )
 {
-    ft::map<int, int> m1;
-    ft::map<int, int> m2;
+    std::map<int, int> m1;
+    std::map<int, int> m2;
     for ( int i = 0; i < 10; i++ ) {
         m1[i] = i + 2;
         m2[i] = i + 2;
@@ -392,8 +394,8 @@ MU_TEST( test_map_not_equal )
 
 MU_TEST( test_map_less_than )
 {
-    ft::map<int, int> m1;
-    ft::map<int, int> m2;
+    std::map<int, int> m1;
+    std::map<int, int> m2;
     for ( int i = 0; i < 10; i++ ) {
         m1[i] = i + 2;
         m2[i] = i + 2;
@@ -404,8 +406,8 @@ MU_TEST( test_map_less_than )
 
 MU_TEST( test_map_less_than_or_equal )
 {
-    ft::map<int, int> m1;
-    ft::map<int, int> m2;
+    std::map<int, int> m1;
+    std::map<int, int> m2;
     for ( int i = 0; i < 10; i++ ) {
         m1[i] = i + 2;
         m2[i] = i + 2;
@@ -416,8 +418,8 @@ MU_TEST( test_map_less_than_or_equal )
 
 MU_TEST( test_map_greater_than )
 {
-    ft::map<int, int> m1;
-    ft::map<int, int> m2;
+    std::map<int, int> m1;
+    std::map<int, int> m2;
     for ( int i = 0; i < 10; i++ ) {
         m1[i] = i + 2;
         m2[i] = i + 2;
@@ -428,8 +430,8 @@ MU_TEST( test_map_greater_than )
 
 MU_TEST( test_map_greater_than_or_equal )
 {
-    ft::map<int, int> m1;
-    ft::map<int, int> m2;
+    std::map<int, int> m1;
+    std::map<int, int> m2;
     for ( int i = 0; i < 10; i++ ) {
         m1[i] = i + 2;
         m2[i] = i + 2;
@@ -466,8 +468,8 @@ MU_TEST_SUITE( suite_map )
 
 MU_TEST( test_set_create )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
@@ -483,14 +485,14 @@ MU_TEST( test_set_create )
 
 MU_TEST( test_set_copy_constructor )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
     }
 
-    ft::set<int> s2( s );
+    std::set<int> s2( s );
     it = s2.find( 20 );
     mu_assert_int_eq( *it, 20 );
     mu_assert_int_eq( s2.size(), 5 );
@@ -504,8 +506,8 @@ MU_TEST( test_set_copy_constructor )
 
 MU_TEST( test_set_capacities )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
@@ -517,14 +519,14 @@ MU_TEST( test_set_capacities )
 
 MU_TEST( test_set_pair_insert )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
     }
 
-    ft::pair<ft::set<int>::iterator, bool> p = s.insert( 20 );
+    std::pair<std::set<int>::iterator, bool> p = s.insert( 20 );
     mu_assert_int_eq( *p.first, 20 );
     mu_assert_int_eq( p.second, false );
     mu_assert_int_eq( s.size(), 5 );
@@ -532,8 +534,8 @@ MU_TEST( test_set_pair_insert )
 
 MU_TEST( test_set_iterator_insert )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
@@ -546,14 +548,14 @@ MU_TEST( test_set_iterator_insert )
 
 MU_TEST( test_set_input_iterator )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
     }
 
-    ft::set<int> s2( s.begin(), s.end() );
+    std::set<int> s2( s.begin(), s.end() );
     it = s2.find( 20 );
     mu_assert_int_eq( *it, 20 );
     mu_assert_int_eq( s2.size(), 5 );
@@ -567,8 +569,8 @@ MU_TEST( test_set_input_iterator )
 
 MU_TEST( test_set_erase_first_last )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
@@ -582,14 +584,14 @@ MU_TEST( test_set_erase_first_last )
 
 MU_TEST( test_set_swap )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
     }
 
-    ft::set<int> s2;
+    std::set<int> s2;
     for ( int i = 1; i <= 5; i++ ) {
         s2.insert( i * 10 );
     }
@@ -609,8 +611,8 @@ MU_TEST( test_set_swap )
 
 MU_TEST( test_set_clear )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
@@ -623,14 +625,14 @@ MU_TEST( test_set_clear )
 
 MU_TEST( test_set_observers )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
     }
 
-    ft::set<int>::key_compare comp = s.key_comp();
+    std::set<int>::key_compare comp = s.key_comp();
     mu_assert_int_eq( comp( 10, 20 ), true );
     mu_assert_int_eq( comp( 20, 10 ), false );
     mu_assert_int_eq( comp( 20, 20 ), false );
@@ -638,8 +640,8 @@ MU_TEST( test_set_observers )
 
 MU_TEST( test_set_count )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
@@ -660,8 +662,8 @@ MU_TEST( test_set_count )
 
 MU_TEST( test_set_bounds )
 {
-    ft::set<int>           s;
-    ft::set<int>::iterator it;
+    std::set<int>           s;
+    std::set<int>::iterator it;
 
     for ( int i = 1; i <= 5; i++ ) {
         s.insert( i * 10 );
@@ -671,7 +673,7 @@ MU_TEST( test_set_bounds )
     mu_assert_int_eq( *it, 20 );
     it = s.upper_bound( 20 );
     mu_assert_int_eq( *it, 30 );
-    ft::pair<ft::set<int>::iterator, ft::set<int>::iterator> p
+    std::pair<std::set<int>::iterator, std::set<int>::iterator> p
         = s.equal_range( 20 );
     mu_assert_int_eq( *p.first, 20 );
     mu_assert_int_eq( *p.second, 30 );
@@ -679,15 +681,15 @@ MU_TEST( test_set_bounds )
 
 MU_TEST( test_set_lesser )
 {
-    ft::set<int> s;
+    std::set<int> s;
     s.insert( 1 );
     s.insert( 2 );
     s.insert( 3 );
     s.insert( 4 );
     s.insert( 5 );
 
-    ft::set<int>::iterator it  = s.begin();
-    ft::set<int>::iterator ite = s.end();
+    std::set<int>::iterator it  = s.begin();
+    std::set<int>::iterator ite = s.end();
     mu_assert_int_eq( *it, 1 );
     ++it;
     mu_assert_int_eq( *it, 2 );
@@ -703,15 +705,15 @@ MU_TEST( test_set_lesser )
 
 MU_TEST( test_set_greater )
 {
-    ft::set<int> s;
+    std::set<int> s;
     s.insert( 1 );
     s.insert( 2 );
     s.insert( 3 );
     s.insert( 4 );
     s.insert( 5 );
 
-    ft::set<int>::reverse_iterator it  = s.rbegin();
-    ft::set<int>::reverse_iterator ite = s.rend();
+    std::set<int>::reverse_iterator it  = s.rbegin();
+    std::set<int>::reverse_iterator ite = s.rend();
     mu_assert_int_eq( *it, 5 );
     ++it;
     mu_assert_int_eq( *it, 4 );
@@ -727,15 +729,15 @@ MU_TEST( test_set_greater )
 
 MU_TEST( test_set_less_equal )
 {
-    ft::set<int> s;
+    std::set<int> s;
     s.insert( 1 );
     s.insert( 2 );
     s.insert( 3 );
     s.insert( 4 );
     s.insert( 5 );
 
-    ft::set<int>::iterator it  = s.begin();
-    ft::set<int>::iterator ite = s.end();
+    std::set<int>::iterator it  = s.begin();
+    std::set<int>::iterator ite = s.end();
     mu_assert_int_eq( *it, 1 );
     it++;
     mu_assert_int_eq( *it, 2 );
@@ -751,15 +753,15 @@ MU_TEST( test_set_less_equal )
 
 MU_TEST( test_set_greater_equal )
 {
-    ft::set<int> s;
+    std::set<int> s;
     s.insert( 1 );
     s.insert( 2 );
     s.insert( 3 );
     s.insert( 4 );
     s.insert( 5 );
 
-    ft::set<int>::reverse_iterator it  = s.rbegin();
-    ft::set<int>::reverse_iterator ite = s.rend();
+    std::set<int>::reverse_iterator it  = s.rbegin();
+    std::set<int>::reverse_iterator ite = s.rend();
     mu_assert_int_eq( *it, 5 );
     it++;
     mu_assert_int_eq( *it, 4 );
@@ -775,8 +777,8 @@ MU_TEST( test_set_greater_equal )
 
 MU_TEST( test_set_equal )
 {
-    ft::set<int> s1;
-    ft::set<int> s2;
+    std::set<int> s1;
+    std::set<int> s2;
     s1.insert( 1 );
     s1.insert( 2 );
     s1.insert( 3 );
@@ -792,8 +794,8 @@ MU_TEST( test_set_equal )
 
 MU_TEST( test_set_different )
 {
-    ft::set<int> s1;
-    ft::set<int> s2;
+    std::set<int> s1;
+    std::set<int> s2;
     s1.insert( 1 );
     s1.insert( 2 );
     s1.insert( 3 );
@@ -832,8 +834,8 @@ MU_TEST_SUITE( suite_set )
 
 #define TEST_STACK_SIZE 5
 
-static ft::stack<int> demoStack;
-static ft::stack<int> stackInt;
+static std::stack<int> demoStack;
+static std::stack<int> stackInt;
 
 void test_stack_setup()
 {
@@ -845,7 +847,7 @@ void test_stack_teardown() {}
 
 MU_TEST( test_stack_copy_constructor )
 {
-    ft::stack<int> copyStack( stackInt );
+    std::stack<int> copyStack( stackInt );
     mu_assert_int_eq( copyStack.size(), stackInt.size() );
     mu_assert_int_eq( copyStack.top(), stackInt.top() );
 }
@@ -870,7 +872,7 @@ MU_TEST( test_stack_top )
 
 MU_TEST( test_stack_pop )
 {
-    ft::stack<int> mutStack;
+    std::stack<int> mutStack;
 
     for ( int i = 0; i < TEST_STACK_SIZE; i++ )
         mutStack.push( i );
@@ -885,8 +887,8 @@ MU_TEST( test_stack_pop )
 
 MU_TEST( test_stack_equal )
 {
-    ft::stack<int> stack1;
-    ft::stack<int> stack2;
+    std::stack<int> stack1;
+    std::stack<int> stack2;
 
     for ( int i = 0; i < TEST_STACK_SIZE; i++ ) {
         stack1.push( i );
@@ -898,8 +900,8 @@ MU_TEST( test_stack_equal )
 
 MU_TEST( test_stack_not_equal )
 {
-    ft::stack<int> stack1;
-    ft::stack<int> stack2;
+    std::stack<int> stack1;
+    std::stack<int> stack2;
 
     for ( int i = 0; i < TEST_STACK_SIZE; i++ ) {
         stack1.push( i );
@@ -913,8 +915,8 @@ MU_TEST( test_stack_not_equal )
 
 MU_TEST( test_stack_less )
 {
-    ft::stack<int> stack1;
-    ft::stack<int> stack2;
+    std::stack<int> stack1;
+    std::stack<int> stack2;
 
     for ( int i = 0; i < TEST_STACK_SIZE; i++ ) {
         stack1.push( i );
@@ -928,8 +930,8 @@ MU_TEST( test_stack_less )
 
 MU_TEST( test_stack_less_equal )
 {
-    ft::stack<int> stack1;
-    ft::stack<int> stack2;
+    std::stack<int> stack1;
+    std::stack<int> stack2;
 
     for ( int i = 0; i < TEST_STACK_SIZE; i++ ) {
         stack1.push( i );
@@ -941,8 +943,8 @@ MU_TEST( test_stack_less_equal )
 
 MU_TEST( test_stack_greater )
 {
-    ft::stack<int> stack1;
-    ft::stack<int> stack2;
+    std::stack<int> stack1;
+    std::stack<int> stack2;
 
     for ( int i = 0; i < TEST_STACK_SIZE; i++ ) {
         stack1.push( i );
@@ -956,8 +958,8 @@ MU_TEST( test_stack_greater )
 
 MU_TEST( test_stack_greater_equal )
 {
-    ft::stack<int> stack1;
-    ft::stack<int> stack2;
+    std::stack<int> stack1;
+    std::stack<int> stack2;
 
     for ( int i = 0; i < TEST_STACK_SIZE; i++ ) {
         stack1.push( i );
@@ -985,122 +987,122 @@ MU_TEST_SUITE( suite_stack )
 
 MU_TEST( test_is_integral_bool )
 {
-    mu_assert( ft::is_integral<bool>::value == true,
+    mu_assert( std::is_integral<bool>::value == true,
                "is_integral<bool>::value == true" );
 }
 
 MU_TEST( test_is_integral_char )
 {
-    mu_assert( ft::is_integral<char>::value == true,
+    mu_assert( std::is_integral<char>::value == true,
                "is_integral<char>::value == true" );
 }
 
 MU_TEST( test_is_integral_wchar_t )
 {
-    mu_assert( ft::is_integral<wchar_t>::value == true,
+    mu_assert( std::is_integral<wchar_t>::value == true,
                "is_integral<wchar_t>::value == true" );
 }
 
 MU_TEST( test_is_integral_signed_char )
 {
-    mu_assert( ft::is_integral<signed char>::value == true,
+    mu_assert( std::is_integral<signed char>::value == true,
                "is_integral<signed char>::value == true" );
 }
 
 MU_TEST( test_is_integral_short_int )
 {
-    mu_assert( ft::is_integral<short int>::value == true,
+    mu_assert( std::is_integral<short int>::value == true,
                "is_integral<short int>::value == true" );
 }
 
 MU_TEST( test_is_integral_int )
 {
-    mu_assert( ft::is_integral<int>::value == true,
+    mu_assert( std::is_integral<int>::value == true,
                "is_integral<int>::value == true" );
 }
 
 MU_TEST( test_is_integral_long_int )
 {
-    mu_assert( ft::is_integral<long int>::value == true,
+    mu_assert( std::is_integral<long int>::value == true,
                "is_integral<long int>::value == true" );
 }
 
 MU_TEST( test_is_integral_long_long_int )
 {
-    mu_assert( ft::is_integral<long long int>::value == true,
+    mu_assert( std::is_integral<long long int>::value == true,
                "is_integral<long long int>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_char )
 {
-    mu_assert( ft::is_integral<unsigned char>::value == true,
+    mu_assert( std::is_integral<unsigned char>::value == true,
                "is_integral<unsigned char>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_short_int )
 {
-    mu_assert( ft::is_integral<unsigned short int>::value == true,
+    mu_assert( std::is_integral<unsigned short int>::value == true,
                "is_integral<unsigned short int>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_int )
 {
-    mu_assert( ft::is_integral<unsigned int>::value == true,
+    mu_assert( std::is_integral<unsigned int>::value == true,
                "is_integral<unsigned int>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_long_int )
 {
-    mu_assert( ft::is_integral<unsigned long int>::value == true,
+    mu_assert( std::is_integral<unsigned long int>::value == true,
                "is_integral<unsigned long int>::value == true" );
 }
 
 MU_TEST( test_is_integral_unsigned_long_long_int )
 {
-    mu_assert( ft::is_integral<unsigned long long int>::value == true,
+    mu_assert( std::is_integral<unsigned long long int>::value == true,
                "is_integral<unsigned long long int>::value == true" );
 }
 
 MU_TEST( test_is_integral_float )
 {
-    mu_assert( ft::is_integral<float>::value == false,
+    mu_assert( std::is_integral<float>::value == false,
                "is_integral<float>::value == false" );
 }
 
 MU_TEST( test_is_integral_double )
 {
-    mu_assert( ft::is_integral<double>::value == false,
+    mu_assert( std::is_integral<double>::value == false,
                "is_integral<double>::value == false" );
 }
 
 MU_TEST( test_is_integral_int_volatile )
 {
-    mu_assert( ft::is_integral<int volatile>::value == true,
+    mu_assert( std::is_integral<int volatile>::value == true,
                "is_integral<int volatile>::value == true" );
 }
 
 MU_TEST( test_is_integral_int_const )
 {
-    mu_assert( ft::is_integral<int const>::value == true,
+    mu_assert( std::is_integral<int const>::value == true,
                "is_integral<int const>::value == true" );
 }
 
 MU_TEST( test_is_integral_int_const_volatile )
 {
-    mu_assert( ft::is_integral<int const volatile>::value == true,
+    mu_assert( std::is_integral<int const volatile>::value == true,
                "is_integral<int const volatile>::value == true" );
 }
 
 MU_TEST( test_is_integral_int_ptr )
 {
-    mu_assert( ft::is_integral<int *>::value == false,
+    mu_assert( std::is_integral<int *>::value == false,
                "is_integral<int *>::value == false" );
 }
 #include <type_traits>
 
 MU_TEST( test_is_integral_int_const_ptr )
 {
-    mu_assert( ft::is_integral<int const *>::value == false,
+    mu_assert( std::is_integral<int const *>::value == false,
                "is_integral<int const *>::value == false" );
 }
 
@@ -1131,7 +1133,7 @@ MU_TEST_SUITE( suite_type_traits )
 
 MU_TEST( test_int_float_pair )
 {
-    ft::pair<int, float> p1( 42, 3.14 );
+    std::pair<int, float> p1( 42, 3.14 );
 
     mu_assert_int_eq( p1.first, 42 );
     mu_assert_double_eq( p1.second, 3.140000104904 );
@@ -1139,7 +1141,7 @@ MU_TEST( test_int_float_pair )
 
 MU_TEST( test_char_int_pair )
 {
-    ft::pair<char, int> p1( 'a', 42 );
+    std::pair<char, int> p1( 'a', 42 );
 
     mu_assert_int_eq( p1.first, 'a' );
     mu_assert_int_eq( p1.second, 42 );
@@ -1147,7 +1149,7 @@ MU_TEST( test_char_int_pair )
 
 MU_TEST( test_string_string_pair )
 {
-    ft::pair<std::string, std::string> p1( "Hello", "World" );
+    std::pair<std::string, std::string> p1( "Hello", "World" );
 
     mu_assert_string_eq( p1.first.c_str(), "Hello" );
     mu_assert_string_eq( p1.second.c_str(), "World" );
@@ -1155,56 +1157,56 @@ MU_TEST( test_string_string_pair )
 
 MU_TEST( test_pair_equality )
 {
-    ft::pair<int, float> p1( 42, 3.14 );
-    ft::pair<int, float> p2( 42, 3.14 );
+    std::pair<int, float> p1( 42, 3.14 );
+    std::pair<int, float> p2( 42, 3.14 );
 
     mu_assert( p1 == p2, "p1 == p2" );
 }
 
 MU_TEST( test_pair_inequality )
 {
-    ft::pair<int, float> p1( 42, 3.14 );
-    ft::pair<int, float> p2( 42, 3.15 );
+    std::pair<int, float> p1( 42, 3.14 );
+    std::pair<int, float> p2( 42, 3.15 );
 
     mu_assert( p1 != p2, "p1 != p2" );
 }
 
 MU_TEST( test_pair_less_than )
 {
-    ft::pair<int, float> p1( 42, 3.14 );
-    ft::pair<int, float> p2( 42, 3.15 );
+    std::pair<int, float> p1( 42, 3.14 );
+    std::pair<int, float> p2( 42, 3.15 );
 
     mu_assert( p1 < p2, "p1 < p2" );
 }
 
 MU_TEST( test_pair_less_than_or_equal )
 {
-    ft::pair<int, float> p1( 42, 3.14 );
-    ft::pair<int, float> p2( 42, 3.14 );
+    std::pair<int, float> p1( 42, 3.14 );
+    std::pair<int, float> p2( 42, 3.14 );
 
     mu_assert( p1 <= p2, "p1 <= p2" );
 }
 
 MU_TEST( test_pair_greater_than )
 {
-    ft::pair<int, float> p1( 42, 3.15 );
-    ft::pair<int, float> p2( 42, 3.14 );
+    std::pair<int, float> p1( 42, 3.15 );
+    std::pair<int, float> p2( 42, 3.14 );
 
     mu_assert( p1 > p2, "p1 > p2" );
 }
 
 MU_TEST( test_pair_greater_than_or_equal )
 {
-    ft::pair<int, float> p1( 42, 3.14 );
-    ft::pair<int, float> p2( 42, 3.14 );
+    std::pair<int, float> p1( 42, 3.14 );
+    std::pair<int, float> p2( 42, 3.14 );
 
     mu_assert( p1 >= p2, "p1 >= p2" );
 }
 
 MU_TEST( test_assignment_operator )
 {
-    ft::pair<int, float> p1( 42, 3.14 );
-    ft::pair<int, float> p2;
+    std::pair<int, float> p1( 42, 3.14 );
+    std::pair<int, float> p2;
 
     p2 = p1;
 
@@ -1214,8 +1216,8 @@ MU_TEST( test_assignment_operator )
 
 MU_TEST( test_make_pair )
 {
-    ft::pair<int, float> p1( 42, 3.14 );
-    ft::pair<int, float> p2 = ft::make_pair( p1.first, p1.second );
+    std::pair<int, float> p1( 42, 3.14 );
+    std::pair<int, float> p2 = std::make_pair( p1.first, p1.second );
 
     mu_assert_int_eq( p1.first, p2.first );
     mu_assert_double_eq( p1.second, p2.second );
@@ -1241,11 +1243,11 @@ MU_TEST_SUITE( suite_utility )
 
 MU_TEST( test_vec_copy_constructor )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
 
-    ft::vector<int> copyVec( vecInt );
+    std::vector<int> copyVec( vecInt );
     mu_assert_int_eq( copyVec.size(), vecInt.size() );
     mu_assert_int_eq( copyVec[0], vecInt[0] );
     mu_assert_int_eq( copyVec[1], vecInt[1] );
@@ -1261,24 +1263,24 @@ MU_TEST( test_vec_copy_constructor )
 
 MU_TEST( test_vec_integral_constructor )
 {
-    ft::vector<int> vec( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vec( TEST_VECTOR_SIZE, 42 );
     for ( int i = 0; i < ( int ) vec.size(); i++ )
         mu_assert( vec[i] == 42, "all vector values must be 42" );
 }
 
 MU_TEST( test_vec_iterators_constructor )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    ft::vector<int> vec( vecInt.begin(), vecInt.end() );
+    std::vector<int> vec( vecInt.begin(), vecInt.end() );
     for ( int i = 0; i < ( int ) vec.size(); i++ )
         mu_assert( vec[i] == vecInt[i], "all vector values must be equal" );
 }
 
 MU_TEST( test_vec_begin )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( *( vecInt.begin() ) == 0,
@@ -1287,7 +1289,7 @@ MU_TEST( test_vec_begin )
 
 MU_TEST( test_vec_end )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( *( --vecInt.end() ) == ( TEST_VECTOR_SIZE - 1 ),
@@ -1296,7 +1298,7 @@ MU_TEST( test_vec_end )
 
 MU_TEST( test_vec_rbegin )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( *( vecInt.rbegin() ) == 9,
@@ -1305,7 +1307,7 @@ MU_TEST( test_vec_rbegin )
 
 MU_TEST( test_vec_rend )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( *( --vecInt.rend() ) == 0,
@@ -1314,7 +1316,7 @@ MU_TEST( test_vec_rend )
 
 MU_TEST( test_vec_cbegin )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( *( vecInt.cbegin() ) == 0,
@@ -1323,7 +1325,7 @@ MU_TEST( test_vec_cbegin )
 
 MU_TEST( test_vec_cend )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( *( --vecInt.cend() ) == ( TEST_VECTOR_SIZE - 1 ),
@@ -1332,7 +1334,7 @@ MU_TEST( test_vec_cend )
 
 MU_TEST( test_vec_crbegin )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( *( vecInt.crbegin() ) == 9,
@@ -1341,7 +1343,7 @@ MU_TEST( test_vec_crbegin )
 
 MU_TEST( test_vec_crend )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( *( --vecInt.crend() ) == 0,
@@ -1350,7 +1352,7 @@ MU_TEST( test_vec_crend )
 
 MU_TEST( test_vec_size )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( vecInt.size() == TEST_VECTOR_SIZE,
@@ -1359,7 +1361,7 @@ MU_TEST( test_vec_size )
 
 MU_TEST( test_vec_max_size )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( vecInt.max_size() >= TEST_VECTOR_SIZE,
@@ -1369,7 +1371,7 @@ MU_TEST( test_vec_max_size )
 
 MU_TEST( test_vec_reserve )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut.reserve( 2 * TEST_VECTOR_SIZE );
 
     mu_assert( vecMut.capacity() >= 2 * TEST_VECTOR_SIZE,
@@ -1379,7 +1381,7 @@ MU_TEST( test_vec_reserve )
 
 MU_TEST( test_vec_resize )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
 
     vecMut.resize( 5 );
     mu_assert( vecMut.size() == 5, "vector size is equal to the new size" );
@@ -1387,7 +1389,7 @@ MU_TEST( test_vec_resize )
 
 MU_TEST( test_vec_capacity )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( vecInt.capacity() >= TEST_VECTOR_SIZE,
@@ -1397,7 +1399,7 @@ MU_TEST( test_vec_capacity )
 
 MU_TEST( test_vec_empty )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert( vecInt.empty() == false, "vector is not empty" );
@@ -1405,7 +1407,7 @@ MU_TEST( test_vec_empty )
 
 MU_TEST( test_iter_brackets )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
@@ -1414,20 +1416,20 @@ MU_TEST( test_iter_brackets )
 
 MU_TEST( test_vec_int_iter )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    for ( ft::vector<int>::iterator it = vecInt.begin(); it != vecInt.end();
+    for ( std::vector<int>::iterator it = vecInt.begin(); it != vecInt.end();
           it++ )
         mu_assert_int_eq( *it, vecInt[it - vecInt.begin()] );
 }
 
 MU_TEST( test_vec_reverse_iter )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    for ( ft::vector<int>::reverse_iterator it = vecInt.rbegin();
+    for ( std::vector<int>::reverse_iterator it = vecInt.rbegin();
           it != vecInt.rend();
           it++ )
         mu_assert_int_eq( *it, vecInt[vecInt.rend() - it - 1] );
@@ -1435,20 +1437,20 @@ MU_TEST( test_vec_reverse_iter )
 
 MU_TEST( test_vec_iter_char )
 {
-    ft::vector<char> vecChar( TEST_VECTOR_SIZE );
+    std::vector<char> vecChar( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecChar.size(); i++ )
         vecChar[i] = i + '0';
-    for ( ft::vector<char>::iterator it = vecChar.begin(); it != vecChar.end();
+    for ( std::vector<char>::iterator it = vecChar.begin(); it != vecChar.end();
           it++ )
         mu_assert_int_eq( *it, vecChar[it - vecChar.begin()] );
 }
 
 MU_TEST( test_vec_reverse_iter_char )
 {
-    ft::vector<char> vecChar( TEST_VECTOR_SIZE );
+    std::vector<char> vecChar( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecChar.size(); i++ )
         vecChar[i] = i + '0';
-    for ( ft::vector<char>::reverse_iterator it = vecChar.rbegin();
+    for ( std::vector<char>::reverse_iterator it = vecChar.rbegin();
           it != vecChar.rend();
           it++ )
         mu_assert_int_eq( *it, vecChar[vecChar.rend() - it - 1] );
@@ -1456,10 +1458,10 @@ MU_TEST( test_vec_reverse_iter_char )
 
 MU_TEST( test_vec_iter_string )
 {
-    ft::vector<std::string> vecStr( TEST_VECTOR_SIZE );
+    std::vector<std::string> vecStr( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecStr.size(); i++ )
         vecStr[i] = std::to_string( i );
-    for ( ft::vector<std::string>::iterator it = vecStr.begin();
+    for ( std::vector<std::string>::iterator it = vecStr.begin();
           it != vecStr.end();
           it++ )
         mu_assert( *it == vecStr[it - vecStr.begin()], "is the same string" );
@@ -1467,10 +1469,10 @@ MU_TEST( test_vec_iter_string )
 
 MU_TEST( test_vec_reverse_iter_string )
 {
-    ft::vector<std::string> vecStr( TEST_VECTOR_SIZE );
+    std::vector<std::string> vecStr( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecStr.size(); i++ )
         vecStr[i] = std::to_string( i );
-    for ( ft::vector<std::string>::reverse_iterator it = vecStr.rbegin();
+    for ( std::vector<std::string>::reverse_iterator it = vecStr.rbegin();
           it != vecStr.rend();
           it++ )
         mu_assert( *it == vecStr[vecStr.rend() - it - 1],
@@ -1479,7 +1481,7 @@ MU_TEST( test_vec_reverse_iter_string )
 
 MU_TEST( test_vec_assert_out_of_range )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     try {
@@ -1491,7 +1493,7 @@ MU_TEST( test_vec_assert_out_of_range )
 
 MU_TEST( test_vec_front )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert_int_eq( vecInt.front(), 0 );
@@ -1499,16 +1501,16 @@ MU_TEST( test_vec_front )
 
 MU_TEST( test_vec_const_front )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    const ft::vector<int> &vec = vecInt;
+    const std::vector<int> &vec = vecInt;
     mu_assert_int_eq( vec.front(), 0 );
 }
 
 MU_TEST( test_vec_back )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     mu_assert_int_eq( vecInt.back(), 9 );
@@ -1516,16 +1518,16 @@ MU_TEST( test_vec_back )
 
 MU_TEST( test_vec_const_back )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    const ft::vector<int> &vec = vecInt;
+    const std::vector<int> &vec = vecInt;
     mu_assert_int_eq( vec.back(), 9 );
 }
 
 MU_TEST( test_vec_data )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
@@ -1534,31 +1536,31 @@ MU_TEST( test_vec_data )
 
 MU_TEST( test_vec_const_data )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    const ft::vector<int> &vec = vecInt;
+    const std::vector<int> &vec = vecInt;
     for ( int i = 0; i < ( int ) vec.size(); i++ )
         mu_assert_int_eq( i, vec.data()[i] );
 }
 
 MU_TEST( test_vec_assign )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut.assign( 10, 42 );
     mu_assert_int_eq( 42, vecMut[0] );
 }
 
 MU_TEST( test_vec_push_back )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut.push_back( 42 );
     mu_assert_int_eq( 42, vecMut[TEST_VECTOR_SIZE] );
 }
 
 MU_TEST( test_vec_pop_back )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut.push_back( 42 );
     vecMut.push_back( 43 );
     vecMut.pop_back();
@@ -1567,17 +1569,17 @@ MU_TEST( test_vec_pop_back )
 
 MU_TEST( test_vec_insert_pos_val )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut.insert( vecMut.begin(), 42 );
     mu_assert_int_eq( 42, vecMut[0] );
 }
 
 MU_TEST( test_vec_insert_pos_nsize_val )
 {
-    ft::vector<int>                   vecMut( TEST_VECTOR_SIZE );
-    ft::random_access_iterator<int *> position   = vecMut.begin();
-    std::allocator<int>::size_type    n          = 10;
-    std::allocator<int>::value_type   value_type = 42;
+    std::vector<int>                vecMut( TEST_VECTOR_SIZE );
+    std::vector<int>::iterator      position   = vecMut.begin();
+    std::allocator<int>::size_type  n          = 10;
+    std::allocator<int>::value_type value_type = 42;
 
     vecMut.insert( position, n, value_type );
     for ( int i = 0; i < ( int ) n; i++ )
@@ -1586,46 +1588,46 @@ MU_TEST( test_vec_insert_pos_nsize_val )
 
 MU_TEST( test_vec_insert_pos_range )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut.insert( vecMut.begin(), vecInt.begin(), vecInt.end() );
     mu_assert_int_eq( 0, vecMut[0] );
 }
 
 MU_TEST( test_vec_erase_first )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut = vecInt;
     vecMut.erase( vecMut.begin() );
     for ( int i = 0; i < ( int ) vecMut.size(); i++ )
-        mu_assert( i + 1 == vecMut[i], "values are shifted forward" );
+        mu_assert( i + 1 == vecMut[i], "values are shistded forward" );
     mu_assert( vecMut.size() == ( TEST_VECTOR_SIZE - 1 ),
                "size is reduced by 1" );
 }
 
 MU_TEST( test_vec_erase_range )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE );
     vecMut = vecInt;
     vecMut.erase( vecMut.begin(), vecMut.begin() + 5 );
     for ( int i = 0; i < ( int ) vecMut.size(); i++ )
-        mu_assert( i + 5 == vecMut[i], "values are shifted forward" );
+        mu_assert( i + 5 == vecMut[i], "values are shistded forward" );
     mu_assert( vecMut.size() == ( TEST_VECTOR_SIZE - 5 ),
                "size is reduced by 5" );
 }
 
 MU_TEST( test_vec_swap_empty )
 {
-    ft::vector<int> vecMut;
-    ft::vector<int> vecMut2;
+    std::vector<int> vecMut;
+    std::vector<int> vecMut2;
     vecMut.insert( vecMut.begin(), 42 );
     vecMut.swap( vecMut2 );
     mu_assert_int_eq( 42, vecMut2[0] );
@@ -1637,8 +1639,8 @@ MU_TEST( test_vec_swap_empty )
 
 MU_TEST( test_vec_swap )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
-    ft::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
     vecMut.swap( vecMut2 );
     mu_assert_int_eq( 43, vecMut[0] );
     mu_assert_int_eq( 42, vecMut2[0] );
@@ -1646,69 +1648,69 @@ MU_TEST( test_vec_swap )
 
 MU_TEST( test_vec_clear )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
     vecMut.clear();
     mu_assert_int_eq( 0, vecMut.size() );
 }
 
 MU_TEST( test_vec_allocator )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    ft::vector<int> vecMut( vecInt );
+    std::vector<int> vecMut( vecInt );
     mu_assert( vecMut.get_allocator() == vecInt.get_allocator(),
                "allocator is the same" );
 }
 
 MU_TEST( test_vec_lesser_than )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
-    ft::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
     mu_assert( vecMut < vecMut2, "vecMut is lesser than vecMut2" );
 }
 
 MU_TEST( test_vec_less_than_or_equal )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
-    ft::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
     mu_assert( vecMut <= vecMut2, "vecMut is lesser than vecMut2" );
 }
 
 MU_TEST( test_vec_greater_than )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
-    ft::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
     mu_assert( vecMut2 > vecMut, "vecMut2 is greater than vecMut" );
 }
 
 MU_TEST( test_vec_greater_than_or_equal )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
-    ft::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
     mu_assert( vecMut2 >= vecMut, "vecMut2 is greater than vecMut" );
 }
 
 MU_TEST( test_vec_equal )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
-    ft::vector<int> vecMut2( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut2( TEST_VECTOR_SIZE, 42 );
     mu_assert( vecMut == vecMut2, "vecMut is equal to vecMut2" );
 }
 
 MU_TEST( test_vec_not_equal )
 {
-    ft::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
-    ft::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
+    std::vector<int> vecMut( TEST_VECTOR_SIZE, 42 );
+    std::vector<int> vecMut2( TEST_VECTOR_SIZE, 43 );
     mu_assert( vecMut != vecMut2, "vecMut is not equal to vecMut2" );
 }
 
 MU_TEST( test_vec_of_vecs )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    ft::vector<ft::vector<int> > vecMut( TEST_VECTOR_SIZE, vecInt );
+    std::vector<std::vector<int> > vecMut( TEST_VECTOR_SIZE, vecInt );
     mu_assert_int_eq( 0, vecMut[0][0] );
     mu_assert_int_eq( 1, vecMut[0][1] );
     mu_assert_int_eq( 2, vecMut[0][2] );
@@ -1718,12 +1720,12 @@ MU_TEST( test_vec_of_vecs )
 
 MU_TEST( test_vec_of_vecs_of_vecs )
 {
-    ft::vector<int> vecInt( TEST_VECTOR_SIZE );
+    std::vector<int> vecInt( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecInt.size(); i++ )
         vecInt[i] = i;
-    ft::vector<ft::vector<ft::vector<int> > > vecMut(
+    std::vector<std::vector<std::vector<int> > > vecMut(
         TEST_VECTOR_SIZE,
-        ft::vector<ft::vector<int> >( TEST_VECTOR_SIZE, vecInt ) );
+        std::vector<std::vector<int> >( TEST_VECTOR_SIZE, vecInt ) );
     mu_assert_int_eq( 0, vecMut[0][0][0] );
     mu_assert_int_eq( 1, vecMut[0][0][1] );
     mu_assert_int_eq( 2, vecMut[0][0][2] );

@@ -33,44 +33,44 @@ template < typename T1, typename T2 >
 pair< T1, T2 > make_pair( T1 key, T2 val )
 {
     return pair< T1, T2 >( key, val );
-};
+}
 
 template < typename T1, typename T2 >
 inline bool operator==( const pair<T1, T2> &lhs, const pair<T1, T2> &rhs )
 {
     return lhs.first == rhs.first && lhs.second == rhs.second;
-};
+}
 
 template < typename T1, typename T2 >
 inline bool operator!=( const pair<T1, T2> &lhs, const pair<T1, T2> &rhs )
 {
     return !( lhs == rhs );
-};
+}
 
 template < typename T1, typename T2 >
 inline bool operator<( const pair<T1, T2> &lhs, const pair<T1, T2> &rhs )
 {
     return lhs.first < rhs.first
         || ( lhs.first == rhs.first && lhs.second < rhs.second );
-};
+}
 
 template < typename T1, typename T2 >
 inline bool operator<=( const pair<T1, T2> &lhs, const pair<T1, T2> &rhs )
 {
     return lhs < rhs || lhs == rhs;
-};
+}
 
 template < typename T1, typename T2 >
 inline bool operator>( const pair<T1, T2> &lhs, const pair<T1, T2> &rhs )
 {
     return !( lhs <= rhs );
-};
+}
 
 template < typename T1, typename T2 >
 inline bool operator>=( const pair<T1, T2> &lhs, const pair<T1, T2> &rhs )
 {
     return !( lhs < rhs );
-};
+}
 
 } // namespace ft
 

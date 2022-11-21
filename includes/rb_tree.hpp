@@ -570,44 +570,44 @@ inline bool operator==( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
 {
     return lhs.size() == rhs.size()
         && ft::equal( lhs.begin(), lhs.end(), rhs.begin() );
-};
+}
 
 template < RB_TEMPLATE_ARGS >
 inline bool operator!=( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
 {
     return !( lhs == rhs );
-};
+}
 
 template < RB_TEMPLATE_ARGS >
 inline bool operator<( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
 {
     return ft::lexicographical_compare(
         lhs.begin(), lhs.end(), rhs.begin(), rhs.end() );
-};
+}
 
 template < RB_TEMPLATE_ARGS >
 inline bool operator<=( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
 {
     return !( rhs < lhs );
-};
+}
 
 template < RB_TEMPLATE_ARGS >
 inline bool operator>( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
 {
     return rhs < lhs;
-};
+}
 
 template < RB_TEMPLATE_ARGS >
 inline bool operator>=( const RB_CLASS_TYPE &lhs, const RB_CLASS_TYPE &rhs )
 {
     return !( lhs < rhs );
-};
+}
 
 template < RB_TEMPLATE_ARGS >
 inline void swap( RB_CLASS_TYPE &lhs, RB_CLASS_TYPE &rhs )
 {
     lhs.swap( rhs );
-};
+}
 
 } // namespace ft
 

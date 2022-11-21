@@ -459,7 +459,7 @@ inline bool operator==( const vector<T, Alloc> &lhs,
 {
     return ( lhs.size() == rhs.size()
              && ft::equal( lhs.begin(), lhs.end(), rhs.begin() ) );
-};
+}
 
 template < typename T, typename Alloc >
 inline bool operator!=( const vector<T, Alloc> &lhs,
@@ -474,34 +474,34 @@ inline bool operator<( const vector<T, Alloc> &lhs,
 {
     return ( ft::lexicographical_compare(
         lhs.begin(), lhs.end(), rhs.begin(), rhs.end() ) );
-};
+}
 
 template < typename T, typename Alloc >
 inline bool operator<=( const vector<T, Alloc> &lhs,
                         const vector<T, Alloc> &rhs )
 {
     return !( rhs < lhs );
-};
+}
 
 template < typename T, typename Alloc >
 inline bool operator>( const vector<T, Alloc> &lhs,
                        const vector<T, Alloc> &rhs )
 {
     return rhs < lhs;
-};
+}
 
 template < typename T, typename Alloc >
 inline bool operator>=( const vector<T, Alloc> &lhs,
                         const vector<T, Alloc> &rhs )
 {
     return !( lhs < rhs );
-};
+}
 
 template < typename T, typename Alloc >
 inline void swap( vector<T, Alloc> &x, vector<T, Alloc> &y )
 {
     x.swap( y );
-};
+}
 
 } // namespace ft
 

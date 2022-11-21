@@ -96,42 +96,42 @@ inline bool operator==( const stack<T, Container> &lhs,
                         const stack<T, Container> &rhs )
 {
     return lhs.ct() == rhs.ct();
-};
+}
 
 template < class T, class Container >
 inline bool operator!=( const stack<T, Container> &lhs,
                         const stack<T, Container> &rhs )
 {
     return lhs.ct() != rhs.ct();
-};
+}
 
 template < class T, class Container >
 inline bool operator<( const stack<T, Container> &lhs,
                        const stack<T, Container> &rhs )
 {
     return lhs.ct() < rhs.ct();
-};
+}
 
 template < class T, class Container >
 inline bool operator<=( const stack<T, Container> &lhs,
                         const stack<T, Container> &rhs )
 {
     return lhs.ct() <= rhs.ct();
-};
+}
 
 template < class T, class Container >
 inline bool operator>( const stack<T, Container> &lhs,
                        const stack<T, Container> &rhs )
 {
     return lhs.ct() > rhs.ct();
-};
+}
 
 template < class T, class Container >
 inline bool operator>=( const stack<T, Container> &lhs,
                         const stack<T, Container> &rhs )
 {
     return lhs.ct() >= rhs.ct();
-};
+}
 
 } // namespace ft
 

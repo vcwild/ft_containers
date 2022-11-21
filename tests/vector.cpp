@@ -1,8 +1,14 @@
 #include "vector.hpp"
 #include "minunit.h"
+#include <sstream>
 #include <string>
 
 #define TEST_VECTOR_SIZE 10
+
+#define SSTR( x )                                                              \
+    static_cast< std::ostringstream & >(                                       \
+        ( std::ostringstream() << std::dec << x ) )                            \
+        .str()
 
 MU_TEST( test_vec_copy_constructor )
 {
@@ -223,7 +229,7 @@ MU_TEST( test_vec_iter_string )
 {
     ft::vector<std::string> vecStr( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecStr.size(); i++ )
-        vecStr[i] = std::to_string( i );
+        vecStr[i] = SSTR( i );
     for ( ft::vector<std::string>::iterator it = vecStr.begin();
           it != vecStr.end();
           it++ )
@@ -234,7 +240,7 @@ MU_TEST( test_vec_reverse_iter_string )
 {
     ft::vector<std::string> vecStr( TEST_VECTOR_SIZE );
     for ( int i = 0; i < ( int ) vecStr.size(); i++ )
-        vecStr[i] = std::to_string( i );
+        vecStr[i] = SSTR( i );
     for ( ft::vector<std::string>::reverse_iterator it = vecStr.rbegin();
           it != vecStr.rend();
           it++ )
