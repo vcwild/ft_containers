@@ -1,15 +1,4 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/07/07 19:19:40 by vwildner          #+#    #+#              #
-#    Updated: 2022/11/08 23:45:56 by vwildner         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
+# Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
 NAME = ft_containers
 
 CXX = c++
