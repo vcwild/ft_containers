@@ -1,10 +1,6 @@
 #include "utility.hpp"
 #include "minunit.h"
 
-void test_setup() {}
-
-void test_teardown() {}
-
 MU_TEST( test_int_float_pair )
 {
     ft::pair<int, float> p1( 42, 3.14 );
@@ -114,7 +110,6 @@ MU_TEST_SUITE( suite_utility )
 
 int main()
 {
-    MU_SUITE_CONFIGURE( &test_setup, &test_teardown );
     MU_RUN_SUITE( suite_utility );
     MU_REPORT();
     return MU_EXIT_CODE;

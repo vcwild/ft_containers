@@ -5,10 +5,6 @@
 
 using namespace ft;
 
-void test_setup() {}
-
-void test_teardown() {}
-
 MU_TEST( test_create_int_iterator )
 {
     static ft::rb_node<int> root( 0, NULL, NULL );
@@ -45,7 +41,7 @@ MU_TEST( test_create_string_iterator )
     mu_assert( it.base()->leaf == &leaf, "is not the same as node" );
 }
 
-MU_TEST_SUITE( suite_name )
+MU_TEST_SUITE( suite_rb_iterator )
 {
     MU_RUN_TEST( test_create_int_iterator );
     MU_RUN_TEST( test_create_int_const_iterator );
@@ -54,8 +50,7 @@ MU_TEST_SUITE( suite_name )
 
 int main()
 {
-    MU_SUITE_CONFIGURE( &test_setup, &test_teardown );
-    MU_RUN_SUITE( suite_name );
+    MU_RUN_SUITE( suite_rb_iterator );
     MU_REPORT();
     return MU_EXIT_CODE;
 }

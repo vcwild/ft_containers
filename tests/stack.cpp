@@ -6,13 +6,13 @@
 static ft::stack<int> demoStack;
 static ft::stack<int> stackInt;
 
-void test_setup()
+void test_stack_setup()
 {
     for ( int i = 0; i < TEST_STACK_SIZE; i++ )
         stackInt.push( i );
 }
 
-void test_teardown() {}
+void test_stack_teardown() {}
 
 MU_TEST( test_stack_copy_constructor )
 {
@@ -155,7 +155,7 @@ MU_TEST_SUITE( suite_stack )
 
 int main()
 {
-    MU_SUITE_CONFIGURE( &test_setup, &test_teardown );
+    MU_SUITE_CONFIGURE( &test_stack_setup, &test_stack_teardown );
     MU_RUN_SUITE( suite_stack );
     MU_REPORT();
     return MU_EXIT_CODE;

@@ -3,10 +3,6 @@
 #include <iostream>
 #include <string>
 
-void test_setup() {}
-
-void test_teardown() {}
-
 bool is_palindrome( const std::string &s )
 {
     return ft::equal( s.begin(), s.begin() + s.size() / 2, s.rbegin() );
@@ -111,7 +107,6 @@ MU_TEST_SUITE( suite_algorithm )
 
 int main()
 {
-    MU_SUITE_CONFIGURE( &test_setup, &test_teardown );
     MU_RUN_SUITE( suite_algorithm );
     MU_REPORT();
     return MU_EXIT_CODE;

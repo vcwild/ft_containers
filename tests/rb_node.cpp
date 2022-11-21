@@ -5,10 +5,6 @@ static ft::rb_node<int> root( 0, NULL, NULL );
 static ft::rb_node<int> leaf( 1, &root, NULL );
 static ft::rb_node<int> node1( 2, &leaf, &leaf );
 
-void test_setup() {}
-
-void test_teardown() {}
-
 MU_TEST( test_root )
 {
     mu_assert_int_eq( root.data, 0 );
@@ -50,7 +46,6 @@ MU_TEST_SUITE( suite_rb_node )
 
 int main()
 {
-    MU_SUITE_CONFIGURE( &test_setup, &test_teardown );
     MU_RUN_SUITE( suite_rb_node );
     MU_REPORT();
     return MU_EXIT_CODE;
