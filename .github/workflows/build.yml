@@ -28,3 +28,4 @@ jobs:
           make test stack
           make test rb_node
           make test rb_iterator
+          make test map

@@ -59,56 +59,63 @@ public:
         _alloc( alloc ),
         _root( NULL ), _sentinel( NULL ), _size( 0 ), _comp( comp )
     {
-        _sentinel
-            = new node( value_type(), NULL, NULL, NULL, NULL, NULL, BLACK );
+        _sentinel = _alloc.allocate( 1 );
+        _alloc.construct( _sentinel, create_node( value_type(), BLACK ) );
+        _root = _sentinel;
     };
 
     rb_tree( const rb_tree &rbt ) :
         _alloc( rbt._alloc ), _size( rbt._size ), _comp( rbt._comp )
     {
-        _root = _copy( rbt._root, _sentinel );
+        _sentinel = _alloc.allocate( 1 );
+        _alloc.construct( _sentinel, create_node( value_type(), BLACK ) );
+        _root = _sentinel;
+        _copy( rbt._root );
     };
 
     // Destructor
     ~rb_tree()
     {
         _clear( _root );
+        _alloc.destroy( _sentinel );
         _alloc.deallocate( _sentinel, 1 );
+        _size = 0;
     };
 
     // Assignment operator
     rb_tree &operator=( const rb_tree &rhs )
     {
-        if ( this != &rhs ) {
-            _clear( _root );
-            _alloc.deallocate( _sentinel, 1 );
-            _root = _copy( rhs._root, _sentinel );
-            _size = rhs._size;
-            _comp = rhs._comp;
+        if ( this == &rhs ) {
+            return *this;
         }
+        this->~rb_tree();
+        _alloc    = rhs._alloc;
+        _sentinel = _alloc.allocate( 1 );
+        _alloc.construct( _sentinel, create_node( value_type(), BLACK ) );
+        _root = _sentinel;
+        _copy( rhs._root );
+        _size = rhs._size;
+        _comp = rhs._comp;
         return *this;
     };
 
     // Iterators
 
-    iterator begin() { return iterator( _minimum( _root ) ); };
+    iterator begin() { return iterator( minimum( _root ) ); };
 
     iterator end() { return iterator( NULL ); };
 
-    const_iterator begin() const
-    {
-        return const_iterator( _minimum( _root ) );
-    };
+    const_iterator begin() const { return const_iterator( minimum( _root ) ); };
 
     const_iterator end() const { return const_iterator( NULL ); };
 
-    reverse_iterator rbegin() { return reverse_iterator( _maximum( _root ) ); };
+    reverse_iterator rbegin() { return reverse_iterator( maximum( _root ) ); };
 
     reverse_iterator rend() { return reverse_iterator( NULL ); };
 
     const_reverse_iterator rbegin() const
     {
-        return const_reverse_iterator( _maximum( _root ) );
+        return const_reverse_iterator( maximum( _root ) );
     };
 
     const_reverse_iterator rend() const
@@ -130,54 +137,25 @@ public:
 
     // Modifiers
 
-    ft::pair<iterator, bool> insert( const value_type &val )
+    void insert( value_type val )
     {
-        node_pointer new_node = _alloc.allocate( 1 );
-        _alloc.construct( new_node, node( val, _root, _sentinel ) );
-        return _insert( new_node );
-    };
-
-    iterator insert( iterator position, const value_type &val )
-    {
-        ( void ) position;
-        node_pointer new_node = _alloc.allocate( 1 );
-        _alloc.construct( new_node, node( val, _root, _sentinel ) );
-        return _insert( new_node ).first;
-    };
-
-    void insert( value_type val, node_pointer _root )
-    {
-        node_pointer existing_node = search( KeyOfValue()( val ), _root );
-        if ( existing_node != _sentinel ) {
-            _erase( existing_node );
+        node_pointer z = search( KeyOfValue()( val ) );
+        if ( z != _sentinel ) {
+            _erase( z );
         }
-        node_pointer new_node = _alloc.allocate( 1 );
-        _alloc.construct( new_node, node( val, _root, _sentinel ) );
-        _insert( new_node );
-    }
-
-    template < typename InputIterator >
-    void insert( InputIterator first, InputIterator last )
-    {
-        while ( first != last ) {
-            node_pointer new_node = _alloc.allocate( 1 );
-            _alloc.construct( new_node, node( *first, _root, _sentinel ) );
-            _insert( new_node );
-            ++first;
-        }
+        _insert( val );
     };
 
-    template < typename InputIterator >
-    void insert_unique( InputIterator first, InputIterator last )
+    void insert( value_type val, node_pointer nptr )
     {
-        while ( first != last ) {
-            node_pointer new_node = _alloc.allocate( 1 );
-            _alloc.construct( new_node, node( *first, _root, _sentinel ) );
-            if ( _insert_unique( new_node ).second )
-                ++_size;
-            ++first;
+        node_pointer z = search( KeyOfValue()( val ), nptr );
+        if ( z != _sentinel ) {
+            _erase( z );
         }
+        _insert( val );
     };
+
+    iterator insert_unique( value_type val ) { return _insert( val ); };
 
     void erase( iterator position )
     {
@@ -228,51 +206,23 @@ public:
     void clear()
     {
         _clear( _root );
-        _root     = NULL;
-        _sentinel = NULL;
-        _size     = 0;
-    };
-
-    // Observers
-
-    value_type &operator[]( const key_type &key )
-    {
-        node_pointer node = _search( key );
-        if ( node == NULL ) {
-            node_pointer new_node = _alloc.allocate( 1 );
-            _alloc.construct(
-                new_node,
-                node( value_type( key, value_type() ), _root, _sentinel ) );
-            _insert( new_node );
-            return new_node->value.second;
-        }
-        return node->value.second;
+        _root = _sentinel;
+        _size = 0;
     };
 
     // Operations
 
-    iterator search( const key_type &k )
-    {
-        node_pointer node = _search( k );
-        if ( node == NULL ) {
-            return end();
-        }
-        return iterator( node );
-    };
+    node_pointer search( key_type k ) const { return _search( _root, k ); };
 
-    const_iterator search( const key_type &k ) const
+    node_pointer search( key_type k, node_pointer nptr ) const
     {
-        node_pointer node = _search( k );
-        if ( node == NULL ) {
-            return end();
-        }
-        return const_iterator( node );
+        return _search( nptr, k );
     };
 
     size_type count( const key_type &k ) const
     {
         node_pointer node = _search( k );
-        if ( node == NULL ) {
+        if ( node == _sentinel ) {
             return 0;
         }
         return 1;
@@ -351,301 +301,281 @@ public:
                                              upper_bound( k ) );
     };
 
-    // Debug
-
-    void print() const
-    {
-        _print( _root );
-        std::cout << std::endl;
-    };
-
 private:
     // Member functions
-    node_pointer _copy( node_pointer node, node_pointer &end )
+    node_pointer _copy( node_pointer nptr )
     {
-        if ( node == NULL ) {
-            return NULL;
+        if ( nptr != nptr->leaf ) {
+            insert_unique( nptr->data );
+            _copy( nptr->left );
+            _copy( nptr->right );
         }
-        node_pointer new_node = _alloc.allocate( 1 );
-        _alloc.construct( new_node, node->data );
-        new_node->root  = _root;
-        new_node->leaf  = _sentinel;
-        new_node->left  = _copy( node->left, end );
-        new_node->right = _copy( node->right, end );
-        if ( new_node->left != NULL ) {
-            new_node->left->parent = new_node;
-        }
-        if ( new_node->right != NULL ) {
-            new_node->right->parent = new_node;
-        }
-        if ( node->parent == NULL ) {
-            _root = new_node;
-        }
-        if ( node->right == NULL ) {
-            end = new_node;
-        }
-        return new_node;
     };
 
-    void _clear( node_pointer node )
+    void _clear( node_pointer nptr )
     {
-        if ( node == NULL ) {
+        if ( nptr == _sentinel ) {
             return;
         }
-        _clear( node->left );
-        _clear( node->right );
-        _alloc.destroy( node );
-        _alloc.deallocate( node, 1 );
+        _clear( nptr->left );
+        _clear( nptr->right );
+        _alloc.destroy( nptr );
+        _alloc.deallocate( nptr, 1 );
     };
 
-    void _insert( node_pointer node, node_pointer &end )
+    iterator _insert( value_type val )
     {
-        node_pointer y = _sentinel;
         node_pointer x = _root;
+        node_pointer y = _sentinel;
+        node_pointer z = _alloc.allocate( 1 );
+        _alloc.construct( z, create_node( val, RED ) );
         while ( x != _sentinel ) {
             y = x;
-            if ( _comp( KeyOfValue()( node->data ),
-                        KeyOfValue()( x->data ) ) ) {
+            if ( _comp( KeyOfValue()( z->data ), KeyOfValue()( x->data ) ) ) {
                 x = x->left;
             } else {
                 x = x->right;
             }
         }
-        node->parent = y;
+        z->parent = y;
         if ( y == _sentinel ) {
-            _root = node;
-        } else if ( _comp( KeyOfValue()( node->data ),
+            _root = z;
+        } else if ( _comp( KeyOfValue()( z->data ),
                            KeyOfValue()( y->data ) ) ) {
-            y->left = node;
+            y->left = z;
         } else {
-            y->right = node;
+            y->right = z;
+            z->left  = _sentinel;
+            z->right = _sentinel;
+            z->color = RED;
         }
-        if ( node->right == NULL ) {
-            end = node;
-        }
-        _insert_fix( node );
+        _insert_fix( z );
+        _sentinel->root = _root;
+        _size++;
+        return iterator( z );
     };
 
-    void _insert_fix( node_pointer node )
+    void _insert_fix( node_pointer z )
     {
-        while ( node->parent != NULL && node->parent->color == RED ) {
-            if ( node->parent == node->parent->parent->left ) {
-                node_pointer uncle = node->parent->parent->right;
-                if ( uncle != NULL && uncle->color == RED ) {
-                    node->parent->color         = BLACK;
-                    uncle->color                = BLACK;
-                    node->parent->parent->color = RED;
-                    node                        = node->parent->parent;
+        node_pointer y;
+        while ( z->parent->color == RED ) {
+            if ( z->parent == z->parent->parent->left ) {
+                y = z->parent->parent->right;
+                if ( y->color == RED ) {
+                    z->parent->color         = BLACK;
+                    y->color                 = BLACK;
+                    z->parent->parent->color = RED;
+                    z                        = z->parent->parent;
                 } else {
-                    if ( node == node->parent->right ) {
-                        node = node->parent;
-                        _left_rotate( node );
+                    if ( z == z->parent->right ) {
+                        z = z->parent;
+                        _left_rotate( z );
                     }
-                    node->parent->color         = BLACK;
-                    node->parent->parent->color = RED;
-                    _right_rotate( node->parent->parent );
+                    z->parent->color         = BLACK;
+                    z->parent->parent->color = RED;
+                    _right_rotate( z->parent->parent );
                 }
             } else {
-                node_pointer uncle = node->parent->parent->left;
-                if ( uncle != NULL && uncle->color == RED ) {
-                    node->parent->color         = BLACK;
-                    uncle->color                = BLACK;
-                    node->parent->parent->color = RED;
-                    node                        = node->parent->parent;
+                y = z->parent->parent->left;
+                if ( y->color == RED ) {
+                    z->parent->color         = BLACK;
+                    y->color                 = BLACK;
+                    z->parent->parent->color = RED;
+                    z                        = z->parent->parent;
                 } else {
-                    if ( node == node->parent->left ) {
-                        node = node->parent;
-                        _right_rotate( node );
+                    if ( z == z->parent->left ) {
+                        z = z->parent;
+                        _right_rotate( z );
                     }
-                    node->parent->color         = BLACK;
-                    node->parent->parent->color = RED;
-                    _left_rotate( node->parent->parent );
+                    z->parent->color         = BLACK;
+                    z->parent->parent->color = RED;
+                    _left_rotate( z->parent->parent );
                 }
             }
         }
         _root->color = BLACK;
     };
 
-    void _left_rotate( node_pointer node )
+    void _left_rotate( node_pointer x )
     {
-        node_pointer right = node->right;
-        node->right        = right->left;
-        if ( right->left != NULL ) {
-            right->left->parent = node;
+        node_pointer y;
+        y        = x->right;
+        x->right = y->left;
+        if ( y->left != _sentinel ) {
+            y->left->parent = x;
         }
-        right->parent = node->parent;
-        if ( node->parent == NULL ) {
-            _root = right;
-        } else if ( node == node->parent->left ) {
-            node->parent->left = right;
+        y->parent = x->parent;
+        if ( x->parent == _sentinel ) {
+            _root = y;
+        } else if ( x == x->parent->left ) {
+            x->parent->left = y;
         } else {
-            node->parent->right = right;
+            x->parent->right = y;
         }
-        right->left  = node;
-        node->parent = right;
+        y->left   = x;
+        x->parent = y;
     };
 
-    void _right_rotate( node_pointer node )
+    void _right_rotate( node_pointer x )
     {
-        node_pointer left = node->left;
-        node->left        = left->right;
-        if ( left->right != NULL ) {
-            left->right->parent = node;
+        node_pointer y;
+        y       = x->left;
+        x->left = y->right;
+        if ( y->right != _sentinel ) {
+            y->right->parent = x;
         }
-        left->parent = node->parent;
-        if ( node->parent == NULL ) {
-            _root = left;
-        } else if ( node == node->parent->right ) {
-            node->parent->right = left;
+        y->parent = x->parent;
+        if ( x->parent == _sentinel ) {
+            _root = y;
+        } else if ( x == x->parent->right ) {
+            x->parent->right = y;
         } else {
-            node->parent->left = left;
+            x->parent->left = y;
         }
-        left->right  = node;
-        node->parent = left;
+        y->right  = x;
+        x->parent = y;
     };
 
     void _transplant( node_pointer u, node_pointer v )
     {
-        if ( u->parent == NULL ) {
+        if ( u->parent == _sentinel ) {
             _root = v;
         } else if ( u == u->parent->left ) {
             u->parent->left = v;
         } else {
             u->parent->right = v;
         }
-        if ( v != NULL ) {
-            v->parent = u->parent;
-        }
+        v->parent = u->parent;
     };
 
-    void _erase( node_pointer node )
+    void _erase( node_pointer z )
     {
-        node_pointer    y = node;
-        node_pointer    x;
+        node_pointer    x                = NULL;
+        node_pointer    y                = z;
         t_rb_node_color y_original_color = y->color;
-        if ( node->left == NULL ) {
-            x = node->right;
-            _transplant( node, node->right );
-        } else if ( node->right == NULL ) {
-            x = node->left;
-            _transplant( node, node->left );
+        if ( z->left == _sentinel ) {
+            x = z->right;
+            _transplant( z, z->right );
+        } else if ( z->right == _sentinel ) {
+            x = z->left;
+            _transplant( z, z->left );
         } else {
-            y                = _minimum( node->right );
+            y                = minimum( z->right );
             y_original_color = y->color;
             x                = y->right;
-            if ( y->parent == node ) {
-                if ( x != NULL ) {
-                    x->parent = y;
-                }
-            } else {
+            if ( z != z->right ) {
                 _transplant( y, y->right );
-                y->right         = node->right;
+                y->right         = z->right;
                 y->right->parent = y;
+            } else {
+                x->parent = y;
             }
-            _transplant( node, y );
-            y->left         = node->left;
+            _transplant( z, y );
+            y->left         = z->left;
             y->left->parent = y;
-            y->color        = node->color;
+            y->color        = z->color;
         }
+        _alloc.destroy( z );
+        _alloc.deallocate( z, 1 );
         if ( y_original_color == BLACK ) {
             _erase_fix( x );
         }
+        _sentinel->root = _root;
+        _size--;
     };
 
-    void _erase_fix( node_pointer node )
+    void _erase_fix( node_pointer x )
     {
-        while ( node != _root && ( node == NULL || node->color == BLACK ) ) {
-            if ( node == node->parent->left ) {
-                node_pointer w = node->parent->right;
+        node_pointer w;
+
+        while ( x != _root && x->color == BLACK ) {
+            if ( x == x->parent->left ) {
+                w = x->parent->right;
+
                 if ( w->color == RED ) {
-                    w->color            = BLACK;
-                    node->parent->color = RED;
-                    _left_rotate( node->parent );
-                    w = node->parent->right;
+                    w->color         = BLACK;
+                    x->parent->color = RED;
+                    _left_rotate( x->parent );
+                    w = x->parent->right;
                 }
-                if ( ( w->left == NULL || w->left->color == BLACK )
-                     && ( w->right == NULL || w->right->color == BLACK ) ) {
+                if ( w->left->color == BLACK && w->right->color == BLACK ) {
                     w->color = RED;
-                    node     = node->parent;
+                    x        = x->parent;
                 } else {
-                    if ( w->right == NULL || w->right->color == BLACK ) {
+                    if ( w->right->color == BLACK ) {
                         w->left->color = BLACK;
                         w->color       = RED;
                         _right_rotate( w );
-                        w = node->parent->right;
+                        w = x->parent->right;
                     }
-                    w->color            = node->parent->color;
-                    node->parent->color = BLACK;
-                    w->right->color     = BLACK;
-                    _left_rotate( node->parent );
-                    node = _root;
+                    w->color         = x->parent->color;
+                    x->parent->color = BLACK;
+                    w->right->color  = BLACK;
+                    _left_rotate( x->parent );
+                    x = _root;
                 }
             } else {
-                node_pointer w = node->parent->left;
+                w = x->parent->left;
+
                 if ( w->color == RED ) {
-                    w->color            = BLACK;
-                    node->parent->color = RED;
-                    _right_rotate( node->parent );
-                    w = node->parent->left;
+                    w->color         = BLACK;
+                    x->parent->color = RED;
+                    _right_rotate( x->parent );
+                    w = x->parent->left;
                 }
-                if ( ( w->right == NULL || w->right->color == BLACK )
-                     && ( w->left == NULL || w->left->color == BLACK ) ) {
+                if ( w->right->color == BLACK && w->left->color == BLACK ) {
                     w->color = RED;
-                    node     = node->parent;
+                    x        = x->parent;
                 } else {
-                    if ( w->left == NULL || w->left->color == BLACK ) {
+                    if ( w->left->color == BLACK ) {
                         w->right->color = BLACK;
                         w->color        = RED;
                         _left_rotate( w );
-                        w = node->parent->left;
+                        w = x->parent->left;
                     }
-                    w->color            = node->parent->color;
-                    node->parent->color = BLACK;
-                    w->left->color      = BLACK;
-                    _right_rotate( node->parent );
-                    node = _root;
+                    w->color         = x->parent->color;
+                    x->parent->color = BLACK;
+                    w->left->color   = BLACK;
+                    _right_rotate( x->parent );
+                    x = _root;
                 }
             }
         }
-        if ( node != NULL ) {
-            node->color = BLACK;
+        x->color = BLACK;
+    };
+
+    node_pointer minimum( node_pointer nptr ) { return node::minimum( nptr ); };
+
+    node_pointer maximum( node_pointer nptr ) { return node::maximum( nptr ); };
+
+    node_pointer successor( node_pointer nptr )
+    {
+        return node::successor( nptr );
+    };
+
+    node_pointer predecessor( node_pointer nptr )
+    {
+        return node::predecessor( nptr );
+    };
+
+    node_pointer _search( node_pointer nptr, key_type k ) const
+    {
+        if ( nptr == _sentinel
+             || ( !_comp( k, KeyOfValue()( nptr->data ) )
+                  && !_comp( KeyOfValue()( nptr->data ), k ) ) ) {
+            return nptr;
         }
-    };
-
-    node_pointer _minimum( node_pointer node )
-    {
-        return node::minimum( node );
-    };
-
-    node_pointer _maximum( node_pointer node )
-    {
-        return node::maximum( node );
-    };
-
-    node_pointer _successor( node_pointer node )
-    {
-        return node::successor( node );
-    };
-
-    node_pointer _predecessor( node_pointer node )
-    {
-        return node::predecessor( node );
-    };
-
-    node_pointer _search( const value_type &value )
-    {
-        node_pointer node = _root;
-        while ( node != NULL ) {
-            if ( value < node->value ) {
-                node = node->left;
-            } else if ( node->value < value ) {
-                node = node->right;
-            } else {
-                return node;
-            }
+        if ( _comp( k, KeyOfValue()( nptr->data ) ) ) {
+            return _search( nptr->left, k );
         }
-        return node;
+        return _search( nptr->right, k );
     };
+
+    node create_node( value_type val, t_rb_node_color color )
+    {
+        return node(
+            val, _root, _sentinel, _sentinel, _sentinel, _sentinel, color );
+    }
 };
 
 template < RB_TEMPLATE_ARGS >

@@ -169,7 +169,10 @@ public:
     };
 
     // Operations
-    iterator find( const key_type &k ) { return _rb_tree.search( k ); };
+    iterator find( const key_type &k )
+    {
+        return iterator( _rb_tree.search( k ) );
+    };
 
     const_iterator find( const key_type &k ) const
     {
