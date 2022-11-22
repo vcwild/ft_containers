@@ -3,7 +3,10 @@ NAME = ft_containers
 
 CXX = clang++
 
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -Wno-long-long -pedantic-errors
+LIBS = -lrt -lm
+
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98  -Wno-long-long -pedantic-errors $(LIBS)
+
 
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes
 
@@ -47,7 +50,7 @@ endif
 
 # **************************************************************************** #
 
-.PHONY: all run valgrind re fclean clean test containers
+.PHONY: all run valgrind re fclean clean test containers $(NAME)
 
 all: $(NAME) containers
 
@@ -57,20 +60,22 @@ $(OBJECTS_PATH)/%.o: $(SOURCES_PATH)/%.cpp $(HEADER)
 
 test:
 	@mkdir -p bin
-	@$(CXX) $(CXXFLAGS) -lrt -lm -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o bin/$(RUN_ARGS)
+	@$(CXX) $(CXXFLAGS) -I $(INCLUDES_PATH) tests/$(RUN_ARGS).cpp -o bin/$(RUN_ARGS)
 	@./bin/$(RUN_ARGS)
 
 $(NAME) : $(TARGET)
+	./$(TARGET)
 
 containers: $(STD_TARGET)
+	./$(STD_TARGET)
 
 $(TARGET):
 	@mkdir -p bin
-	@$(CXX) -lrt -lm -Wall -Wextra -Werror -I $(INCLUDES_PATH) tests/ft_main.cpp -o bin/$(NAME)
+	@$(CXX) $(CXXFLAGS) -I $(INCLUDES_PATH) tests/ft_main.cpp -o bin/$(NAME)
 
 $(STD_TARGET):
 	@mkdir -p bin
-	@$(CXX) -lrt -lm -Wall -Wextra -std=c++11 -I $(INCLUDES_PATH) tests/std_main.cpp -o bin/containers
+	@$(CXX) $(CXXFLAGS) -std=c++11 -I $(INCLUDES_PATH) tests/std_main.cpp -o bin/containers
 
 clean:
 	@$(REMOVE) $(OBJECTS_PATH)
@@ -79,3 +84,5 @@ fclean: clean
 	@$(REMOVE) $(NAME)
 	@rm -r bin
 
+valgrind:
+	@$(VALGRIND) all

@@ -5,12 +5,18 @@
 #include <limits.h>
 #include <map>
 #include <set>
+#include <sstream>
 #include <stack>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
+
+#define SSTR( x )                                                              \
+    static_cast< std::ostringstream & >(                                       \
+        ( std::ostringstream() << std::dec << x ) )                            \
+        .str()
 
 using namespace std;
 
@@ -24,27 +30,10 @@ bool is_equal( const std::string &s1, const std::string &s2 )
     return std::equal( s1.begin(), s1.end(), s2.begin() );
 }
 
-bool is_equal_predicate( const std::string &s1, const std::string &s2 )
-{
-    return std::equal(
-        s1.begin(), s1.end(), s2.begin(), []( char c1, char c2 ) {
-            return std::tolower( c1 ) == std::tolower( c2 );
-        } );
-}
-
 bool is_lexicographical_compare( const std::string &s1, const std::string &s2 )
 {
     return std::lexicographical_compare(
         s1.begin(), s1.end(), s2.begin(), s2.end() );
-}
-
-bool is_lexicographical_compare_predicate( const std::string &s1,
-                                           const std::string &s2 )
-{
-    return std::lexicographical_compare(
-        s1.begin(), s1.end(), s2.begin(), s2.end(), []( char c1, char c2 ) {
-            return std::tolower( c1 ) < std::tolower( c2 );
-        } );
 }
 
 MU_TEST( test_algorithm_is_palindrome )
@@ -67,18 +56,6 @@ MU_TEST( test_algorithm_is_not_equal )
     mu_assert( !is_equal( "hello", "world" ), "hello is not equal to world" );
 }
 
-MU_TEST( test_algorithm_is_equal_predicate )
-{
-    mu_assert( is_equal_predicate( "hello", "HELLO" ),
-               "hello is equal to HELLO" );
-}
-
-MU_TEST( test_algorithm_is_not_equal_predicate )
-{
-    mu_assert( !is_equal_predicate( "hello", "world" ),
-               "hello is not equal to world" );
-}
-
 MU_TEST( test_algorithm_is_lexicographical_compare )
 {
     mu_assert( is_lexicographical_compare( "hello", "world" ),
@@ -91,30 +68,14 @@ MU_TEST( test_algorithm_is_not_lexicographical_compare )
                "world is not lexicographically less than hello" );
 }
 
-MU_TEST( test_algorithm_is_lexicographical_compare_predicate )
-{
-    mu_assert( is_lexicographical_compare_predicate( "hello", "WORLD" ),
-               "hello is lexicographically less than WORLD" );
-}
-
-MU_TEST( test_algorithm_is_not_lexicographical_compare_predicate )
-{
-    mu_assert( !is_lexicographical_compare_predicate( "world", "HELLO" ),
-               "world is not lexicographically less than HELLO" );
-}
-
 MU_TEST_SUITE( suite_algorithm )
 {
     MU_RUN_TEST( test_algorithm_is_palindrome );
     MU_RUN_TEST( test_algorithm_not_palindrome );
     MU_RUN_TEST( test_algorithm_is_equal );
     MU_RUN_TEST( test_algorithm_is_not_equal );
-    MU_RUN_TEST( test_algorithm_is_equal_predicate );
-    MU_RUN_TEST( test_algorithm_is_not_equal_predicate );
     MU_RUN_TEST( test_algorithm_is_lexicographical_compare );
     MU_RUN_TEST( test_algorithm_is_not_lexicographical_compare );
-    MU_RUN_TEST( test_algorithm_is_lexicographical_compare_predicate );
-    MU_RUN_TEST( test_algorithm_is_not_lexicographical_compare_predicate );
 }
 // ---------------------------------------------------------------------------
 
@@ -1098,7 +1059,6 @@ MU_TEST( test_is_integral_int_ptr )
     mu_assert( std::is_integral<int *>::value == false,
                "is_integral<int *>::value == false" );
 }
-#include <type_traits>
 
 MU_TEST( test_is_integral_int_const_ptr )
 {
