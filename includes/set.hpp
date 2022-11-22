@@ -99,6 +99,14 @@ public:
     size_type max_size() const { return _rb_tree.max_size(); };
 
     // Modifiers
+    /**
+     * @brief Inserts an element into the set.
+     *
+     * @param val The value to insert.
+     * @return ft::pair<iterator, bool> A pair containing an iterator to the
+     * inserted element, or to the element that prevented the insertion, and a
+     * bool denoting whether the insertion took place.
+     */
     ft::pair<iterator, bool> insert( const value_type &val )
     {
         iterator it = find( val );
@@ -108,6 +116,13 @@ public:
         return ft::make_pair( it, false );
     };
 
+    /**
+     * @brief Inserts an element into the set.
+     *
+     * @param position The position to insert the element.
+     * @param val The value to insert.
+     * @return iterator The iterator to the inserted element.
+     */
     iterator insert( iterator position, const value_type &val )
     {
         iterator it = find( val );
@@ -118,6 +133,13 @@ public:
         return find( val );
     };
 
+    /**
+     * @brief Inserts a range of elements into the set.
+     *
+     * @tparam InputIterator The type of the iterator.
+     * @param first The first element of the range.
+     * @param last The last element of the range.
+     */
     template <class InputIterator>
     void insert( InputIterator first, InputIterator last )
     {
@@ -125,8 +147,20 @@ public:
             insert( *first++ );
     };
 
+    /**
+     * @brief Erases an element from the set.
+     *
+     * @param position The position of the element to erase.
+     * @return iterator The position of the next element.
+     */
     void erase( iterator position ) { _rb_tree.erase( *position ); };
 
+    /**
+     * @brief Erases an element from the set.
+     *
+     * @param k The key of the element to erase.
+     * @return size_type The number of elements erased.
+     */
     size_type erase( const value_type &val )
     {
         iterator it = find( val );
@@ -137,14 +171,28 @@ public:
         return 1;
     };
 
+    /**
+     * @brief Erases a range of elements from the set.
+     *
+     * @param first The first element of the range.
+     * @param last The last element of the range.
+     */
     void erase( iterator first, iterator last )
     {
         while ( first != last )
             erase( first++ );
     };
 
+    /**
+     * @brief Swaps the contents of two sets.
+     *
+     * @param x The set to swap with.
+     */
     void swap( set &s ) { _rb_tree.swap( s._rb_tree ); };
 
+    /**
+     * @brief Clears the set.
+     */
     void clear() { _rb_tree.clear(); };
 
     // Observers
@@ -153,11 +201,23 @@ public:
     value_compare value_comp() const { return _rb_tree.key_comp(); };
 
     // Operations
+    /**
+     * @brief Finds an element in the set.
+     *
+     * @param k The key of the element to find.
+     * @return iterator The iterator to the element, or end() if not found.
+     */
     iterator find( const value_type &val ) const
     {
         return iterator( _rb_tree.search( val ) );
     };
 
+    /**
+     * @brief Counts the number of elements with a given key.
+     *
+     * @param k The key to count.
+     * @return size_type The number of elements with the given key.
+     */
     size_type count( const value_type &val ) const
     {
         if ( find( val ) == end() ) {
@@ -166,16 +226,35 @@ public:
         return 1;
     };
 
+    /**
+     * @brief Finds the first element not less than a given key.
+     *
+     * @param k The key to search for.
+     * @return iterator The iterator to the element, or end() if not found.
+     */
     iterator lower_bound( const value_type &val ) const
     {
         return _rb_tree.lower_bound( val );
     };
 
+    /**
+     * @brief Finds the first element greater than a given key.
+     *
+     * @param k The key to search for.
+     * @return iterator The iterator to the element, or end() if not found.
+     */
     iterator upper_bound( const value_type &val ) const
     {
         return _rb_tree.upper_bound( val );
     };
 
+    /**
+     * @brief Finds a range of elements with a given key.
+     *
+     * @param k The key to search for.
+     * @return ft::pair<iterator, iterator> A pair containing the lower and
+     * upper bounds of the range.
+     */
     ft::pair<iterator, iterator> equal_range( const value_type &val ) const
     {
         return ft::make_pair( lower_bound( val ), upper_bound( val ) );
