@@ -122,6 +122,13 @@ public:
     };
 
     // Modifiers
+    /**
+     * @brief Inserts a element into the map container
+     *
+     * @param val The value to insert
+     * @return ft::pair<iterator, bool> Returns a pair, with its member
+     * pair::first
+     */
     ft::pair<iterator, bool> insert( const value_type &val )
     {
         iterator it = find( val.first );
@@ -132,6 +139,15 @@ public:
         }
     };
 
+    /**
+     * @brief Inserts a element into the map container
+     *
+     *
+     * @param position The iterator with the position where the element will be
+     * inserted
+     * @param val The value to insert
+     * @return iterator Returns an iterator to the inserted element
+     */
     iterator insert( iterator position, const value_type &val )
     {
         iterator it = find( val.first );
@@ -143,6 +159,14 @@ public:
         }
     };
 
+    /**
+     * @brief Inserts a range of elements into the map container
+     *
+     *
+     * @tparam InputIterator The iterator type
+     * @param first The iterator to the first element of the range
+     * @param last The iterator to the last element of the range
+     */
     template <typename InputIterator>
     void insert( InputIterator first, InputIterator last )
     {
@@ -152,7 +176,22 @@ public:
         }
     };
 
-    void      erase( iterator it ) { _rb_tree.erase( it->first ); };
+    /**
+     * @brief Erases an element from the map container
+     *
+     *
+     * @param it The iterator to the element to erase
+     */
+    void erase( iterator it ) { _rb_tree.erase( it->first ); };
+
+    /**
+     * @brief Eraes an element from the map container
+     *
+     *
+     * @param k The key of the element to erase
+     *
+     * @return size_type Returns the number of elements erased
+     */
     size_type erase( const key_type &k )
     {
         if ( find( k ) == end() ) {
@@ -161,6 +200,13 @@ public:
         _rb_tree.erase( k );
         return 1;
     };
+
+    /**
+     * @brief Erases a range of elements from the map container
+     *
+     * @param first The iterator to the first element of the range
+     * @param last The iterator to the last element of the range
+     */
     void erase( iterator first, iterator last )
     {
         while ( first != last ) {
@@ -169,7 +215,17 @@ public:
         }
     };
 
+    /**
+     * @brief Swaps the contents of two map containers
+     *
+     * @param x The map container to swap with
+     */
     void swap( map &x ) { _rb_tree.swap( x._rb_tree ); };
+
+    /**
+     * @brief Clears the contents of the map container
+     *
+     */
     void clear() { _rb_tree.clear(); };
 
     // Observers
@@ -180,43 +236,101 @@ public:
     };
 
     // Operations
+    /**
+     * @brief Finds an element with a specific key
+     *
+     * @param k The key to search for
+     * @return iterator Returns an iterator to the element, if the element is
+     * not found, the function returns an iterator to map::end
+     */
     iterator find( const key_type &k )
     {
         return iterator( _rb_tree.search( k ) );
     };
 
+    /**
+     * @brief Finds an element with a specific key
+     *
+     * @param k The key to search for
+     * @return const_iterator Returns an iterator to the element, if the element
+     * is not found, the function returns an iterator to map::end
+     */
     const_iterator find( const key_type &k ) const
     {
         return const_iterator( _rb_tree.search( k ) );
     };
 
+    /**
+     * @brief Counts the number of elements with a specific key
+     *
+     * @param k The key to count elements with
+     * @return size_type Returns the number of elements with the specified key
+     */
     size_type count( const key_type &k ) const { return _rb_tree.count( k ); };
 
+    /**
+     * @brief The lower bound of a key
+     *
+     * @param k The key to search for
+     * @return iterator Returns an iterator to the first element not less than k
+     */
     iterator lower_bound( const key_type &k )
     {
         return _rb_tree.lower_bound( k );
     };
 
+    /**
+     * @brief The lower bound of a key
+     *
+     * @param k The key to search for
+     * @return iterator Returns an iterator to the first element not less than k
+     */
     const_iterator lower_bound( const key_type &k ) const
     {
         return _rb_tree.lower_bound( k );
     };
 
+    /**
+     * @brief The upper bound of a key
+     *
+     * @param k The key to search for
+     * @return iterator Returns an iterator to the first element greater than k
+     */
     iterator upper_bound( const key_type &k )
     {
         return _rb_tree.upper_bound( k );
     };
 
+    /**
+     * @brief The upper bound of a key
+     *
+     * @param k The key to search for
+     * @return iterator Returns an iterator to the first element greater than k
+     */
     const_iterator upper_bound( const key_type &k ) const
     {
         return _rb_tree.upper_bound( k );
     };
 
+    /**
+     * @brief Gets a range of elements with a specific key
+     *
+     * @param k The key to search for
+     * @return ft::pair<const_iterator, const_iterator> Returns a pair of
+     * iterators, the first is the lower bound, the second is the upper bound
+     */
     ft::pair<iterator, iterator> equal_range( const key_type &k )
     {
         return _rb_tree.equal_range( k );
     };
 
+    /**
+     * @brief Gets a range of elements with a specific key
+     *
+     * @param k The key to search for
+     * @return ft::pair<const_iterator, const_iterator> Returns a pair of
+     * iterators, the first is the lower bound, the second is the upper bound
+     */
     ft::pair<const_iterator, const_iterator>
     equal_range( const key_type &k ) const
     {
