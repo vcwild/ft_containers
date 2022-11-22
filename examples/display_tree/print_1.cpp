@@ -1,3 +1,6 @@
+/*
+ * Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
+ */
 int rec[1000006];
 
 void _printTree( TreeNode *curr, int depth )

@@ -1,3 +1,6 @@
+/*
+ * Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
+ */
 #ifndef REVERSE_ITERATOR_HPP
 #define REVERSE_ITERATOR_HPP
 

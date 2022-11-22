@@ -1,3 +1,6 @@
+/*
+ * Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
+ */
 #include "vector.hpp"
 #include "minunit.h"
 #include <sstream>

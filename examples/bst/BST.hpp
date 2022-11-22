@@ -1,3 +1,6 @@
+/*
+ * Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
+ */
 #ifndef BST_HPP
 #define BST_HPP
 
@@ -10,8 +13,7 @@ typedef struct TreeNode
     TreeNode *right;
 } TreeNode;
 
-typedef class BinarySearchTree
-{
+typedef class BinarySearchTree {
 public:
     BinarySearchTree();
     ~BinarySearchTree();

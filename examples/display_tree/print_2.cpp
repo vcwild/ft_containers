@@ -1,3 +1,6 @@
+/*
+ * Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
+ */
 void _printTree( TreeNode *node, int level )
 {
     if ( node != NULL ) {

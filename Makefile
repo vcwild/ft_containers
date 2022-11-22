@@ -1,7 +1,7 @@
 # Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
 NAME = ft_containers
 
-CXX = clang++
+CXX = c++
 
 LIBS = -lrt -lm
 

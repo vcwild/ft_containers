@@ -1,3 +1,6 @@
+/*
+ * Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
+ */
 #ifndef AVLTREE_HPP
 #define AVLTREE_HPP
 
@@ -20,8 +23,7 @@ struct AVLNode
     }
 };
 
-class AVLTree
-{
+class AVLTree {
 public:
     AVLTree() { _root = NULL; };
     ~AVLTree() { clear( _root ); };
@@ -47,3 +49,5 @@ public:
 private:
     AVLNodePtr _root;
 };
+
+#endif // AVLTREE_HPP

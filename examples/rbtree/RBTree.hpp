@@ -1,3 +1,6 @@
+/*
+ * Copyright 2022 ©️ vcwild under the GNU Affero General Public License v3.0.
+ */
 #ifndef RBTREE_HPP
 #define RBTREE_HPP
 
@@ -29,8 +32,7 @@ struct RBNode
     t_color   color;
 };
 
-typedef class RedBlackTree
-{
+typedef class RedBlackTree {
 
 public:
     RedBlackTree();
