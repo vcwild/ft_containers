@@ -272,7 +272,9 @@ public:
     size_type count( const key_type &k ) const { return _rb_tree.count( k ); };
 
     /**
-     * @brief The lower bound of a key
+     * @brief Returns a reference to the mapped value of the element identified
+     with key k.
+
      *
      * @param k The key to search for
      * @return iterator Returns an iterator to the first element not less than k
@@ -280,6 +282,40 @@ public:
     iterator lower_bound( const key_type &k )
     {
         return _rb_tree.lower_bound( k );
+    };
+
+    /**
+     * @brief Returns a reference to the mapped value of the element identified
+     * with key k.
+     *
+     * @param k The key to search for
+     * @return const_iterator Returns an iterator to the first element not less
+     * than k
+     */
+    mapped_type &at( const key_type &k )
+    {
+        iterator it = find( k );
+        if ( it == end() ) {
+            throw std::out_of_range( "map::at" );
+        }
+        return it->second;
+    };
+
+    /**
+     * @brief  Returns a reference to the mapped value of the element identified
+     * with key k.
+     *
+     * @param k The key to search for
+     * @return const_iterator Returns an iterator to the first element not less
+     * than k
+     */
+    const mapped_type &at( const key_type &k ) const
+    {
+        const_iterator it = find( k );
+        if ( it == end() ) {
+            throw std::out_of_range( "map::at" );
+        }
+        return it->second;
     };
 
     /**
