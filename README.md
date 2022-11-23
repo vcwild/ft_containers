@@ -32,6 +32,16 @@ make
 
 This will compile the program and run the tests for each container.
 
+### Execute standalone tests
+
+You can also execute the tests for each container separately:
+
+```bash
+make test [container_name]
+```
+
+Where `[container_name]` can be `vector`, `stack`, `map` or `set`.
+
 ## References
 
 ### Vectors
