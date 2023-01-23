@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/github/languages/count/vcwild/ft_containers?color=%23E96418&style=flat-square" alt="languages" />
   <img src="https://img.shields.io/github/license/vcwild/ft_containers?color=%23E96418&style=flat-square" alt="license" />
   <img src="https://img.shields.io/github/repo-size/vcwild/ft_containers?color=%23E96418&style=flat-square" alt="repo size" />
-  <img src="https://img.shields.io/github/workflow/status/vcwild/ft_containers/complete-checking?style=flat-square&color=%23E96418" alt="build" />
+  <img src="https://img.shields.io/github/actions/workflow/status/vcwild/ft_containers/build.yml?branch=main&style=flat-square&color=%23E96418" alt="build" />
 </div>
 
 # ft_containers
